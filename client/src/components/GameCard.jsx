@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { AddToCart } from "../services/CartServices";
 import { GetCart } from "../services/CartServices";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import swal from '@sweetalert/with-react'
 
 const GameCard = ({id, title, image, price, rating, user, authenticated}) => {
   const [cart, setCart] = useState({})
+  const navigate = useNavigate()
 
   const findCart = async () => {
     const res = await GetCart(user.id)
@@ -28,7 +29,7 @@ const GameCard = ({id, title, image, price, rating, user, authenticated}) => {
 
   return (
     <div className='game-card'>
-      <Link to={`/game/details/${id}`} ><section className="img-wrapper"><img className="game-image" src={image} alt="" /></section></Link>
+      <section className="img-wrapper" onClick={() => navigate(`/game/details/${id}`)}><img className="game-image" src={image} alt="" /></section>
       <section className='hover-info'>
         <h3>{title}</h3>
         <p>USD ${price}  |  Rating: {rating}</p>

@@ -1,11 +1,7 @@
-import React, { useEffect } from "react";
 import GameCard from '../components/GameCard'
 
-const GameListings = ({user, authenticated, games, GetAllGames}) => {
-  
-  useEffect(() => {
-    GetAllGames()
-  }, [GetAllGames])
+
+const GameListings = ({user, authenticated, games}) => {
   
   return (
     <div className='games'>

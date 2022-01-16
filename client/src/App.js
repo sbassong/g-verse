@@ -63,14 +63,14 @@ function App() {
           <Route exact path='/' element={<Homepage user={user} authenticated={authenticated}/>}  />
           <Route exact path='/signin' element={(props) => (<SignIn {...props} setUser={setUser} toggleAuthenticated={toggleAuthenticated}/>)} />
           <Route exact path='/signup' element={SignUp}/>
-          <Route exact path='/search/results' element={<SearchResults searchResults={searchResults} user={user} authenticated={authenticated}/>}  />
+          <Route exact path='/search/results' element={<SearchResults searchResults={searchResults} user={user} authenticated={authenticated} />}  />
           {user && authenticated && (<ProtectedRoute exact path='/user/account' element={Account} authenticated={authenticated} user={user} handleLogOut={handleLogOut}/>)}
           {user && authenticated && (<ProtectedRoute exact path='/cart' element={Cart} authenticated={authenticated} user={user} />)}
           <Route exact path='/games/listings' element={<GameListings user={user} authenticated={authenticated} games={games} GetAllGames={GetAllGames}/>} />
           <Route exact path='/about' element={About}/>
           {
-            games.map(game => (
-              <Route key={game.id} path={`/game/details/${game.id}`} element={<GameDetails game={game} user={user} authenticated={authenticated}/>} />
+            games.length > 0 && games.map(game => (
+              <Route key={game.id} path={`/game/details/${game.id}`} element={<GameDetails game={game} user={user} authenticated={authenticated} />} />
             ))
           }
           </Routes>
