@@ -1,18 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import GameCard from '../components/GameCard'
-import {GetGames} from '../services/GameServices'
 
-const GameListings = ({user, authenticated}) => {
-  const [games, setGames] = useState([])
-
-  const showGames = async () => {
-    const res = await GetGames()
-    setGames(res)
-  }
+const GameListings = ({user, authenticated, games, GetAllGames}) => {
   
   useEffect(() => {
-    showGames()
-  }, [])
+    GetAllGames()
+  }, [GetAllGames])
   
   return (
     <div className='games'>

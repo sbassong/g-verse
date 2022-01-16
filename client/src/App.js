@@ -1,7 +1,7 @@
 import './styles/App.css'
 import './styles/JinHome.css'
 import './styles/Sam.css'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { CheckSession } from './services/UserServices'
 import { GetGames } from './services/GameServices'
@@ -24,18 +24,19 @@ import About from './pages/About'
 function App() {
   const [authenticated, toggleAuthenticated] = useState(false || localStorage.getItem('authenticated'))
   const [user, setUser] = useState(null)
+
   const [searchResults, setSearchResults] = useState([])
   const [games, setGames] = useState([])
 
-  const GetAllGames = async () => {
+  const GetAllGames = useCallback(async () => {
     const res = await GetGames()
     setGames(res)
-  }
+  }, [])
 
   const handleLogOut = () => {
     setUser(null)
     toggleAuthenticated(false)
-    localStorage.clear()
+    localStorage.getItem('authenticated').clear()
   }
 
   const checkToken = async () => {
@@ -65,7 +66,7 @@ function App() {
           <Route exact path='/search/results' element={<SearchResults searchResults={searchResults} user={user} authenticated={authenticated}/>}  />
           {user && authenticated && (<ProtectedRoute exact path='/user/account' element={Account} authenticated={authenticated} user={user} handleLogOut={handleLogOut}/>)}
           {user && authenticated && (<ProtectedRoute exact path='/cart' element={Cart} authenticated={authenticated} user={user} />)}
-          <Route exact path='/games/listings' element={<GameListings user={user} authenticated={authenticated}/>} />
+          <Route exact path='/games/listings' element={<GameListings user={user} authenticated={authenticated} games={games} GetAllGames={GetAllGames}/>} />
           <Route exact path='/about' element={About}/>
           {
             games.map(game => (
