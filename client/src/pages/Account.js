@@ -2,12 +2,12 @@ import React, {useState} from "react";
 import {DeleteUser} from '../services/UserServices'
 import UpdatePasswordForm from "../components/UpdatePasswordForm";
 import UpdateProfileForm from "../components/UpdateProfileForm";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import swal from '@sweetalert/with-react'
 
 
 const Account = (props) => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const [passwordButton, togglePassword] = useState(false)
   const [profileButton, toggleProfile] = useState(false)
 
@@ -35,7 +35,7 @@ const Account = (props) => {
         icon: "success",
         })
         .then(() => {
-        history.push('/signup')
+        navigate('/signup')
         })
       } else {
         swal("Your account is safe!");

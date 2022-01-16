@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { UpdatePassword } from '../services/UserServices'
 import swal from '@sweetalert/with-react'
 import { Form, Button } from 'react-bootstrap'
@@ -8,14 +8,14 @@ const iState = { oldPassword: '', newPassword: '', c_newPassword: '' }
 
 
 const UpdatePasswordForm = ({user}) => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const [formValues, setFormValues] = useState(iState)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     await UpdatePassword(user.id, formValues)
     swal("Password successfully updated! Please sign in.")
-      .then(() => { history.push('/signin') })
+      .then(() => { navigate('/signin') })
   }
 
   const handleChange = (e) => {

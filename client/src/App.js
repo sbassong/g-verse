@@ -2,7 +2,7 @@ import './styles/App.css'
 import './styles/JinHome.css'
 import './styles/Sam.css'
 import React, { useState, useEffect } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { CheckSession } from './services/UserServices'
 import { GetGames } from './services/GameServices'
 
@@ -58,21 +58,21 @@ function App() {
       <Nav authenticated={authenticated} user={user} handleLogOut={handleLogOut} setSearchResults={setSearchResults} />
       
       <main>
-        <Switch>
-          <Route exact path='/' component={() => <Homepage user={user} authenticated={authenticated}/>}  />
-          <Route exact path='/signin' component={(props) => (<SignIn {...props} setUser={setUser} toggleAuthenticated={toggleAuthenticated}/>)} />
-          <Route exact path='/signup' component={SignUp}/>
-          <Route exact path='/search/results' component={() => <SearchResults searchResults={searchResults} user={user} authenticated={authenticated}/>}  />
-          {user && authenticated && (<ProtectedRoute exact path='/user/account' component={Account} authenticated={authenticated} user={user} handleLogOut={handleLogOut}/>)}
-          {user && authenticated && (<ProtectedRoute exact path='/cart' component={Cart} authenticated={authenticated} user={user} />)}
-          <Route exact path='/games/listings' component={() => <GameListings user={user} authenticated={authenticated}/>} />
-          <Route exact path='/about' component={About}/>
+        <Routes>
+          <Route exact path='/' element={<Homepage user={user} authenticated={authenticated}/>}  />
+          <Route exact path='/signin' element={(props) => (<SignIn {...props} setUser={setUser} toggleAuthenticated={toggleAuthenticated}/>)} />
+          <Route exact path='/signup' element={SignUp}/>
+          <Route exact path='/search/results' element={<SearchResults searchResults={searchResults} user={user} authenticated={authenticated}/>}  />
+          {user && authenticated && (<ProtectedRoute exact path='/user/account' element={Account} authenticated={authenticated} user={user} handleLogOut={handleLogOut}/>)}
+          {user && authenticated && (<ProtectedRoute exact path='/cart' element={Cart} authenticated={authenticated} user={user} />)}
+          <Route exact path='/games/listings' element={<GameListings user={user} authenticated={authenticated}/>} />
+          <Route exact path='/about' element={About}/>
           {
             games.map(game => (
-              <Route key={game.id} path={`/game/details/${game.id}`} component={() => <GameDetails game={game} user={user} authenticated={authenticated}/>} />
+              <Route key={game.id} path={`/game/details/${game.id}`} element={<GameDetails game={game} user={user} authenticated={authenticated}/>} />
             ))
           }
-          </Switch>
+          </Routes>
         </main>
     </div>
   )

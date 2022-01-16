@@ -1,10 +1,10 @@
 import React, {useState} from 'react'
 import { FaSistrix } from 'react-icons/fa'
 import {GetGamesByTitle} from '../services/GameServices'
-import { useHistory } from 'react-router'
+import { useNavigate } from 'react-router'
 
 const SearchBar = ({ setSearchResults }) => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const [searchQuery, setSearchQuery] = useState('')
 
   const getSearchResults = async (e) => {
@@ -13,7 +13,7 @@ const SearchBar = ({ setSearchResults }) => {
       let results = await GetGamesByTitle(searchQuery)
       setSearchResults(results)
       setSearchQuery('')
-      history.push('/search/results')
+      navigate('/search/results')
     } catch (err) {
       throw err
     }
