@@ -1,3 +1,4 @@
+import React from 'react'
 import {useEffect, useState} from "react";
 import { AddToCart, GetCart } from "../services/CartServices";
 import { GetReviewsByGameId } from "../services/ReviewServices";

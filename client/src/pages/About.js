@@ -18,7 +18,7 @@ const About = () => {
             <a
               href="https://www.linkedin.com/in/jinimb/"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               LinkedIn
             </a>
@@ -26,7 +26,7 @@ const About = () => {
             <a
               href="https://github.com/jinimbrancalhao"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               GitHub
             </a>
@@ -45,7 +45,7 @@ const About = () => {
             <a
               href="https://www.linkedin.com/in/sambassong/"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               LinkedIn
             </a>
@@ -53,7 +53,7 @@ const About = () => {
             <a
               href="https://github.com/sbassong"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               GitHub
             </a>
@@ -72,7 +72,7 @@ const About = () => {
             <a
               href="https://www.linkedin.com/in/razaskhalid/"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               LinkedIn{' '}
             </a>
@@ -80,7 +80,7 @@ const About = () => {
             <a
               href="https://github.com/Raza-Khalid"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               GitHub
             </a>
