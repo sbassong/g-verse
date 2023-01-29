@@ -3,7 +3,6 @@ import GameCard from '../components/GameCard'
 
 
 const GameListings = ({user, authenticated, games}) => {
-  
   return (
     <div className='games'>
         {games.length > 0 && games.map((game) => (

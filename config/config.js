@@ -4,11 +4,12 @@ module.exports = {
   development: {
     database: 'gameStart_development',
     dialect: 'postgres',
-    host: 6000
+    host: "127.0.0.1",
   },
   test: {
     database: 'gameStart_test',
-    dialect: 'postgres'
+    dialect: 'postgres',
+    host: "127.0.0.1",
   },
   production: {
     use_env_variable: 'DATABASE_URL',
