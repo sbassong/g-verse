@@ -3,7 +3,9 @@ import {DeleteUser} from '../services/UserServices'
 import UpdatePasswordForm from "../components/UpdatePasswordForm";
 import UpdateProfileForm from "../components/UpdateProfileForm";
 import { useNavigate } from "react-router";
-// import swal from '@sweetalert/with-react'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal)
 
 
 const Account = (props) => {
@@ -19,29 +21,30 @@ const Account = (props) => {
     profileButton ? toggleProfile(false) : toggleProfile(true)
   }
 
-  // const handleDeleteUser = async (userId) => {
-  //   // swal({
-  //     title: "Are you sure?",
-  //     text: "This account will be permanently deleted!",
-  //     icon: "warning",
-  //     buttons: true,
-  //     dangerMode: true,
-  //   })
-  //   .then((willDelete) => {
-  //     if (willDelete) {
-  //       DeleteUser(userId)
-  //       props.handleLogOut()
-  //       // swal("Poof! Account deleted!", {
-  //       icon: "success",
-  //       })
-  //       .then(() => {
-  //       navigate('/signup')
-  //       })
-  //     } else {
-  //       // swal("Your account is safe!");
-  //     }
-  //   })
-  // }
+  const handleDeleteUser = async (userId) => {
+    MySwal.fire({
+      title: "Are you sure?",
+      text: "This account will be permanently deleted!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        DeleteUser(userId)
+        props.handleLogOut()
+        MySwal.fire({
+          text: "Poof! Account deleted!",
+          icon: "success",
+        })
+        .then(() => {
+        navigate('/signup')
+        })
+      } else {
+        MySwal.fire({text: "Your account is safe!"});
+      }
+    })
+  }
 
   return (
     <div className="account-page">
@@ -55,9 +58,9 @@ const Account = (props) => {
       <button onClick={showPasswordForm}>Update Password</button>
       <button onClick={showProfileForm}>Update User profile</button>
       <button
-        // onClick={() => {
-        //   handleDeleteUser(props.user.id)
-        // }}
+        onClick={() => {
+          handleDeleteUser(props.user.id)
+        }}
       >
         Delete Account
       </button>

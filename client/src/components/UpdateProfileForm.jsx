@@ -1,7 +1,9 @@
 import React, {useState} from 'react'
 import { UpdateUser } from '../services/UserServices'
-// import swal from '@sweetalert/with-react'
 import { Form, Button} from 'react-bootstrap'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal)
 
 
 const UpdateProfileForm = ({user}) => {
@@ -11,7 +13,7 @@ const UpdateProfileForm = ({user}) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     UpdateUser(user.id, formValues)
-    // swal("Profile successfully updated!")
+    MySwal.fire({text: "Profile successfully updated!"})
     .then(() => {window.location.reload()})
   }
 

@@ -1,17 +1,18 @@
+/* eslint-disable */
 import React from 'react'
 import {useEffect, useState} from "react";
 import { AddToCart, GetCart } from "../services/CartServices";
 import { GetReviewsByGameId } from "../services/ReviewServices";
 import ReviewCard from "../components/ReviewCard";
 import SubmitReviewForm from "../components/SubmitReviewForm";
-import { useCallback } from 'react';
-// import swal from '@sweetalert/with-react'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal)
 
 const GameDetails = ({ game, user, authenticated}) => {
   const [cart, setCart] = useState({})
   const [gameReviews, setGameReviews] = useState([])
   const [reviewButton, toggleReviewButton] = useState(false)
-  // const findCart = useCallback(fi)
 
   const showReviewForm = () => {
     reviewButton ? toggleReviewButton(false) : toggleReviewButton(true)
@@ -29,7 +30,7 @@ const GameDetails = ({ game, user, authenticated}) => {
 
   const handleAddCart = async () => {
     await AddToCart(cart_item)
-    // swal("Game added to cart!")
+    MySwal.fire({text: "Game added to cart!"})
   }
   
   const cart_item = {
@@ -43,7 +44,7 @@ const GameDetails = ({ game, user, authenticated}) => {
   useEffect(() => {
     if (user) findCart()
     getReviews()
-  }, [getReviews, findCart, user])
+  }, [user])
 
   return (
     <div className='details'>
