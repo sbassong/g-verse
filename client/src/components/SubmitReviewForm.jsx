@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { CreateReview } from '../services/ReviewServices'
-import swal from '@sweetalert/with-react'
+// import swal from '@sweetalert/with-react'
 import {Form, Button} from 'react-bootstrap'
 
 const SubmitReviewForm = ({user, game}) => {
@@ -9,7 +9,7 @@ const SubmitReviewForm = ({user, game}) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     await CreateReview(formValues)
-    swal("Thank you for review!")
+    // swal("Thank you for review!")
       .then(() => { window.location.reload() })
   }
 

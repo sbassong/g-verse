@@ -1,12 +1,12 @@
 import React from 'react'
-import swal from '@sweetalert/with-react'
+// import swal from '@sweetalert/with-react'
 import {DeleteReview } from '../services/ReviewServices'
 
 const ReviewCard = ({review, user}) => {
 
   const handleDeleteReview = async () => {
     await DeleteReview(review.id)
-    swal("Review successfully deleted!")
+    // swal("Review successfully deleted!")
       .then(() => { window.location.reload() })
   }
 

@@ -4,7 +4,7 @@ import { AddToCart, GetCart } from "../services/CartServices";
 import { GetReviewsByGameId } from "../services/ReviewServices";
 import ReviewCard from "../components/ReviewCard";
 import SubmitReviewForm from "../components/SubmitReviewForm";
-import swal from '@sweetalert/with-react'
+// import swal from '@sweetalert/with-react'
 
 const GameDetails = ({ game, user, authenticated}) => {
   const [cart, setCart] = useState({})
@@ -27,7 +27,7 @@ const GameDetails = ({ game, user, authenticated}) => {
 
   const handleAddCart = async () => {
     await AddToCart(cart_item)
-    swal("Game added to cart!")
+    // swal("Game added to cart!")
   }
   
   const cart_item = {

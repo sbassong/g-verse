@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { UpdateUser } from '../services/UserServices'
-import swal from '@sweetalert/with-react'
+// import swal from '@sweetalert/with-react'
 import { Form, Button} from 'react-bootstrap'
 
 
@@ -11,7 +11,7 @@ const UpdateProfileForm = ({user}) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     UpdateUser(user.id, formValues)
-    swal("Profile successfully updated!")
+    // swal("Profile successfully updated!")
     .then(() => {window.location.reload()})
   }
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UpdatePassword } from '../services/UserServices'
-import swal from '@sweetalert/with-react'
+// import swal from '@sweetalert/with-react'
 import { Form, Button } from 'react-bootstrap'
 
 const iState = { oldPassword: '', newPassword: '', c_newPassword: '' }
@@ -14,7 +14,7 @@ const UpdatePasswordForm = ({user}) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     await UpdatePassword(user.id, formValues)
-    swal("Password successfully updated! Please sign in.")
+    // swal("Password successfully updated! Please sign in.")
       .then(() => { navigate('/signin') })
   }
 

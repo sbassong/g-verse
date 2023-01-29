@@ -26,7 +26,13 @@ const SearchBar = ({ setSearchResults }) => {
   return (
     <div className='search-bar'>
       <form onSubmit={(e) => getSearchResults(e)} className='search-form'>
-        <input onChange={(e) => handleChange(e)} value={searchQuery} className='search-input' type="text" placeholder="Enter game title" icon={<FaSistrix />} />
+        <input onChange={(e) => handleChange(e)} 
+          value={searchQuery} 
+          className='search-input' 
+          type="text" 
+          placeholder="Enter game title" 
+          icon={<FaSistrix />} 
+        />
         <button className='search-button' type='submit' >Search</button>
       </form>
     </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AddToCart } from "../services/CartServices";
 import { GetCart } from "../services/CartServices";
 import { useNavigate } from "react-router-dom";
-import swal from '@sweetalert/with-react'
+// import swal from '@sweetalert/with-react'
 
 const GameCard = ({id, title, image, price, rating, user, authenticated}) => {
   const [cart, setCart] = useState({})
@@ -15,7 +15,7 @@ const GameCard = ({id, title, image, price, rating, user, authenticated}) => {
 
   const handleAddCart = async () => {
     await AddToCart(cart_item)
-    swal("Game added to cart!")
+    // swal("Game added to cart!")
   }
   
   const cart_item = {
