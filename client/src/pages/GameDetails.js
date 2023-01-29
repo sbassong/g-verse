@@ -4,12 +4,14 @@ import { AddToCart, GetCart } from "../services/CartServices";
 import { GetReviewsByGameId } from "../services/ReviewServices";
 import ReviewCard from "../components/ReviewCard";
 import SubmitReviewForm from "../components/SubmitReviewForm";
+import { useCallback } from 'react';
 // import swal from '@sweetalert/with-react'
 
 const GameDetails = ({ game, user, authenticated}) => {
   const [cart, setCart] = useState({})
   const [gameReviews, setGameReviews] = useState([])
   const [reviewButton, toggleReviewButton] = useState(false)
+  // const findCart = useCallback(fi)
 
   const showReviewForm = () => {
     reviewButton ? toggleReviewButton(false) : toggleReviewButton(true)
@@ -41,7 +43,7 @@ const GameDetails = ({ game, user, authenticated}) => {
   useEffect(() => {
     if (user) findCart()
     getReviews()
-  }, [])
+  }, [getReviews, findCart, user])
 
   return (
     <div className='details'>
