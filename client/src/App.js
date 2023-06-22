@@ -1,6 +1,5 @@
-// import './styles/App.css'
-// import './styles/JinHome.css'
-import './styles/Sam.css'
+import './styles/App.css'
+
 import React, { useState, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { CheckSession } from './services/UserServices'

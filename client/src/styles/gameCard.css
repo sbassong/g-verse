@@ -1,0 +1,74 @@
+
+/* gameCard styles */
+.game-card {
+  width: 400px;
+  height: 230px;
+  border-radius: 12.5px;
+  background-color: #1b1b1b;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin: 2em;
+  padding: 15px;
+  overflow-x: auto;
+  overflow-y: auto;
+  display: flex;
+
+  .game-img {
+    width: 200px !important;
+    height: 200px !important;
+    padding: 5px;
+    margin-right: 10px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover cover;
+  }
+
+  .game-info {
+    width: 150px;
+    height: 200px;
+    background-color: rgba(170, 165, 165, .2);
+    text-align: left !important;
+
+    .game-price {
+
+    }
+    .game-rating {
+      color: #fdca52;
+      border-color:rgba(253, 202, 82, .4)
+    }
+  }
+}
+
+.game-card:hover {
+  opacity: 0.6;
+}
+
+
+/* .game-card img {
+  width: 100%;
+  border-top-left-radius : 30px;
+}
+
+.hover-info > h3,
+p {
+  color: white;
+  margin: 0em;
+  font-weight: bold;
+}
+.hover-info > h3 {
+  margin-top: -0.5em;
+}
+.add-button, .add-cart {
+  background-color: #01c3cc;
+  color: white;
+  width: auto;
+  height: 1.7em;
+  border-radius: 12.5px;
+}
+.add-button:hover, .add-cart:hover {
+  background-color: white;
+  color: #01c3cc;
+} */
+
+
+

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import GameCard from '../components/GameCard'
 import { GetPopularGames, GetRecentGames } from '../services/GameServices'
-import { Carousel } from 'react-bootstrap'
 import '../styles/JinHome.css'
 
 const Homepage = ({ user, authenticated}) => {
@@ -25,50 +24,14 @@ const Homepage = ({ user, authenticated}) => {
 
   return (
     <div className="homepage">
-      <Carousel
-        style={{
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          width: '50%',
-          marginTop: '1em'
-        }}
-        fade
-      >
-        <Carousel.Item>
-          <img
-            id="image"
-            className="d-block w-100"
-            src="https://i.imgur.com/JoZ2QRl.jpg"
-            alt="fifa"
-          />
-        </Carousel.Item>
-        <Carousel.Item>
-          <img
-            id="image"
-            className="d-block w-100"
-            src="https://i.imgur.com/MjVxbqn.jpg"
-            alt="fortnite"
-          />
-
-          <Carousel.Caption></Carousel.Caption>
-        </Carousel.Item>
-        <Carousel.Item>
-          <img
-            id="image"
-            className="d-block w-100"
-            src="https://i.imgur.com/WieQ8iy.jpg"
-            alt="pubg"
-          />
-        </Carousel.Item>
-      </Carousel>
 
       <section className="home-cont" >
         <div className="home-games">
+
           <section className="popular-games">
             <h1>Top Rated Games:</h1>
             <div className='games-cont'>
-              {popularGames &&
-              popularGames.map((game) => (
+              {popularGames && popularGames.map((game) => (
                 <GameCard
                   key={game.id}
                   id={game.id}
@@ -86,8 +49,7 @@ const Homepage = ({ user, authenticated}) => {
           <section className="recent-games">
             <h1>Recently Added Games:</h1>
             <div className='games-cont'>
-              {recentGames &&
-              recentGames.map((game) => (
+              {recentGames && recentGames.map((game) => (
                 <GameCard
                   key={game.id}
                   id={game.id}
@@ -100,8 +62,8 @@ const Homepage = ({ user, authenticated}) => {
                 />
               ))}
             </div>
-            
           </section>
+          
         </div>
       </section>
     </div>

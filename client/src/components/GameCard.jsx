@@ -1,4 +1,5 @@
 /* eslint-disable */
+import '../styles/gameCard.css'
 import React, { useEffect, useState } from "react";
 import { AddToCart } from "../services/CartServices";
 import { GetCart } from "../services/CartServices";
@@ -33,14 +34,19 @@ const GameCard = ({id, title, image, price, rating, user, authenticated}) => {
 
   return (
     <div className='game-card'>
-      <section className="img-wrapper" onClick={() => navigate(`/game/details/${id}`)}><img className="game-image" src={image} alt="" /></section>
-      <section className='hover-info'>
-        <h3>{title}</h3>
-        <p>USD ${price}  |  Rating: {rating}</p>
+      <div className="game-img" onClick={() => navigate(`/game/details/${id}`)}><img className="game-image" src={image} alt="" /></div>
+
+      <div className='game-info'>
+        <p className='game-title subtitle'>{title}</p>
+        <p className='game-price subtext'>
+          <span style={{ color: '#2dc14f'}}>$</span>{price}
+        </p>
+        <p className='game-rating subtext'>Rating: {rating}</p>
+        
         {
           (user && authenticated) && <button onClick={handleAddCart} className='add-button' >Add to Cart</button>
           }
-      </section>
+      </div>
     </div>
 
   )
