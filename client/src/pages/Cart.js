@@ -7,13 +7,13 @@ const Cart = (props) => {
   const [deleted, setDeleted] = useState({})
 
   const handleCart = async (userId) => {
-    let userCart = await GetCartItems(userId)
+    const userCart = await GetCartItems(userId)
     setCartItems(userCart.cart)
   }
 
   const handleDeleteItem = async (gameId, index) => {
     await DeleteCartItem(gameId)
-    cartItems.slice(index, 1)
+    cartItems.slice(index, 1) // this is a bit weird, can state be changed this way?
     setDeleted(gameId)
   }
   const noItems = (
@@ -21,7 +21,7 @@ const Cart = (props) => {
   )
   useEffect(() => {
     handleCart(props.user.id)
-  }, [deleted])
+  }, [deleted, props.user.id])
 
   return (
     <div className="cart">

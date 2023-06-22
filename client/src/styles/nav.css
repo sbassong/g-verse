@@ -1,0 +1,80 @@
+
+/* NavBar styles */
+.nav {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 3rem;
+  margin-top: 1rem;
+  flex-wrap: nowrap;
+  
+  .logo {
+    font-family: Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue, sans-serif;
+    font-size: clamp(1.4rem, 1.6vw, 3rem);
+    font-weight: 500;
+    margin-right: 3rem;
+    width: fit-content;
+    text-wrap: nowrap;
+  }
+
+  .logo:hover {
+    color: white;
+  }
+
+  .search-bar {
+    width: clamp(250px, 50%, 1000px);
+    margin-right: 1rem;
+    
+    .search-form {
+      width: 100%;
+      position: relative;
+
+      .search-icon {
+        position: absolute;
+        height: 1.2rem;
+        width: 1.2rem;
+        top: 50%;
+        left: .8rem;
+        transform: translateY(-50%);
+      }
+
+      .search-input {
+        text-align: left;
+        padding: .4rem 2.5rem;
+        border-radius: 2rem;
+        width: 100%;
+        outline: none;
+        border: none;
+        background-color: rgb(175, 175, 175);
+      }
+      
+      .search-input:hover,
+      .search-input:active,
+      .search-input:focus {
+        background-color: white;
+        color: rgb(65, 65, 65) !important;
+      }
+    }
+  }
+  
+  .menu-nav {
+    margin-left: auto;
+    width: max-content;
+    flex-wrap: nowrap;
+
+    .menu-item {
+      margin-left: 1rem;
+      margin-right: 0;
+      text-decoration: none;
+    }
+    
+    .menu-item:hover {
+      color: rgb(170, 165, 165);
+    }
+  }
+
+  /* TODO: nav button styles */
+}
+
+
+

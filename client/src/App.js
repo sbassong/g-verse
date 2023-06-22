@@ -1,7 +1,7 @@
-import './styles/App.css'
-import './styles/JinHome.css'
+// import './styles/App.css'
+// import './styles/JinHome.css'
 import './styles/Sam.css'
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { CheckSession } from './services/UserServices'
 import { GetGames } from './services/GameServices'
@@ -28,10 +28,10 @@ function App() {
   const [searchResults, setSearchResults] = useState([])
   const [games, setGames] = useState([])
 
-  const GetAllGames = useCallback(async () => {
+  const GetAllGames = async () => {
     const res = await GetGames()
     setGames(res)
-  }, [])
+  }
 
   const handleLogOut = () => {
     setUser(null)
