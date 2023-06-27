@@ -33,15 +33,16 @@ const GameCard = ({id, title, image, price, rating, user, authenticated}) => {
   }, [])
 
   return (
-    <div className='game-card'>
-      <div className="game-img" onClick={() => navigate(`/game/details/${id}`)}><img className="game-image" src={image} alt="" /></div>
+    <div className='game-card' onClick={() => navigate(`/game/details/${id}`)}>
+
+      <img className="game-img" src={image} alt="" />
 
       <div className='game-info'>
-        <p className='game-title subtitle'>{title}</p>
-        <p className='game-price subtext'>
-          <span style={{ color: '#2dc14f'}}>$</span>{price}
-        </p>
-        <p className='game-rating subtext'>Rating: {rating}</p>
+        <div className='game-title subtitle'>{title}</div>
+        <div className='game-price subtext'>
+          <span style={{ color: '#2dc14f'}}>$ </span>{price}
+        </div>
+        <div className='game-rating subtext'>Rating: {rating}</div>
         
         {
           (user && authenticated) && <button onClick={handleAddCart} className='add-button' >Add to Cart</button>

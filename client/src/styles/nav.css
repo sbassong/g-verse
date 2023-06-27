@@ -4,9 +4,13 @@
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 1rem 3rem;
-  margin-top: 1rem;
+  padding: 3rem 3rem 2rem 3rem;
+  margin-bottom: 5vh;
   flex-wrap: nowrap;
+  position: sticky;
+  top: 0rem;
+  z-index: 10;
+  background: #000000;
   
   .logo {
     font-family: Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue, sans-serif;
@@ -14,7 +18,7 @@
     font-weight: 500;
     margin-right: 3rem;
     width: fit-content;
-    text-wrap: nowrap;
+    white-space: nowrap;
   }
 
   .logo:hover {

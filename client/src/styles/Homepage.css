@@ -1,0 +1,19 @@
+
+.homepage {
+  padding-left: 3rem;
+  padding-right: 3rem;
+  padding-top: 2rem;
+  overflow-y: auto;
+
+  .title {
+    text-align: left;
+    margin-bottom: 1rem;
+  }
+
+  .games-cont {
+    display: flex;
+    width: 100%;
+    margin-bottom: 2rem;
+    overflow-x: auto;
+  }
+}

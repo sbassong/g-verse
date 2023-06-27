@@ -7,16 +7,16 @@
 }
 
 .subtext {
-  font-size: clamp(.8rem, .9vw, 2rem);
+  font-size: clamp(.8rem, .9vw, 1.4rem);
 }
 
 .subtitle {
-  font-size: clamp(1.1rem, 1.2vw, 2.5rem);
+  font-size: clamp(1.1rem, 1.3vw, 1.7rem);
   font-weight: 500;
 }
 
 .title {
-  font-size: clamp(1.2rem, 1.4vw, 2.5em);
+  font-size: clamp(1.2rem, 1.5vw, 1.8rem);
   font-weight: 600;
 }
 
@@ -34,8 +34,13 @@ a {
   background:#000000;
   overflow-x: hidden;
   overflow-y: scroll;
+  position: relative;
 }
 
+.main-section {
+  position: relative;
+  z-index: 0;
+}
 
 /* homepage styling */
 /* .home-cont {

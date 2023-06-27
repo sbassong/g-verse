@@ -1,41 +1,60 @@
 
+/* .games-cont {
+  display: flex;
+  width: 100%;
+  margin-bottom: 2rem;
+  overflow-x: scroll;
+} */
+
 /* gameCard styles */
 .game-card {
-  width: 400px;
-  height: 230px;
-  border-radius: 12.5px;
+  width: clamp(200px, 22vw, 300px) !important;
+  height: clamp(200px, 22vw, 300px) !important;
+  border-radius: .5rem;
   background-color: #1b1b1b;
   cursor: pointer;
   transition: all 0.2s;
-  margin: 2em;
-  padding: 15px;
-  overflow-x: auto;
-  overflow-y: auto;
-  display: flex;
+  margin: 0 3rem 2rem 0;
 
   .game-img {
-    width: 200px !important;
-    height: 200px !important;
-    padding: 5px;
-    margin-right: 10px;
-    background-position: center;
+    width: clamp(175px, 22vw, 300px)!important;
+    height: clamp(125px, 60%, 200px) !important;
+    border-top-left-radius: .5rem;
+    border-top-right-radius: .5rem;
+    /* background-position: center;
     background-repeat: no-repeat;
-    background-size: cover cover;
+    background-size: cover cover; */
   }
-
+  
   .game-info {
-    width: 150px;
-    height: 200px;
-    background-color: rgba(170, 165, 165, .2);
+    height: 40% !important;
     text-align: left !important;
-
-    .game-price {
-
+    margin: 1vw .8vw 0vh .8vw;
+    
+    > div {
+      text-align: left !important;
     }
-    .game-rating {
+    
+    .game-title, .game-price {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: .5vh;
+    }
+
+    
+    .game-rating  {
       color: #fdca52;
-      border-color:rgba(253, 202, 82, .4)
+      margin-bottom: .5rem;
     }
+  }
+}
+
+@media screen and (max-width: 600px) {
+
+  .game-title, .game-price {
+    font-size: clamp(.9rem, 1vw, 1.5rem);
+    margin-bottom: .2rem;
   }
 }
 

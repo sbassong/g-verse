@@ -2,11 +2,11 @@ require('dotenv').config()
 
 module.exports = {
   development: {
-    database: 'gameStart_development',
+    database: 'g-verse_development',
     dialect: 'postgres',
   },
   test: {
-    database: 'gameStart_test',
+    database: 'g-verse_test',
     dialect: 'postgres',
   },
   production: {

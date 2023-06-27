@@ -57,7 +57,7 @@ function App() {
     <div className="App">
       <Nav authenticated={authenticated} user={user} handleLogOut={handleLogOut} setSearchResults={setSearchResults} />
       
-      <main>
+      <main className='main-section'>
         <Routes>
           <Route exact path='/' element={<Homepage user={user} authenticated={authenticated}/>}  />
           <Route exact path='/signin' element={(props) => (<SignIn {...props} setUser={setUser} toggleAuthenticated={toggleAuthenticated}/>)} />
