@@ -39,10 +39,10 @@ const GameCard = ({id, title, image, price, rating, user, authenticated}) => {
 
       <div className='game-info'>
         <div className='game-title subtitle'>{title}</div>
-        <div className='game-price subtext'>
+        <div className='game-price subtext' style={{ fontWeight: 'bold' }}>
           <span style={{ color: '#2dc14f'}}>$ </span>{price}
         </div>
-        <div className='game-rating subtext'>Rating: {rating}</div>
+        <div className='game-rating subtext' style={{ fontWeight: 'bold' }} >Rating: {rating}</div>
         
         {
           (user && authenticated) && <button onClick={handleAddCart} className='add-button' >Add to Cart</button>

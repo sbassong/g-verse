@@ -1,0 +1,12 @@
+
+.listings-cont {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 4rem;
+  padding-right: 4rem;
+  padding-top: 4rem;
+  width: 100%;
+  margin-bottom: 1rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+}

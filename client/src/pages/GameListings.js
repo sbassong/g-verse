@@ -1,10 +1,10 @@
 import React from 'react'
 import GameCard from '../components/GameCard'
-
+import '../styles/GameListings.css'
 
 const GameListings = ({user, authenticated, games}) => {
   return (
-    <div className='games'>
+    <div className='listings-cont'>
         {games.length > 0 && games.map((game) => (
           <GameCard 
             key={game.id} 

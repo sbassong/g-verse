@@ -1,11 +1,4 @@
 
-/* .games-cont {
-  display: flex;
-  width: 100%;
-  margin-bottom: 2rem;
-  overflow-x: scroll;
-} */
-
 /* gameCard styles */
 .game-card {
   width: clamp(200px, 22vw, 300px) !important;
@@ -21,9 +14,6 @@
     height: clamp(125px, 60%, 200px) !important;
     border-top-left-radius: .5rem;
     border-top-right-radius: .5rem;
-    /* background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover cover; */
   }
   
   .game-info {
@@ -61,33 +51,6 @@
 .game-card:hover {
   opacity: 0.6;
 }
-
-
-/* .game-card img {
-  width: 100%;
-  border-top-left-radius : 30px;
-}
-
-.hover-info > h3,
-p {
-  color: white;
-  margin: 0em;
-  font-weight: bold;
-}
-.hover-info > h3 {
-  margin-top: -0.5em;
-}
-.add-button, .add-cart {
-  background-color: #01c3cc;
-  color: white;
-  width: auto;
-  height: 1.7em;
-  border-radius: 12.5px;
-}
-.add-button:hover, .add-cart:hover {
-  background-color: white;
-  color: #01c3cc;
-} */
 
 
 
