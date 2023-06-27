@@ -33,7 +33,7 @@ const Nav = ({ handleLogOut, authenticated, user, setSearchResults }) => {
 
       <div className='menu-nav'>
         <NavLink className='menu-item subtitle' to='/'>Home</NavLink>
-        <NavLink className='menu-item subtitle'  to='/games/listings'>Games</NavLink>
+        <NavLink className='menu-item subtitle'  to='/games/listings'>Library</NavLink>
       </div>
         {/* {authenticated && user ? signedIn : notSignedIn} */}
     </nav>

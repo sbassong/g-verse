@@ -7,17 +7,20 @@ const SearchResults = ({searchResults, user, authenticated}) => {
     <div className='search-results'>
       <h3 className='title'>Search results</h3>
       <div className='results-cont'>
-          {searchResults.length > 0 && searchResults.map(searchResult => (
-            <GameCard 
-              key={searchResult.id} 
-              id={searchResult.id} 
-              title={searchResult.title} 
-              image={searchResult.background_image} 
-              price={searchResult.price} 
-              rating={searchResult.rating} 
-              user={user} 
-              authenticated={authenticated}/>
-          ))}
+          { searchResults.length > 0
+            ? searchResults.map(searchResult => (
+              <GameCard 
+                key={searchResult.id} 
+                id={searchResult.id} 
+                title={searchResult.title} 
+                image={searchResult.background_image} 
+                price={searchResult.price} 
+                rating={searchResult.rating} 
+                user={user} 
+                authenticated={authenticated}
+              />))
+            : <div className='no-games'>Oops, no matches found.</div>
+          }
       </div>
     </div>
   )

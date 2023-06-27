@@ -11,46 +11,103 @@
 
   .game-img {
     width: clamp(175px, 22vw, 300px)!important;
-    height: clamp(125px, 60%, 200px) !important;
+    height: clamp(125px, 70%, 200px) !important;
     border-top-left-radius: .5rem;
     border-top-right-radius: .5rem;
   }
   
   .game-info {
-    height: 40% !important;
+    height: 30% !important;
     text-align: left !important;
-    margin: 1vw .8vw 0vh .8vw;
+    margin: 1.5vw 1.5vw 0 1.5vw;
     
     > div {
       text-align: left !important;
+      margin-bottom: .2rem;
     }
     
-    .game-title, .game-price {
+    .game-title {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-bottom: .5vh;
+      margin-bottom: .5vw
     }
 
-    
-    .game-rating  {
-      color: #fdca52;
-      margin-bottom: .5rem;
+    .game-numbers {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: .2vw;
+      padding-bottom: .2vw;
+
+      .game-price {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-right: 1rem;
+      }
     }
+  }
+
+  .add-game-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: max-content;
+    padding: .1rem 1.2rem .1rem 2rem;
+    margin-left: auto;
+    font-weight: 600;
+    border-radius: 2rem;
+    background-color: rgba(175, 175, 175, .5);
+    text-align: end;
+    align-self: flex-end;
+    
+    .add-cart-icon {
+      position: absolute;
+      top: 50%;
+      left: .5rem;
+      transform: translateY(-50%);
+      margin-right: .5rem;
+      height: .8rem;
+      width: .8rem;
+      
+      svg, path {
+        height: .8rem;
+        width: .8rem;
+        fill:white;
+      }
+    }
+  }
+  
+  .add-game-button:hover {
+    background-color: rgba(175, 175, 175, .7);
+
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
+  .game-title, .game-price, .game-rating, .add-game-button {
+    font-size: clamp(.8rem, .9vw, 1.5rem);
+    margin-bottom: 0rem !important;
+    font-weight: 500 !important;
+  }
 
-  .game-title, .game-price {
-    font-size: clamp(.9rem, 1vw, 1.5rem);
-    margin-bottom: .2rem;
+  .add-game-button {
+    display: flex;
+    align-items: center;
+    width: min-content;
+    padding: .1rem .8rem .1rem 1rem;
   }
 }
 
 .game-card:hover {
-  opacity: 0.6;
+  .game-img {
+    opacity: 0.4;
+  }
 }
+
+
+
 
 
 

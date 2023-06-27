@@ -1,3 +1,30 @@
+body {
+  background: #000000;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  height: .5rem;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: none;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(193, 193, 193, .1);
+  border-radius: 12px;
+  scrollbar-width: thin;
+  -webkit-box-shadow: none;
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+  background: none;
+  scrollbar-width: thin;
+}
+
 /* applies to all elements */
 * {
   text-align: center;
@@ -5,6 +32,7 @@
   font-size: clamp(.9rem, 1vw, 1.5rem);
   color: white;
 }
+
 
 .subtext {
   font-size: clamp(.8rem, .9vw, 1.4rem);
