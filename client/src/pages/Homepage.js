@@ -40,7 +40,7 @@ const Homepage = ({ user, authenticated}) => {
         ))}
       </div>
 
-      <h1 className='title'>Latest Games:</h1>
+      <h1 className='title'>Latest Games</h1>
       <div className='games-cont'>
         {recentGames && recentGames.map((game) => (
           <GameCard

@@ -1,10 +1,12 @@
 /* eslint-disable */
+import '../../src/styles/GameDetails.css'
 import React from 'react'
 import {useEffect, useState} from "react";
 import { AddToCart, GetCart } from "../services/CartServices";
 import { GetReviewsByGameId } from "../services/ReviewServices";
 import ReviewCard from "../components/ReviewCard";
 import SubmitReviewForm from "../components/SubmitReviewForm";
+import { ReactComponent as AddCardIcon } from '../../src/styles/icons/add-to-cart.svg';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 const MySwal = withReactContent(Swal)
@@ -47,29 +49,50 @@ const GameDetails = ({ game, user, authenticated}) => {
   }, [user])
 
   return (
-    <div className='details'>
-      <section className='top-half'>
-        <div><img src={game.background_image} alt="" /></div>
+    <div className='game-details'>
+      <div className='top-half'>
+        <img className='img-div' src={game.background_image} alt={`${game.title} poster`} />
       
-        <section className='right-side'>
-          <h1>{game.title}</h1>
-          <p>Rating: {game.rating}</p>
-          <p>USD ${ game.price }</p>
-          <p>Platform: {game.platform}</p>
-          <p>Description: {game.description}</p>
-          <button className='add-cart' onClick={handleAddCart} >Add to Cart</button>
+        <div className='right-side'>
+          <div className='title'>{game.title}</div>
+          <div className='subtitle' style={{ color: '#2dc14f'}}>${ game.price } USD</div>
+          <div
+            className='subtitle'
+            style={{ color: 'rgb(175, 175, 175)', fontWeight: 'bold'}}
+          >
+            Rating <span 
+                style={{ color: '#fdca52', fontWeight: 'bold'}}
+                className='subtitle'
+              >
+                {game.rating}
+              </span>
+          </div>
+          <div 
+            className='subtitle'
+            style={{ color: 'rgb(175, 175, 175)'}}
+          >
+            Platforms: <span className='subtitle'>{game.platform}</span>
+          </div>
+          <div 
+            className='details-desc'
+            style={{ color: 'rgb(190, 190, 190)'}}
+          >
+            {game.description}
+          </div>
+          <div onClick={handleAddCart} className='add-game-button' >Add to Cart</div>
           <br/>
-          {(user && authenticated) && <button className='show-review-form' onClick={showReviewForm}>Review game</button>}
-          {reviewButton && <SubmitReviewForm user={user} game={game}/> }
-        </section>
-      </section>
+        </div>
+      </div>
 
-      <section className='reviews-cont'>
-        {gameReviews.length > 0 && reviewsExist}
-        {gameReviews.map(review => (
-          <ReviewCard key={review.id} review={review} user={user} />
-        ))}
-      </section>
+        {/* {(user && authenticated) && <div className='show-review-form' onClick={showReviewForm}>Review game</div>}
+        {reviewButton && <SubmitReviewForm user={user} game={game}/> } */}
+
+        {/* <section className='reviews-cont'>
+          {gameReviews.length > 0 && reviewsExist}
+          {gameReviews.map(review => (
+            <ReviewCard key={review.id} review={review} user={user} />
+          ))}
+        </section> */}
       
     </div>
   )

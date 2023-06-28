@@ -1,44 +1,46 @@
 
 /* gameCard styles */
 .game-card {
-  width: clamp(200px, 22vw, 300px) !important;
-  height: clamp(200px, 22vw, 300px) !important;
+  width: clamp(250px, 21vw, 290px) !important;
+  height: clamp(250px, 21vw, 300px) !important;
   border-radius: .5rem;
   background-color: #1b1b1b;
   cursor: pointer;
   transition: all 0.2s;
-  margin: 0 3rem 2rem 0;
+  margin: 0 3rem 1.5rem 0;
 
   .game-img {
-    width: clamp(175px, 22vw, 300px)!important;
+    width: clamp(250px, 21vw, 290px)!important;
     height: clamp(125px, 70%, 200px) !important;
     border-top-left-radius: .5rem;
     border-top-right-radius: .5rem;
   }
   
   .game-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
     height: 30% !important;
     text-align: left !important;
-    margin: 1.5vw 1.5vw 0 1.5vw;
+    margin: auto clamp(1rem, 1.5vw, 2.5rem);
     
     > div {
       text-align: left !important;
-      margin-bottom: .2rem;
     }
     
     .game-title {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-bottom: .5vw
+      margin-top: .5vmin;
     }
-
+    
     .game-numbers {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-top: .2vw;
-      padding-bottom: .2vw;
+      margin-top: -1vmin;
+      margin-bottom: .5vmin;
 
       .game-price {
         white-space: nowrap;
@@ -87,7 +89,7 @@
 
 @media screen and (max-width: 800px) {
   .game-title, .game-price, .game-rating, .add-game-button {
-    font-size: clamp(.8rem, .9vw, 1.5rem);
+    /* font-size: clamp(1rem, .9vw, 1.5rem); */
     margin-bottom: 0rem !important;
     font-weight: 500 !important;
   }

@@ -1,0 +1,172 @@
+/* gameDetails styling */
+.game-details {
+  padding-left: 5rem;
+  padding-right: 5rem;
+  padding-top: 2rem;
+}
+
+.top-half {
+  display: flex;
+  padding: 1rem;
+  width: 100%;
+  
+  .img-div {
+    width: clamp(325px, 50vw, 700px);
+    height: clamp(325px, 50vw, 550px);
+    margin-right: 3vmin;
+    border-radius: .5rem;
+  }
+  
+  .right-side {
+    display: flex;
+    flex-direction: column;
+    height: clamp(325px, 50vw, 550px);
+    padding-right: 1rem;
+    padding-left: 1rem;
+
+    > div {
+      text-align: left;
+    }
+
+    .subtext {
+      font-size: clamp(.8rem, .9vw, 1.4rem);
+    }
+
+    .subtitle {
+      font-size: clamp(1.1rem, 1.3vw, 1.5rem);
+      font-weight: 600;
+      margin-bottom: 1.5vmin;
+    }
+
+    .title {
+      font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+      font-weight: 600;
+      margin-top: 3vmin;
+      margin-bottom: 2.5vmin;
+      line-height: 2.8vw;
+    }
+
+    .details-desc {
+      margin-bottom: 2vmin;
+    }
+
+    .add-game-button {
+      display: flex;
+      align-items: center;
+      width: max-content;
+      padding: .5rem 1.5rem .5rem 1.5rem;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: auto;
+      margin-bottom: 0;
+      font-weight: 600;
+      border-radius: 2rem;
+      background-color: rgba(175, 175, 175, .5);
+    }
+
+    .add-game-button:hover {
+      background-color: rgba(175, 175, 175, .7);
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .game-details {
+      padding-top: 1rem;
+  }
+
+  .top-half {
+    flex-direction: column;
+
+    .img-div {
+      width: clamp(300px, 90vw, calc(calc(95vw - 5rem) - 5rem));
+      height: clamp(300px, 75vw, calc(calc(75vw - 5rem) - 5rem));
+    }
+
+    .right-side {
+      height: auto;
+      padding-right: 1rem;
+      padding-left: 1rem;
+
+      .title {
+        line-height: 2rem;
+        margin-top: 2rem;
+      }
+
+      .details-desc {
+        margin-bottom: 2rem;
+      }
+
+      .add-game-button {
+        margin-bottom: auto;
+      }
+    }
+  }
+}
+
+
+/*.show-review-form {
+  background-color: #f37971;
+  color: white;
+  width: auto;
+  height: 1.7em;
+  border-radius: 12.5px;
+  display: inline;
+}
+.show-review-form:hover{
+  background-color: white;
+  color:#f37971;
+} */
+
+/* review section styling */
+/* .reviews-cont {
+  width: 70%;
+  margin: auto;
+} */
+
+/* .review-card {
+  border: 1px solid white;
+  border-radius: 30px;
+  background-color: rgb(65, 63, 63);
+  height: 40px;
+  padding: 2em auto;
+  margin: 0.6em auto;
+
+}
+
+.review-card p, h4 {
+  display: inline-block;
+  margin: auto 0.4em;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.review-card p{
+  color: #01c3cc;
+}
+.review-card h4{
+  color: white;
+}
+
+.delete-review {
+  background-color: #f37971;
+  color: white;
+  width: auto;
+  height: 1.7em;
+  border-radius: 12.5px;
+  margin: auto 1em;
+  display: inline;
+}
+.delete-review:hover {
+  background-color: white;
+  color:#f37971
+}
+
+.review-h2 {
+  font-size: 40px;
+  color: #01c3cc;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+} */
+
+

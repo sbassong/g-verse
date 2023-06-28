@@ -50,14 +50,15 @@ const GameCard = ({id, title, image, price, rating, user, authenticated}) => {
       <img 
         onClick={() => navigate(`/game/details/${id}`)}
         className="game-img"
-        src={image} alt="" 
+        src={image}
+        alt={`${title} image`} 
       />
 
       <div className='game-info'>
         <div className='game-title subtitle'>{title}</div>
 
-        <div className='game-numbers subtext' style={{ fontWeight: 'bold' }}>
-          <div className='game-price subtext' style={{ color: '#2dc14f'}}>${price}</div>
+        <div className='game-numbers' style={{ fontWeight: 'bold' }}>
+          <div className='game-price' style={{ color: '#2dc14f'}}>${price}</div>
           {
             isHover ?
               <div onClick={handleAddCart} className='add-game-button subtext' >

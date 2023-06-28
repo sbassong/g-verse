@@ -5,7 +5,7 @@ import '../styles/GameListings.css'
 const GameListings = ({user, authenticated, games}) => {
   return (
     <div className='games-library'>
-      <div className='subtitle' >Browse our ever expanding game-verse</div>
+      <div className='subtitle games-sub' >Browse our ever expanding game-verse</div>
       <div className='listings-cont'>
           {games.length > 0 && games.map((game) => (
             <GameCard 
