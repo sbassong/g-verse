@@ -4,7 +4,8 @@
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 3rem 5rem 2rem 5rem;
+  padding-top: 3rem;
+  padding-bottom: 2rem;
   margin-bottom: 5vh;
   flex-wrap: nowrap;
   position: sticky;
@@ -65,7 +66,7 @@
     margin-left: auto;
     width: max-content;
     flex-wrap: nowrap;
-
+    
     .menu-item {
       margin-left: 1rem;
       margin-right: 0;
@@ -75,10 +76,52 @@
     .menu-item:hover {
       color: rgb(170, 165, 165);
     }
+    
+    .login-icon {
+      width: clamp(1.8rem, 2vw, 3rem);
+      height: clamp(1.8rem, 2vw, 3rem);
+      margin-top: -.7rem;
+    }
   }
-
-  /* TODO: nav button styles */
 }
 
+.bold {
+  font-weight: 600;
+}
+
+#account-menu > .MuiPopover-paper,
+#account-menu .MuiMenu-list  {
+  background-color: #1b1b1b;
+  border-radius: 5px;
+}
+
+#account-menu .MuiMenu-list > li:hover  {
+  background-color: rgba(175, 175, 175, .5);
+}
+
+@media screen and (max-width: 800px) {
+  .nav {
+    justify-content: center;
+    
+    .logo {
+      margin-right: 1.5rem;
+    }
+    
+    .search-bar {
+      margin-right: .5rem;
+    }
+    
+    .no-display-max {
+      display: none;
+    }
+  }
+}
+
+@media screen and (min-width: 801px) {
+  #account-menu .no-display,
+  .no-display {
+    display: none;
+  }
+}
 
 
