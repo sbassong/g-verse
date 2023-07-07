@@ -36,8 +36,8 @@ const AccountMenu = ({user, handleLogOut}) => {
   const HomeItem = () => <NavLink to='/'><span className='menu-item subtext bold'>Home</span></NavLink>
   const LibraryItem = () => <NavLink to='/games/listings'><span className='menu-item subtext bold'>Library</span></NavLink>
   const ProfileItem = () => <NavLink to="/user/account"><span className="menu-item subtext">Account</span></NavLink>
-  const LogInItem = () => <NavLink to="/login"><span className='menu-item subtext'>Log in</span></NavLink>
-  const LogOutItem = () => <NavLink to="/logout" onClick={handleLogOut} ><span className='menu-item subtext'>Log out</span></NavLink>
+  const LogInItem = () => <NavLink to="/signin"><span className='menu-item subtext'>Sign in</span></NavLink>
+  const LogOutItem = () => <NavLink to="/signout" onClick={handleLogOut} ><span className='menu-item subtext'>Sign out</span></NavLink>
   const CartItem = () => <NavLink to="/cart"><span className='menu-item subtext'>Cart</span></NavLink>
 
   return (
@@ -48,7 +48,7 @@ const AccountMenu = ({user, handleLogOut}) => {
       />
 
       <GiHamburgerMenu 
-        className='menu-item title login-icon no-display'
+        className='menu-item title menu-icon no-display'
         onClick={handleClick}
       />
 

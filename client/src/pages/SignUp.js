@@ -1,6 +1,30 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react';
+import { NavLink } from 'react-router-dom'
+import '../styles/SignIn.css'
 import { SignUpUser } from '../services/UserServices'
-import { Form, Button } from 'react-bootstrap'
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import FilledInput from '@mui/material/FilledInput';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import CustomizedInputsStyleOverrides from '../styles/muiOverrides';
 
 const iState = {
   name: '',
@@ -9,7 +33,10 @@ const iState = {
   confirmPassword: ''
 }
 
+
 const SignUp = (props) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
   const [formValues, setFormValues] = useState({
     name: '',
     email: '',
@@ -17,9 +44,12 @@ const SignUp = (props) => {
     confirmPassword: ''
   })
 
-  const handleChange = (e) => {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value })
-  }
+  const handleFormChange = (e) => setFormValues({ ...formValues, [e.target.name]: e.target.value });
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowConfirmPassword = () => setShowConfirmedPassword((show) => !show);
+  const handleMouseDownPassword = (event) => event.preventDefault();
+  const handleMouseDownConfirmedPassword = (event) => event.preventDefault();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -33,77 +63,152 @@ const SignUp = (props) => {
   }
 
   return (
-    <div className="signin col">
-      <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '85%' }}>
-        <Form className="col" onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label style={{ color: 'white' }} htmlFor="name">
-              Name
-            </Form.Label>
-            <Form.Control
-              onChange={handleChange}
+    <ThemeProvider theme={CustomizedInputsStyleOverrides}>
+      <Container component="main" maxWidth="sm">
+        {/* <CssBaseline /> */}
+        <Box
+          sx={{
+            padding: 3,
+            marginTop: 6,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            borderRadius:  2,
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: '#757ce8' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="name"
+              label="Account Name"
               name="name"
-              type="text"
-              placeholder="John Smith"
               value={formValues.name}
-              required
-            />
-          </Form.Group>
+              onChange={handleFormChange}
+              autoComplete="name"
+              autoFocus
+              className='signup-name-field'
+              sx={{
+                borderRadius: 1,
+                backgroundColor: 'rgba(225, 225, 225)',
+              }}
+              />
 
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label style={{ color: 'white' }} htmlFor="email">
-              Email
-            </Form.Label>
-            <Form.Control
-              onChange={handleChange}
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
               name="email"
-              type="email"
-              placeholder="example@example.com"
               value={formValues.email}
-              required
-            />
-          </Form.Group>
+              onChange={handleFormChange}
+              autoComplete="email"
+              className='signin-email-field'
+              sx={{
+                borderRadius: 1,
+                backgroundColor: 'rgba(225, 225, 225)',
+              }}
+              />
 
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label style={{ color: 'white' }} htmlFor="password">
-              Password
-            </Form.Label>
-            <Form.Control
-              onChange={handleChange}
-              type="password"
+            <TextField
+              margin="normal"
+              required
+              fullWidth
               name="password"
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              id="outlined-adornment-password"
               value={formValues.password}
-              required
+              autoComplete="current-password"
+              className='signin-password-field'
+              color="grey"
+              // focused
+              onChange={handleFormChange}
+              sx={{
+                borderRadius: 1,
+                backgroundColor: 'rgba(225, 225, 225)',
+              }}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="start"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>,
+              }}
             />
-          </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label style={{ color: 'white' }} htmlFor="confirmPassword">
-              Confirm Password
-            </Form.Label>
-            <Form.Control
-              onChange={handleChange}
-              type="password"
-              name="confirmPassword"
-              value={formValues.confirmPassword}
+            <TextField
+              margin="normal"
               required
+              fullWidth
+              name="confirmPassword"
+              label="Comfirm Password"
+              type={showConfirmedPassword ? 'text' : 'password'}
+              id="outlined-adornment-confirm-password"
+              value={formValues.confirmPassword}
+              autoComplete="current-password"
+              className='signin-confirm-password-field'
+              color="grey"
+              // focused
+              onChange={handleFormChange}
+              sx={{
+                borderRadius: 1,
+                backgroundColor: 'rgba(225, 225, 225)',
+              }}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle confirmed password visibility"
+                    onClick={handleClickShowConfirmPassword}
+                    onMouseDown={handleMouseDownConfirmedPassword}
+                    edge="start"
+                  >
+                    {showConfirmedPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>,
+              }}
             />
-          </Form.Group>
-          <Button
-            variant="primary"
-            type="submit"
-            disabled={
-              !formValues.email ||
-              (!formValues.password &&
-                formValues.confirmPassword === formValues.password)
-            }
-          >
-            Sign Up
-          </Button>
-        </Form>
-      </div>
-    </div>
-  )
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 4, mb: 3, backgroundColor: '#757ce8' }}
+              
+            >
+              Create Account
+            </Button>
+            <Box className='separator-line'><span className='or-span'>OR</span></Box>
+              <NavLink className='menu-item subtitle no-display-max' to='/signin'>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 2, mb: 1, backgroundColor: '#2dc14f' }}
+                >
+                  Already have an account ? Sign In
+                </Button>
+              </NavLink>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
+  );
 }
 
-export default SignUp
+export default SignUp;

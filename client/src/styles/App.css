@@ -27,11 +27,11 @@ body {
 
 /* applies to all elements */
 * {
-  text-align: center;
   box-sizing: border-box;
   font-size: clamp(.9rem, 1vw, 1.5rem);
   color: white;
 }
+
 
 
 .subtext {

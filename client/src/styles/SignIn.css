@@ -1,0 +1,17 @@
+
+
+
+.separator-line {
+  border-bottom: .5px solid #6c6b6b;
+  line-height: 0;
+  margin: .5rem 0;
+  text-align: center;
+  width: 100%;
+
+  .or-span {
+      background-color: #1b1b1b;
+      color: #606060;
+      font-size: .6875rem;
+      padding: 0 0.25rem;
+    }
+}

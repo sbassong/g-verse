@@ -2,9 +2,7 @@ import React from 'react'
 import '../styles/nav.css'
 import { NavLink } from 'react-router-dom'
 import SearchBar from './SearchBar'
-import { VscAccount } from "react-icons/vsc";
-
-import AccountMenu from './profile-menu';
+import AccountMenu from './ProfileMenu';
 
 
 const Nav = ({ handleLogOut, authenticated, user, setSearchResults }) => {

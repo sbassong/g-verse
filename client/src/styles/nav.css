@@ -78,9 +78,14 @@
     }
     
     .login-icon {
-      width: clamp(1.8rem, 2vw, 3rem);
-      height: clamp(1.8rem, 2vw, 3rem);
-      margin-top: -.7rem;
+      width: clamp(2rem, 2vw, 3rem) !important;
+      height: clamp(2rem, 2vw, 3rem) !important;
+      margin-top: -.5rem !important;
+    }
+
+    .menu-icon {
+      width: clamp(2rem, 4vw, 4rem) !important;
+      height: clamp(2rem, 4vw, 4rem) !important;
     }
   }
 }
@@ -97,7 +102,12 @@
 
 #account-menu .MuiMenu-list > li:hover  {
   background-color: rgba(175, 175, 175, .5);
+
+  > svg, path  {
+    background-color: transparent;
+  }
 }
+
 
 @media screen and (max-width: 800px) {
   .nav {
