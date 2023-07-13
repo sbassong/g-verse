@@ -1,29 +1,20 @@
 /* eslint-disable */
 import React from 'react'
-import {DeleteReview } from '../services/ReviewServices'
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-const MySwal = withReactContent(Swal)
+import { Card, CardContent, Typography, Rating } from '@mui/material'
 
 
-const ReviewCard = ({review, user}) => {
-
-  const handleDeleteReview = async () => {
-    await DeleteReview(review.id)
-    MySwal.fire({text: "Review successfully deleted!"})
-      .then(() => { window.location.reload() })
-  }
+const ReviewCard = ({review}) => {
 
   return (
-    <div className='review-card'>
-      <h4>{review.User.name}:</h4>
-      <p>  {review.content}</p>
-
-      {(review.User.id === review.user_id) && 
-        <button className='delete-review' onClick={handleDeleteReview}>Delete Review</button>
-      }
-    </div>
-  )
+    <Card sx={{ maxWidth: 345, mb: 2 }}>
+      <CardContent>
+        <Rating name="read-only" value={review.rating} readOnly />
+        <Typography variant="body2" color="text.secondary">
+          {review.content}
+        </Typography>
+      </CardContent>
+    </Card>
+  );
 }
 
 export default ReviewCard

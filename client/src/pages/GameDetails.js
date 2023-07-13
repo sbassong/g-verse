@@ -2,14 +2,11 @@
 import '../../src/styles/GameDetails.css'
 import React from 'react'
 import {useEffect, useState} from "react";
-import { AddToCart, GetCart } from "../services/CartServices";
+// import { AddToFavorites, GetFavorites } from "../services/FavoritesServices";
 import { GetReviewsByGameId } from "../services/ReviewServices";
 import ReviewCard from "../components/ReviewCard";
-import SubmitReviewForm from "../components/SubmitReviewForm";
-import { ReactComponent as AddCardIcon } from '../../src/styles/icons/add-to-cart.svg';
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-const MySwal = withReactContent(Swal)
+import AddReview from '../components/AddReview';
+import { Box, Typography } from '@mui/material';
 
 const GameDetails = ({ game, user, authenticated}) => {
   const [cart, setCart] = useState({})
@@ -21,7 +18,7 @@ const GameDetails = ({ game, user, authenticated}) => {
   }
 
   const findCart = async () => {
-    const res = await GetCart(user.id)
+    const res = await GetFavorites(user.id)
     setCart(res)
   }
 
@@ -31,7 +28,7 @@ const GameDetails = ({ game, user, authenticated}) => {
   }
 
   const handleAddCart = async () => {
-    await AddToCart(cart_item)
+    await AddToFavorites(cart_item)
     MySwal.fire({text: "Game added to cart!"})
   }
   
@@ -84,15 +81,28 @@ const GameDetails = ({ game, user, authenticated}) => {
         </div>
       </div>
 
-        {/* {(user && authenticated) && <div className='show-review-form' onClick={showReviewForm}>Review game</div>}
-        {reviewButton && <SubmitReviewForm user={user} game={game}/> } */}
+      <Box
+        sx={{
+          padding: 2,
+          marginTop: 2,
+          display: 'flex',
+        }}
+      >
+        <AddReview user={user} game={game}/>
 
-        {/* <section className='reviews-cont'>
-          {gameReviews.length > 0 && reviewsExist}
-          {gameReviews.map(review => (
-            <ReviewCard key={review.id} review={review} user={user} />
-          ))}
-        </section> */}
+        <Box 
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          {gameReviews.length > 0
+            ? gameReviews.map((review) => <ReviewCard review={review}/>)
+            : <Typography variant="body2" color="text.secondary">Be the first to leave a review!</Typography>
+          }
+        </Box>
+      </Box>
       
     </div>
   )

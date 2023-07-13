@@ -1,0 +1,14 @@
+.account-page {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+
+  .profile-ui {
+    
+    .profile-box {
+    }
+  }
+  
+  .form-ui {
+  }
+}

@@ -14,11 +14,6 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       })
-      Game.belongsToMany(models.Cart, {
-        through: models.Cart_game,
-        as: 'cart_items',
-        foreignKey: 'game_id'
-      })
     }
   }
   Game.init(
@@ -43,9 +38,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       platform: {
-        type: DataTypes.STRING
-      },
-      website: {
         type: DataTypes.STRING
       },
       price: {

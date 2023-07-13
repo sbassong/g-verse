@@ -1,7 +1,7 @@
 const { User, Game, Cart } = require('../models')
 const middleware = require('../middleware')
 
-//  AUTH FUNCTIONS //  AUTH FUNCTIONS //  AUTH FUNCTIONS
+// AUTH FUNCTIONS
 const Login = async (req, res) => {
   try {
     const user = await User.findOne({
@@ -15,14 +15,17 @@ const Login = async (req, res) => {
         req.body.password
       ))
     ) {
-      let payload = {
+      const trimmedUser = {
         id: user.id,
-        email: user.email
+        email: user.email,
+        name: user.name,
+        image: user.image,
+        favorites: user.favorites,
       }
-      let token = middleware.createToken(payload)
-      return res.send({ user: payload, token })
+      let token = middleware.createToken(trimmedUser)
+      return res.send({ user: trimmedUser, token })
     }
-    res.status(401).send({ status: 'Error', msg: 'Unauthorized' })
+    res.status(401).send({ status: 'Error', msg: 'No user matches this email or password. Try again.' })
   } catch (error) {
     throw error
   }
@@ -33,13 +36,19 @@ const SignUp = async (req, res) => {
     const { email, password, name, image } = req.body
     let password_digest = await middleware.hashPassword(password)
     const user = await User.create({ email, password_digest, name, image })
-    const cart = await Cart.create({user_id: user.dataValues.id})
-    res.send({user, cart})
+    const trimmedUser = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      image: user.image,
+      favorites: user.favorites,
+    };
+
+    res.send(trimmedUser)
   } catch (error) {
     throw error
   }
 }
-
 
 const UpdatePassword = async (req, res) => {
   try {
@@ -54,7 +63,14 @@ const UpdatePassword = async (req, res) => {
     ) {
       let password_digest = await middleware.hashPassword(newPassword)
       await user.update({ password_digest })
-      return res.send({ status: 'Ok', payload: user })
+      const trimmedUpdatedUser = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        image: user.image,
+        favorites: user.favorites,
+      }
+      return res.send(trimmedUpdatedUser)
     }
     res.status(401).send({ status: 'Error', msg: 'Unauthorized' })
   } catch (error) {
@@ -65,18 +81,17 @@ const UpdatePassword = async (req, res) => {
 const CheckSession = async (req, res) => {
   try {
     const { payload } = res.locals
-    const user = await User.findByPk(payload.id, {attributes: ['id', 'name', 'email', 'image']})
+    const user = await User.findByPk(payload.id, {attributes: ['id', 'name', 'email', 'image', 'favorites']})
     res.send(user)
   } catch (error) {
     throw error
   }
 }
 
-//USERS FUNCTIONS //USERS FUNCTIONS//USERS FUNCTIONS
-
+// USERS FUNCTIONS
 const GetProfiles = async (req, res) => {
   try {
-    const users = await User.findAll()
+    const users = await User.findAll({attributes: ['id', 'name', 'email', 'image', 'favorites']})
     res.send(users)
   } catch (error) {
     throw error
@@ -85,7 +100,7 @@ const GetProfiles = async (req, res) => {
 
 const GetUserProfile = async (req, res) => {
   try {
-    const user = await User.findByPk(req.params.user_id)
+    const user = await User.findByPk(req.params.user_id, {attributes: ['id', 'name', 'email', 'image', 'favorites']})
     res.send(user)
   } catch (error) {
     throw error
@@ -95,11 +110,18 @@ const GetUserProfile = async (req, res) => {
 const UpdateUser = async (req, res) => {
   try {
     let userId = parseInt(req.params.user_id)
-    let updatedUser = await User.update(req.body, {
+    const updatedUser = await User.update(req.body, {
       where: { id: userId },
       returning: true
     })
-    res.send(updatedUser)
+    const trimmedUpdatedUser = {
+      id: updatedUser.id,
+      email: updatedUser.email,
+      name: updatedUser.name,
+      image: updatedUser.image,
+      favorites: updatedUser.favorites,
+    }
+    res.send(trimmedUpdatedUser)
   } catch (error) {
     throw error
   }
@@ -115,14 +137,15 @@ const DeleteUser = async (req, res) => {
   }
 }
 
+
 module.exports = {
-  //USERS FUNCTIONS
+  // USERS FUNCTIONS
   GetProfiles,
   GetUserProfile,
   UpdateUser,
   DeleteUser,
 
-  //  AUTH FUNCTIONS
+  // AUTH FUNCTIONS
   Login,
   SignUp,
   UpdatePassword,

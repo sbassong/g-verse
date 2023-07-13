@@ -1,29 +1,12 @@
+import '../styles/SignIn.css'
 import React, {useState} from 'react';
 import { NavLink } from 'react-router-dom'
-import '../styles/SignIn.css'
-import { SignUpUser } from '../services/UserServices'
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import { useNavigate } from "react-router";
+import { ThemeProvider } from '@mui/material/styles';
+import {Avatar, Button, TextField, IconButton, Box, Typography, Container, InputAdornment, } from '@mui/material/';
+import {Visibility, VisibilityOff} from '@mui/icons-material/';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import FilledInput from '@mui/material/FilledInput';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormHelperText from '@mui/material/FormHelperText';
-import FormControl from '@mui/material/FormControl';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { SignUpUser } from '../services/UserServices'
 import CustomizedInputsStyleOverrides from '../styles/muiOverrides';
 
 const iState = {
@@ -31,18 +14,13 @@ const iState = {
   email: '',
   password: '',
   confirmPassword: ''
-}
+};
 
-
-const SignUp = (props) => {
+const SignUp = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
-  const [formValues, setFormValues] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  })
+  const [formValues, setFormValues] = useState(iState);
 
   const handleFormChange = (e) => setFormValues({ ...formValues, [e.target.name]: e.target.value });
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -52,20 +30,19 @@ const SignUp = (props) => {
 
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     await SignUpUser({
       name: formValues.name,
       email: formValues.email,
       password: formValues.password
-    })
-    setFormValues(iState)
-    props.history.push('/signin')
+    });
+    setFormValues(iState);
+    navigate('/signin');
   }
 
   return (
     <ThemeProvider theme={CustomizedInputsStyleOverrides}>
       <Container component="main" maxWidth="sm">
-        {/* <CssBaseline /> */}
         <Box
           sx={{
             padding: 3,
@@ -92,6 +69,7 @@ const SignUp = (props) => {
               id="name"
               label="Account Name"
               name="name"
+              placeholder="Firstname Lastname"
               value={formValues.name}
               onChange={handleFormChange}
               autoComplete="name"
@@ -110,6 +88,7 @@ const SignUp = (props) => {
               id="email"
               label="Email Address"
               name="email"
+              placeholder="firstname@email.com"
               value={formValues.email}
               onChange={handleFormChange}
               autoComplete="email"

@@ -46,7 +46,7 @@ export const GetAllUsers = async () => {
   }
 }
 
-export const UpdatePassword = async (user_id, data) => {
+export const UpdateUserPassword = async (user_id, data) => {
   try {
     const res = await Client.post(`/users/update/password/${user_id}`, data)
     return res.data

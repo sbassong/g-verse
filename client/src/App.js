@@ -2,12 +2,11 @@ import './styles/App.css'
 
 import React, { useState, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { useNavigate } from "react-router";
 import { CheckSession } from './services/UserServices'
 import { GetGames } from './services/GameServices'
 
 import Nav from './components/Nav'
-import ProtectedRoute from './components/ProtectedRoute';
-
 import Account from './pages/Account'
 import Homepage from './pages/Homepage'
 import GameDetails from './pages/GameDetails'
@@ -15,11 +14,10 @@ import GameListings from './pages/GameListings'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import SearchResults from './pages/SearchResults'
-import Cart from './pages/Cart'
-
 
 
 function App() {
+  const navigate = useNavigate()
   const [authenticated, toggleAuthenticated] = useState(false || localStorage.getItem('authenticated'))
   const [user, setUser] = useState(null)
 
@@ -31,10 +29,12 @@ function App() {
     setGames(res)
   }
 
-  const handleLogOut = () => {
+  const handleLogOut =  () => {
     setUser(null)
     toggleAuthenticated(false)
-    localStorage.getItem('authenticated').clear()
+    localStorage.removeItem('authenticated')
+    localStorage.removeItem('token')
+    // navigate('/signin')
   }
 
   const checkToken = async () => {
@@ -45,11 +45,9 @@ function App() {
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      checkToken()
-    }
-    GetAllGames()
+    const token = localStorage.getItem('token');
+    if (token) checkToken();
+    GetAllGames();
   }, [])
 
   return (
@@ -59,21 +57,18 @@ function App() {
       <main className='main-section'>
         <Routes>
           <Route exact path='/' element={<Homepage user={user} authenticated={authenticated}/>}  />
-          <Route exact path='/signin' element={<SignIn setUser={setUser} toggleAuthenticated={toggleAuthenticated}/>} />
-          <Route exact path='/signup' element={<SignUp/>}/>
+          <Route exact path='/signin' element={<SignIn user={user} authenticated={authenticated} setUser={setUser} toggleAuthenticated={toggleAuthenticated}/>} />
+          <Route exact path='/signup' element={<SignUp />}/>
+          <Route exact path='/library/games' element={<GameListings user={user} authenticated={authenticated} games={games} GetAllGames={GetAllGames}/>} />
           <Route exact path='/search/results' element={<SearchResults searchResults={searchResults} user={user} authenticated={authenticated} />}  />
-          {user && authenticated && (<ProtectedRoute exact path='/user/account' element={Account} authenticated={authenticated} user={user} handleLogOut={handleLogOut}/>)}
-          {user && authenticated && (<ProtectedRoute exact path='/cart' element={Cart} authenticated={authenticated} user={user} />)}
-          <Route exact path='/games/listings' element={<GameListings user={user} authenticated={authenticated} games={games} GetAllGames={GetAllGames}/>} />
-          {
-            games.length > 0 && games.map(game => (
-              <Route key={game.id} path={`/game/details/${game.id}`} element={<GameDetails game={game} user={user} authenticated={authenticated} />} />
-            ))
-          }
-          </Routes>
-        </main>
+          <Route exact path='/user/account' element={<Account authenticated={authenticated} user={user} setUser={setUser} toggleAuthenticated={toggleAuthenticated} handleLogOut={handleLogOut}/>} />
+          { games.length > 0 && games.map(game => (
+            <Route key={game.id} path={`/game/details/${game.id}`} element={<GameDetails game={game} user={user} authenticated={authenticated} />} />
+          ))}
+        </Routes>
+      </main>
     </div>
   )
 }
 
-export default App
+export default App;

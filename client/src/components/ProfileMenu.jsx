@@ -33,12 +33,11 @@ const AccountMenu = ({user, handleLogOut}) => {
     setAnchorEl(null);
   };
 
-  const HomeItem = () => <NavLink to='/'><span className='menu-item subtext bold'>Home</span></NavLink>
-  const LibraryItem = () => <NavLink to='/games/listings'><span className='menu-item subtext bold'>Library</span></NavLink>
-  const ProfileItem = () => <NavLink to="/user/account"><span className="menu-item subtext">Account</span></NavLink>
-  const LogInItem = () => <NavLink to="/signin"><span className='menu-item subtext'>Sign in</span></NavLink>
-  const LogOutItem = () => <NavLink to="/signout" onClick={handleLogOut} ><span className='menu-item subtext'>Sign out</span></NavLink>
-  const CartItem = () => <NavLink to="/cart"><span className='menu-item subtext'>Cart</span></NavLink>
+  const HomeItem = () => <span className='menu-item subtext bold'>Home</span>
+  const LibraryItem = () => <span className='menu-item subtext bold'>Library</span>
+  const ProfileItem = () => <span className="menu-item subtext">Account</span>
+  const LogInItem = () => <span className='menu-item subtext'>Sign in</span>
+  const LogOutItem = () => <span className='menu-item subtext'>Sign out</span>
 
   return (
     <React.Fragment>
@@ -89,35 +88,44 @@ const AccountMenu = ({user, handleLogOut}) => {
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-          <MenuItem className='no-display'  onClick={handleClose}>
-            <HomeOutlinedIcon />
-            <HomeItem />
-          </MenuItem>
-
-          <MenuItem className='no-display' onClick={handleClose}>
-            <VideoLibraryOutlinedIcon />
-            <LibraryItem />
-          </MenuItem>
+          <NavLink to='/'>
+            <MenuItem className='no-display'  onClick={handleClose}>
+              <HomeOutlinedIcon />
+              <HomeItem />
+            </MenuItem>
+          </NavLink>
+          <NavLink to='/library/games'>
+            <MenuItem className='no-display' onClick={handleClose}>
+              <VideoLibraryOutlinedIcon />
+              <LibraryItem />
+            </MenuItem>
+          </NavLink>
 
           <Divider className='no-display'/>
 
           { user &&
-            <MenuItem onClick={handleClose}>
-              <Logout />
-              <LogOutItem />
-            </MenuItem>
-          }
-          { user &&
-            <MenuItem onClick={handleClose}>
-            <AccountCircleOutlinedIcon />
-            <ProfileItem />
-            </MenuItem>
+            <NavLink to="/user/account">
+              <MenuItem onClick={handleClose}>
+                <AccountCircleOutlinedIcon />
+                <ProfileItem />
+              </MenuItem>
+            </NavLink>
           }  
+          { user &&
+            <NavLink to="/" onClick={handleLogOut} >
+              <MenuItem onClick={handleClose}>
+                <Logout />
+                <LogOutItem />
+              </MenuItem>
+            </NavLink>
+          }
           { !user &&
-            <MenuItem onClick={handleClose}>
-              <Login />
-              <LogInItem />
-            </MenuItem>
+            <NavLink to="/signin">
+              <MenuItem onClick={handleClose}>
+                <Login />
+                <LogInItem />
+              </MenuItem>
+            </NavLink>
           }
         </Menu>
         

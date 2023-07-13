@@ -1,53 +1,38 @@
-import React, {useState} from 'react';
-import { NavLink } from 'react-router-dom'
 import '../styles/SignIn.css'
-import { SignInUser } from '../services/UserServices'
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import React, {useEffect, useState} from 'react';
+import { NavLink, useLocation, Navigate } from 'react-router-dom'
+import { useNavigate } from "react-router";
+import { ThemeProvider } from '@mui/material/styles';
+import {Avatar, Button, TextField, IconButton, Box, Typography, Container, InputAdornment, } from '@mui/material/';
+import {Visibility, VisibilityOff} from '@mui/icons-material/';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import FilledInput from '@mui/material/FilledInput';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormHelperText from '@mui/material/FormHelperText';
-import FormControl from '@mui/material/FormControl';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import CustomizedInputsStyleOverrides from '../styles/muiOverrides';
+import { SignInUser } from '../services/UserServices'
 
+const iState = { email: '', password: '' };
 
-const SignIn = (props) => {
+const SignIn = ({user, setUser, authenticated, toggleAuthenticated}) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
-  const [hoverEmailColor, setHoverEmailColor] = useState('rgba(225, 225, 225)')
-  const [hoverPasswordColor, setHoverPasswordColor] = useState('rgba(225, 225, 225)')
-  const [formValues, setFormValues] = useState({ email: '', password: '' })
+  const [formValues, setFormValues] = useState(iState);
 
   const handleFormChange = (e) => setFormValues({ ...formValues, [e.target.name]: e.target.value });
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => event.preventDefault();
 
-    const handleSubmit = async (e) => {
-    e.preventDefault()
-    const payload = await SignInUser(formValues)
-    setFormValues({ email: '', password: '' })
-    props.setUser(payload)
-    props.toggleAuthenticated(true)
-    props.history.push('/')
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const payload = await SignInUser(formValues);
+    setFormValues(iState);
+    await setUser(payload);
+    toggleAuthenticated(true);
+    navigate('/user/account');
+  };
 
 
-  return (
+  if (user && authenticated) return <Navigate to="/user/account" state={{ from: location }} replace />
+  else return (
     <ThemeProvider theme={CustomizedInputsStyleOverrides}>
       <Container component="main" maxWidth="sm">
         <Box
@@ -68,7 +53,6 @@ const SignIn = (props) => {
             Sign in
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
-
             <TextField
               margin="normal"
               required
@@ -76,6 +60,7 @@ const SignIn = (props) => {
               id="email"
               label="Email Address"
               name="email"
+              placeholder="firstname@email.com"
               value={formValues.email}
               onChange={handleFormChange}
               autoComplete="email"
@@ -83,10 +68,9 @@ const SignIn = (props) => {
               className='signin-email-field'
               sx={{
                 borderRadius: 1,
-                backgroundColor: hoverEmailColor,
+                backgroundColor: 'rgba(225, 225, 225)',
               }}
-              
-              />
+            />
 
             <TextField
               margin="normal"
@@ -100,11 +84,10 @@ const SignIn = (props) => {
               autoComplete="current-password"
               className='signin-password-field'
               color="grey"
-              // focused
               onChange={handleFormChange}
               sx={{
                 borderRadius: 1,
-                backgroundColor: hoverPasswordColor,
+                backgroundColor: 'rgba(225, 225, 225)',
               }}
               InputProps={{
                 endAdornment: <InputAdornment position="end">
@@ -127,7 +110,7 @@ const SignIn = (props) => {
             >
               Sign In
             </Button>
-              <Box className='separator-line'><span className='or-span'>OR</span></Box>
+            <Box className='separator-line'><span className='or-span'>OR</span></Box>
               <NavLink className='menu-item subtitle no-display-max' to='/signup'>
                 <Button
                   type="submit"
@@ -143,6 +126,7 @@ const SignIn = (props) => {
       </Container>
     </ThemeProvider>
   );
+  
 }
 
 export default SignIn;

@@ -8,17 +8,6 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      User.hasMany(models.Review, {
-        foreignKey: 'user_id',
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE'
-      })
-      User.hasOne(models.Cart, {
-        foreignKey: 'user_id',
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE'
-      })
     }
   }
   User.init(
@@ -41,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
       password_digest: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      favorites: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        defaultValue: []
       }
     },
     {

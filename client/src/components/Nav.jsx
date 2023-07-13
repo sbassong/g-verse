@@ -13,8 +13,8 @@ const Nav = ({ handleLogOut, authenticated, user, setSearchResults }) => {
       <SearchBar setSearchResults={setSearchResults}/>
       <div className='menu-nav'>
         <NavLink className='menu-item subtitle no-display-max' to='/'>Home</NavLink>
-        <NavLink className='menu-item subtitle no-display-max' to='/games/listings'>Library</NavLink>
-        <AccountMenu handleLogOut={handleLogOut} />
+        <NavLink className='menu-item subtitle no-display-max' to='/library/games'>Library</NavLink>
+        <AccountMenu handleLogOut={handleLogOut} user={user} authenticated={authenticated} />
       </div>
     </nav>
   )

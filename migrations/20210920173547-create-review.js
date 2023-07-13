@@ -8,15 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      user_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        onDelete: 'CASCADE',
-        references: {
-          model: 'users',
-          key: 'id'
-        }
-      },
       game_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -29,6 +20,10 @@ module.exports = {
       content: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      rating: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

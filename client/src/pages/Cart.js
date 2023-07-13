@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import CartItem from '../components/CartItem'
-import { DeleteCartItem, GetCartItems } from '../services/CartServices'
+import { DeleteFavoriteItem, GetFavoriteItems } from '../services/FavoritesServices'
 
-const Cart = (props) => {
+const Favorites = (props) => {
   const [cartItems, setCartItems] = useState([])
   const [deleted, setDeleted] = useState({})
 
   const handleCart = async (userId) => {
-    const userCart = await GetCartItems(userId)
+    const userCart = await GetFavoriteItems(userId)
     setCartItems(userCart.cart)
   }
 
   const handleDeleteItem = async (gameId, index) => {
-    await DeleteCartItem(gameId)
+    await DeleteFavoriteItem(gameId)
     cartItems.slice(index, 1) // this is a bit weird, can state be changed this way?
     setDeleted(gameId)
   }
@@ -26,25 +25,8 @@ const Cart = (props) => {
   return (
     <div className="cart">
       <h1 className="cart-text">Cart Items:</h1>
-      {cartItems.length < 1 && noItems}
-      {cartItems.map((item, index) => (
-        <div className="cart-cont">
-          <CartItem
-            key={item.id}
-            title={item.title}
-            image={item.background_image}
-            price={item.price}
-          />
-          <button
-            onClick={() => handleDeleteItem(item.id, index)}
-            className="delete-button"
-          >
-            Remove
-          </button>
-        </div>
-      ))}
     </div>
   )
 }
 
-export default Cart
+export default Favorites

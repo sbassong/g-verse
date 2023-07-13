@@ -9,6 +9,4 @@ Router.get('/:game_title', controller.GetGameByTitle)
 
 Router.post('/new_game', controller.CreateGame)
 
-Router.delete('/:game_id', controller.DeleteGame)
-
 module.exports = Router

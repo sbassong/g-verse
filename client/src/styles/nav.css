@@ -100,7 +100,11 @@
   border-radius: 5px;
 }
 
-#account-menu .MuiMenu-list > li:hover  {
+#account-menu ul li {
+    margin: .3rem;
+}
+
+#account-menu a:hover .MuiMenu-list > li  {
   background-color: rgba(175, 175, 175, .5);
 
   > svg, path  {

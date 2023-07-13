@@ -17,7 +17,7 @@ module.exports = {
         allowNull: false
       },
       rating: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       background_image: {
         type: Sequelize.STRING,
@@ -28,9 +28,6 @@ module.exports = {
         allowNull: false
       },
       platform: {
-        type: Sequelize.STRING
-      },
-      website: {
         type: Sequelize.STRING
       },
       price: {
