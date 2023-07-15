@@ -31,11 +31,12 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await SignUpUser({
+    const newUser = await SignUpUser({
       name: formValues.name,
       email: formValues.email,
       password: formValues.password
     });
+    console.log('newUser =>', newUser)
     setFormValues(iState);
     navigate('/signin');
   }

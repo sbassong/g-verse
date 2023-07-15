@@ -11,6 +11,7 @@ Router.post('/signup', controller.SignUp)
 Router.post('/update/password/:user_id', middleware.stripToken, middleware.verifyToken, controller.UpdatePassword)
 
 Router.put('/update/:user_id', controller.UpdateUser)
+Router.put('/update/user/favorites/:user_id', controller.UpdateUserFavorites)
 
 Router.delete('/delete/:user_id', controller.DeleteUser)
 

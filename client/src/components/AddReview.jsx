@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import { NavLink } from 'react-router-dom'
 import { CreateReview } from '../services/ReviewServices'
 import '../styles/SignIn.css'
 import { ThemeProvider } from '@mui/material/styles';
@@ -7,71 +6,75 @@ import CustomizedInputsStyleOverrides from '../styles/muiOverrides';
 import { Rating, Button, TextField, Box, Typography, Container} from '@mui/material'
 
 
-const AddReview = (props) => {
-  const [content, setContent] = useState('')
+const AddReview = ({ user, game, setGameReviews, gameReviews }) => {
+  const [content, setContent] = useState('');
   const [rating, setRating] = useState(0);
-  // const [formValues, setFormValues] = useState({ user_id: user.id, game_id: game.id, content: '' })
 
-
-  const handleFormChange = (e) => setContent(e.target.value );
+  const handleContentChange = (e) => setContent(e.target.value );
+  const handleRatingChange = (e, newRating) => setRating(newRating);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    CreateReview({content: content ? content : 'No content', rating})
+    e.preventDefault();
+    const newReview = await CreateReview({
+      content: content ? content : 'No content',
+      rating,
+      game_id: game?.id,
+    });
+
+    const updatedGameReviews = gameReviews;
+    updatedGameReviews.push(newReview);
+
+    setGameReviews(updatedGameReviews);
     setRating(0);
     setContent('');
-  }
+  };
   
-
   return (
     <ThemeProvider theme={CustomizedInputsStyleOverrides}>
-
       <Container component="main" maxWidth="xs">
         <Box
           sx={{
-            padding: 2,
+            padding: 1,
             marginTop: 6,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            justifyContent: 'center',
             borderRadius: 1,
           }}
         >          
-          <Typography component="h1" variant="h5">
+          <Typography component="h4" variant="h6">
             Leave a review
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
 
-          <Typography component="legend" sx={{ mb: 0 }}>Rating</Typography>
+            {/* <Typography component="legend" sx={{ mb: 0 }}>Rating</Typography> */}
             <Rating
               name="simple-controlled"
               required
               value={rating}
-              onChange={(event, newRating) => {
-                setRating(newRating);
-              }}
-              sx={{ mt: 1, mb: 4, }}
+              onChange={handleRatingChange}
+              sx={{ mt: 1, mb: 3, }}
             />
 
             <TextField
               margin="normal"
-              required
               fullWidth
               id="content"
               label="review"
               name="content"
               placeholder="What a game!"
               value={content}
-              variant="filled"
               multiline
-              rows={3}
-              onChange={handleFormChange}
+              rows={2}
+              onChange={handleContentChange}
               autoFocus
               sx={{
                 borderRadius: 1,
                 mb: 4,
                 mt: 1,
-                backgroundColor: 'rgba(225, 225, 225)',
+                backgroundColor: 'rgba(225, 225, 225, .5)',
+                input: { color: 'white' },
               }}
             />
 
@@ -79,7 +82,7 @@ const AddReview = (props) => {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 1, mb: 1, backgroundColor: '#2dc14f' }}
+              sx={{ margin: 'auto', mt: 1, mb: 1, backgroundColor: '#2dc14f' }}
             >
               Add review
             </Button>

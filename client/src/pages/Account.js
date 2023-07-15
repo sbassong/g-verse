@@ -1,22 +1,22 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { Navigate, Route, useLocation } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { useNavigate } from "react-router";
 import '../styles/Account.css'
 import {Avatar, Button, Box, Container, Typography} from '@mui/material';
 import {DeleteUser} from '../services/UserServices'
-// import { GetFavoriteItems } from '../services/FavoritesServices'
 import UpdatePassword from "../components/UpdatePassword";
 import UpdateProfile from "../components/UpdateProfile";
 import Favorites from "./Favorites";
 
 
-const Account = ({authenticated, user, setUser, handleLogOut}) => {
+const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, games, setUserFavorites}) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [accountUpdated, setAccountUpdated] = useState(false)
   const [currentForm, setForm] = useState(null);
   const [passwordButton, togglePassword] = useState(false);
   const [profileButton, toggleProfile] = useState(false);
-  const [favoriteItems, setFavoriteItems] = useState([]);
   
   const showProfileForm = () => {
     if (currentForm === 'profile') {
@@ -55,19 +55,15 @@ const Account = ({authenticated, user, setUser, handleLogOut}) => {
     // })
   }
 
-const handleFetchFavorites = async (userId) => {
-  // const favorites = await GetFavoriteItems(userId)
-  // setFavoriteItems(favorites.cart)
-}
 
   useEffect(() => {
-    if (user?.id) handleFetchFavorites(user.id)
-    if (authenticated && user) setUser(user)
-  }, [user?.id, authenticated])
+    if (authenticated && user) setUser(user);
+  }, [authenticated])
 
-  // useEffect(() => {
-    
-  // }, [user, authenticated])
+  useEffect(() => {
+    if (accountUpdated) setAccountUpdated(false);
+  }, [accountUpdated])
+
 
   if (!(user && authenticated)) return <Navigate to="/signin" state={{ from: location }} replace />
   else return (
@@ -157,9 +153,9 @@ const handleFetchFavorites = async (userId) => {
       <Container
         className="form-ui"
       >
-        { !currentForm &&  <Favorites authenticated={authenticated} user={user} favoriteItems={favoriteItems}/>}
-        { currentForm === 'profile' && profileButton && <UpdateProfile user={user} setUser={setUser} />}
-        { currentForm === 'password' && passwordButton && <UpdatePassword user={user} setUser={setUser} /> }
+        { !currentForm &&  <Favorites authenticated={authenticated} user={user} setUser={setUser} userFavorites={userFavorites} games={games} setUserFavorites={setUserFavorites}/>}
+        { currentForm === 'profile' && profileButton && <UpdateProfile user={user} setUser={setUser} setAccountUpdated={setAccountUpdated} />}
+        { currentForm === 'password' && passwordButton && <UpdatePassword user={user} setUser={setUser} setAccountUpdated={setAccountUpdated}/> }
       </Container>
     </div>
   );

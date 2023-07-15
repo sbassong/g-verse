@@ -10,9 +10,9 @@ const CustomizedInputsStyleOverrides = createTheme({
       MuiTextField: {
         styleOverrides: {
           root: {
-            '--TextField-brandBorderColor': '#2dc14f',
-            '--TextField-brandBorderHoverColor': '#2dc14f',
-            '--TextField-brandBorderFocusedColor': '#757ce8',
+            '--TextField-brandBorderColor': 'transparent',
+            '--TextField-brandBorderHoverColor': 'transparent',
+            '--TextField-brandBorderFocusedColor': 'transparent',
             '& label.Mui-focused': {
               color: '#fff',
             },
@@ -20,7 +20,7 @@ const CustomizedInputsStyleOverrides = createTheme({
               color: '#fff',
             },
             '& label.MuiFormLabel-asterisk': {
-              // color: 'rgb(175, 175, 175)',
+              color: '#fff',
             },
           },
         },

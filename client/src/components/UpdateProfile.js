@@ -10,7 +10,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import CustomizedInputsStyleOverrides from '../styles/muiOverrides';
 
 
-const UpdateProfile = ({user, setUser}) => {
+const UpdateProfile = ({user, setUser, setAccountUpdated}) => {
   const navigate = useNavigate();
   const iState = { name: '', email: '', image: '' };
   const [formValues, setFormValues] = useState(iState);
@@ -23,7 +23,8 @@ const UpdateProfile = ({user, setUser}) => {
     if (!payloadValues.image) payloadValues.image = user.image;
     const updatedUser = await UpdateUser(user?.id, payloadValues);
     setFormValues(iState);
-    setUser(updatedUser);
+    await setUser(updatedUser);
+    setAccountUpdated(true);
     navigate('/user/account');
   };
 

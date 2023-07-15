@@ -64,6 +64,15 @@ export const UpdateUser = async (user_id, data) => {
   }
 }
 
+export const UpdateUserFavorites = async (user_id, data) => {
+  try {
+    const res = await Client.put(`/users//update/user/favorites/${user_id}`, data)
+    return res.data
+  } catch (error) {
+    throw error
+  }
+}
+
 export const DeleteUser = async (user_id) => {
   try {
     const res = await Client.delete(`/users/delete/${user_id}`)

@@ -13,7 +13,7 @@ const SearchBar = ({ setSearchResults }) => {
       let results = await GetGamesByTitle(searchQuery)
       setSearchResults(results)
       setSearchQuery('')
-      navigate('/search/results')
+      navigate('/games/search/results')
     } catch (err) {
       throw err
     }

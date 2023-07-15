@@ -4,9 +4,9 @@ import React, { useEffect, useState } from "react"
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import Rating from '@mui/material/Rating';
-import { ReactComponent as AddIcon } from '../../src/styles/icons/add-to-cart.svg';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
+import { UpdateUserFavorites } from '../services/UserServices';
 
 const StyledRating = styled(Rating)({
   '& .MuiRating-iconFilled': {
@@ -18,35 +18,43 @@ const StyledRating = styled(Rating)({
 });
 
 
-const GameCard = ({id, title, image, price, rating, user, authenticated}) => {
-  const [favorite, setFavorites] = useState({})
-  const [favRating, setRating] = useState(0);
-  const [isHover, toggleIsHover] = useState(false)
-  const navigate = useNavigate()
-
-  const cart_item = {
-    game_id: id,
-    cart_id: favorite.id
-  }
-
-  // const fetchFavorites = async () => {
-  //   const res = await GetFavorites(user.id)
-  //   setFavorites(res)
-  // }
-
-  // const handleAddToFavorites = async () => {
-  //   await AddToFavorites(cart_item)
-  // }
+const GameCard = ({ id, title, image, price, rating, user, setUser, authenticated, userFavorites, setUserFavorites, isFavorite }) => {
+  const [isFavoriteGame, setIsFavorite] = useState(null)
+  const [isHover, toggleIsHover] = useState(false);
+  const navigate = useNavigate();
 
   const handleCardHover = (e) => {
-    if (e?.type === 'mouseenter') toggleIsHover(true)
-    else if (e?.type === 'mouseleave') toggleIsHover(false)
+    if (e?.type === 'mouseenter') toggleIsHover(true);
+    else if (e?.type === 'mouseleave') toggleIsHover(false);
+  };
+
+  const updateUserFavoritesArr = async (data) => {
+    if (!user) return;
+    const updatedUser = await UpdateUserFavorites(user?.id, { favorites: data });
+    return updatedUser;
+  };
+
+  const removeFavoriteId = (value, index, arr) => {
+    if (value !== id) return true;
+    else return false;
   }
   
+  const handleOnFavoriteChange = async (newRating) => {
+    let currUserFavorites = userFavorites;
+    
+    if (newRating === 1) currUserFavorites?.push(id);
+    else currUserFavorites = currUserFavorites?.filter(removeFavoriteId);
+
+    setIsFavorite(newRating)
+    setUserFavorites(currUserFavorites);
+    const updatedUser = await updateUserFavoritesArr(currUserFavorites);
+    setUser(updatedUser);
+  }
 
   useEffect(() => {
-    if (user) fetchFavorites()
-  }, [])
+    if (isFavoriteGame !== isFavorite) setIsFavorite(isFavorite);
+    // setIsFavorite(isFavorite);
+  }, [isFavorite])
 
   return (
     <div
@@ -68,22 +76,22 @@ const GameCard = ({id, title, image, price, rating, user, authenticated}) => {
         <div className='game-numbers' style={{ fontWeight: 'bold' }}>
           <div className='game-price' style={{ color: '#2dc14f'}}>${price}</div>
           <div className='game-rating subtext' style={{ color: '#fdca52'}}>{rating}</div>
-          <StyledRating
-            name="customized-color"
-            defaultValue={favRating}
-            getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
-            max={1}
-            icon={<FavoriteIcon fontSize="inherit" />}
-            emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
-            onChange={(event, newRating) => {
-              setRating(newRating);
-            }}
-          />
+          { user && authenticated && 
+            <StyledRating
+              name="customized-color"
+              value={isFavoriteGame}
+              getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
+              max={1}
+              controlled='true'
+              icon={<FavoriteIcon fontSize="inherit" />}
+              emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+              onChange={(event, newRating) => {
+                handleOnFavoriteChange(newRating);
+              }}
+          />}
           
         </div>
-
       </div>
-
     </div>
 
   )

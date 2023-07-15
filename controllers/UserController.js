@@ -1,7 +1,7 @@
 const { User, Game, Cart } = require('../models')
 const middleware = require('../middleware')
 
-// AUTH FUNCTIONS
+
 const Login = async (req, res) => {
   try {
     const user = await User.findOne({
@@ -63,14 +63,14 @@ const UpdatePassword = async (req, res) => {
     ) {
       let password_digest = await middleware.hashPassword(newPassword)
       await user.update({ password_digest })
-      const trimmedUpdatedUser = {
+      const updatedUser = {
         id: user.id,
         email: user.email,
         name: user.name,
         image: user.image,
         favorites: user.favorites,
       }
-      return res.send(trimmedUpdatedUser)
+      return res.send(updatedUser)
     }
     res.status(401).send({ status: 'Error', msg: 'Unauthorized' })
   } catch (error) {
@@ -88,7 +88,6 @@ const CheckSession = async (req, res) => {
   }
 }
 
-// USERS FUNCTIONS
 const GetProfiles = async (req, res) => {
   try {
     const users = await User.findAll({attributes: ['id', 'name', 'email', 'image', 'favorites']})
@@ -107,21 +106,44 @@ const GetUserProfile = async (req, res) => {
   }
 }
 
+const UpdateUserFavorites = async (req, res) => {
+    try {
+    const { favorites } = req.body;
+    const user = await User.findByPk(req.params.user_id)
+    console.log('foundUser +++++++++++++ ', user)
+    if ( user ) {
+      await user.update({ favorites })
+      const updatedUser = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        image: user.image,
+        favorites: user.favorites,
+      }
+        console.log('updatedUser &&&&&&&&&&&&&&&& ', updatedUser)
+      return res.send(updatedUser);
+    }
+    res.status(401).send({ status: 'Error', msg: 'Unauthorized' })
+  } catch (error) {
+    throw error
+  }
+}
+
 const UpdateUser = async (req, res) => {
   try {
-    let userId = parseInt(req.params.user_id)
-    const updatedUser = await User.update(req.body, {
-      where: { id: userId },
-      returning: true
-    })
-    const trimmedUpdatedUser = {
-      id: updatedUser.id,
-      email: updatedUser.email,
-      name: updatedUser.name,
-      image: updatedUser.image,
-      favorites: updatedUser.favorites,
+    const user = await User.findByPk(req.params.user_id)
+    if ( user ) {
+      await user.update(req.body)
+      const updatedUser = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        image: user.image,
+        favorites: user.favorites,
+      }
+      return res.send(updatedUser);
     }
-    res.send(trimmedUpdatedUser)
+    res.status(401).send({ status: 'Error', msg: 'Unauthorized' })
   } catch (error) {
     throw error
   }
@@ -139,13 +161,11 @@ const DeleteUser = async (req, res) => {
 
 
 module.exports = {
-  // USERS FUNCTIONS
   GetProfiles,
   GetUserProfile,
   UpdateUser,
   DeleteUser,
-
-  // AUTH FUNCTIONS
+  UpdateUserFavorites,
   Login,
   SignUp,
   UpdatePassword,
