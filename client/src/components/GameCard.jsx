@@ -75,20 +75,22 @@ const GameCard = ({ id, title, image, price, rating, user, setUser, authenticate
 
         <div className='game-numbers' style={{ fontWeight: 'bold' }}>
           <div className='game-price' style={{ color: '#2dc14f'}}>${price}</div>
-          <div className='game-rating subtext' style={{ color: '#fdca52'}}>{rating}</div>
-          { user && authenticated && 
-            <StyledRating
+          { user && authenticated
+            ? <StyledRating
               name="customized-color"
               value={isFavoriteGame}
               getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
               max={1}
               controlled='true'
-              icon={<FavoriteIcon fontSize="inherit" />}
-              emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+              icon={<FavoriteIcon fontSize="inherit" sx={{ fill: '#ff3d47', minWidth: '1.5rem', minHeight: '1.5rem', maxWidth: '2rem', maxHeight: '2rem', width: '1.5vw', height: '1.5vw' }} />}
+              emptyIcon={<FavoriteBorderIcon fontSize="inherit" sx={{ fill: '#ff6d75', minWidth: '1.5rem', minHeight: '1.5rem', maxWidth: '2rem', maxHeight: '2rem', width: '1.5vw', height: '1.5vw' }} />}
               onChange={(event, newRating) => {
                 handleOnFavoriteChange(newRating);
               }}
-          />}
+            /> 
+            : <div className='game-rating subtext' style={{ color: '#fdca52'}}>{rating}</div>
+          }
+          
           
         </div>
       </div>

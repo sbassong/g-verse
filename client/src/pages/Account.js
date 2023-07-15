@@ -68,50 +68,48 @@ const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, gam
   if (!(user && authenticated)) return <Navigate to="/signin" state={{ from: location }} replace />
   else return (
     <div className="account-page">
-      <Container
-        className="profile-ui"
-        component="main"
-        maxWidth="xs"
+      <Box
+        className="top-account"
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          p: 'auto',
+          borderBottom: '1px solid #1b1b1b',
+        }}
       >
-        <Avatar 
-          alt={user?.name}
-          src={user?.image}
-          sx={{ width: '8vw', height: '8vw', m: 3 }}
-        />
-        
-        <Typography 
-          component="h1"
-          variant="h6"
-          sx={{ml: 3, mb: 2}}
-        >
-          {user?.name}
-        </Typography>
-        <Typography
-          component="h1"
-          variant="h6"
-          sx={{ml: 3}}
-        >
-          {user?.email}
-        </Typography>
-
         <Box
           className='profile-box'
-          sx={{
-            padding: 3,
-            marginTop: 6,
-            marginLeft: 1,
-            marginRight: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            borderRadius:  2,
-          }}
+          sx={{ m:2, mr: 4, ml: 4, }}
+        >
+          <Avatar 
+            alt={user?.name}
+            src={user?.image}
+            sx={{ width: '9vw', height: '9vw', minWidth: '7rem', minHeight: '7rem', m: 2,  }}
+          />  
+        </Box>
+        <Box
+          className='profile-box'
+          sx={{ m:2}}
+        >
+          <Typography variant="h6" sx={{mb: 1, fontWeight: '600'}} >{user?.name}</Typography>
+          <Typography variant="h6">{user?.email}</Typography>
+        </Box>
+      </Box>
+
+      <Box
+        className="bottom-account"
+        sx={{ display: 'flex', padding: 3, mt: 3, flexWrap: 'wrap', width: '100%'}}
+      >
+        <Box
+          className='user-actions'
+          sx={{ml: 'auto', mr: 'auto', pr: 1, pl: 1, minWidth: '200px', width: '15%'}}
         >
           <Button 
             onClick={showProfileForm}
             fullWidth
             variant="contained"
-            sx={{ mt: 2, mb: 2}}
+            sx={{ mb: 3}}
           >
               Update User profile 
           </Button>
@@ -119,44 +117,43 @@ const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, gam
             onClick={showPasswordForm}
             fullWidth
             variant="contained"
-            sx={{ mt: 2, mb: 3 }}
+            sx={{ mb: 8 }}
           >
               Update Password 
           </Button>
-        </Box>
-        <Box
-          className='profile-box'
-          sx={{
-            padding: 3,
-            marginTop: 6,
-            marginLeft: 1,
-            marginRight: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            borderRadius:  2,
-          }}
-        >
+          
           <Button 
-            onClick={() => {
-              handleDeleteUser(user?.id)
-            }}
+            onClick={showPasswordForm}
             fullWidth
             variant="contained"
-            sx={{ mt: 'auto', mb: 0, backgroundColor: 'red' }}
+            sx={{ mb: 3, backgroundColor: 'red' }}
+          >
+            Sign Out 
+          </Button>
+          <Button 
+            fullWidth
+            variant="contained"
+            sx={{ backgroundColor: 'darkred', mb: 5 }}
+            onClick={() => handleDeleteUser(user?.id)}
           >
               Delete Account 
           </Button>
         </Box>
-      </Container>
       
-      <Container
-        className="form-ui"
-      >
-        { !currentForm &&  <Favorites authenticated={authenticated} user={user} setUser={setUser} userFavorites={userFavorites} games={games} setUserFavorites={setUserFavorites}/>}
-        { currentForm === 'profile' && profileButton && <UpdateProfile user={user} setUser={setUser} setAccountUpdated={setAccountUpdated} />}
-        { currentForm === 'password' && passwordButton && <UpdatePassword user={user} setUser={setUser} setAccountUpdated={setAccountUpdated}/> }
-      </Container>
+        <Box
+          className='forms-container'
+          sx={{ pl: 1, m: 'auto', width: '75%', minWidth: '200px' }}
+        >
+          { !currentForm &&
+            <>
+              <Typography variant="h5" sx={{textAlign: 'center', fontWeight: 'bold'}}>Favorite Games</Typography>
+              <Favorites authenticated={authenticated} user={user} setUser={setUser} userFavorites={userFavorites} games={games} setUserFavorites={setUserFavorites}/>
+            </>
+          }
+          { currentForm === 'profile' && profileButton && <UpdateProfile user={user} setUser={setUser} setAccountUpdated={setAccountUpdated} />}
+          { currentForm === 'password' && passwordButton && <UpdatePassword user={user} setUser={setUser} setAccountUpdated={setAccountUpdated}/> }
+        </Box>
+      </Box>
     </div>
   );
           

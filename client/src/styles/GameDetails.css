@@ -1,16 +1,15 @@
 /* gameDetails styling */
 .game-details {
-  padding-top: 2rem;
 }
 
 .top-half {
   display: flex;
   padding: 1rem;
   width: 100%;
+  margin-bottom: 2rem;
   
   .img-div {
-    width: clamp(325px, 50vw, 700px);
-    height: clamp(325px, 50vw, 550px);
+    width: clamp(300px, 30vw, 500px);
     margin-right: 3vmin;
     border-radius: .5rem;
   }
@@ -18,7 +17,6 @@
   .right-side {
     display: flex;
     flex-direction: column;
-    height: clamp(325px, 50vw, 550px);
     padding-right: 1rem;
     padding-left: 1rem;
 
@@ -77,8 +75,8 @@
     flex-direction: column;
 
     .img-div {
-      width: clamp(300px, 90vw, calc(calc(95vw - 5rem) - 5rem));
-      height: clamp(300px, 75vw, calc(calc(75vw - 5rem) - 5rem));
+      width: clamp(275px, 90vw, calc(calc(90vw - 5rem) - 5rem));
+      height: clamp(225px, 70vw, calc(calc(70vw - 5rem) - 5rem));
     }
 
     .right-side {
@@ -101,70 +99,4 @@
     }
   }
 }
-
-
-/*.show-review-form {
-  background-color: #f37971;
-  color: white;
-  width: auto;
-  height: 1.7em;
-  border-radius: 12.5px;
-  display: inline;
-}
-.show-review-form:hover{
-  background-color: white;
-  color:#f37971;
-} */
-
-/* review section styling */
-/* .reviews-cont {
-  width: 70%;
-  margin: auto;
-} */
-
-/* .review-card {
-  border: 1px solid white;
-  border-radius: 30px;
-  background-color: rgb(65, 63, 63);
-  height: 40px;
-  padding: 2em auto;
-  margin: 0.6em auto;
-
-}
-
-.review-card p, h4 {
-  display: inline-block;
-  margin: auto 0.4em;
-  font-size: 22px;
-  font-weight: bold;
-}
-
-.review-card p{
-  color: #01c3cc;
-}
-.review-card h4{
-  color: white;
-}
-
-.delete-review {
-  background-color: #f37971;
-  color: white;
-  width: auto;
-  height: 1.7em;
-  border-radius: 12.5px;
-  margin: auto 1em;
-  display: inline;
-}
-.delete-review:hover {
-  background-color: white;
-  color:#f37971
-}
-
-.review-h2 {
-  font-size: 40px;
-  color: #01c3cc;
-  font-weight: bold;
-  margin-bottom: 0.5em;
-} */
-
 

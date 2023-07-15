@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import GameCard from '../components/GameCard'
-import '../styles/GameListings.css'
+import { Box  } from '@mui/material';
 
 const Favorites = ({user, authenticated, games, userFavorites, setUser, setUserFavorites}) => {
   const noItems = (
@@ -11,7 +11,10 @@ const Favorites = ({user, authenticated, games, userFavorites, setUser, setUserF
   }, [games])
 
   return (
-    <div className='games-library'>
+    <Box 
+      className='favorite-games-container'
+      sx={{mt: 3, display: 'flex', flexWrap: 'wrap'}}
+    >
       { games?.length > 0
         ? games?.map((game) => {
           let isFavorite;
@@ -35,7 +38,7 @@ const Favorites = ({user, authenticated, games, userFavorites, setUser, setUserF
         }) 
         : noItems
       }
-    </div>
+    </Box>
   )
 }
 

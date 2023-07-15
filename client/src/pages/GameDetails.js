@@ -70,11 +70,31 @@ const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUse
 
   return (
     <div className='game-details'>
-      <div className='top-half'>
+      <Box className='top-half'>
         <img className='img-div' src={game.background_image} alt={`${game.title} poster`} />
       
         <div className='right-side'>
-          <div className='title'>{game.title}</div>
+          <div 
+            className='title' 
+            style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+          >
+            {game.title} 
+      
+            { user && authenticated && 
+              <StyledRating
+                name="customized-color"
+                value={isFavoriteGame}
+                getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
+                max={1}
+                controlled='true'
+                icon={<FavoriteIcon fontSize="inherit" sx={{fill: '#ff3d47', minWidth: '1.5rem', minHeight: '1.5rem', maxWidth: '2.5rem', maxHeight: '2.5rem', width: '2vw', height: '2vw'}}/>}
+                emptyIcon={<FavoriteBorderIcon fontSize="inherit" sx={{fill: '#ff6d75', minWidth: '1.5rem', minHeight: '1.5rem', maxWidth: '2.5rem', maxHeight: '2.5rem', width: '2vw', height: '2vw'}}/>}
+                onChange={(event, newRating) => {
+                  handleOnFavoriteChange(newRating);
+                }}
+                sx={{ml: 2, mr: 2}}
+            />}
+          </div>
           <div className='subtitle' style={{ color: '#2dc14f'}}>${ game.price } USD</div>
           <div
             className='subtitle'
@@ -99,64 +119,39 @@ const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUse
           >
             {game.description}
           </div>
-          <div className='' >
-            { user && authenticated && 
-              <StyledRating
-                name="customized-color"
-                value={isFavoriteGame}
-                getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
-                max={1}
-                controlled='true'
-                icon={<FavoriteIcon fontSize="inherit" />}
-                emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
-                onChange={(event, newRating) => {
-                  handleOnFavoriteChange(newRating);
-                }}
-            />}
-          </div>
           <br/>
         </div>
-      </div>
+      </Box>
 
-      <Box
+      <Box 
         sx={{
-          padding: 2,
-          marginTop: 2,
           display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          ml: 2,
         }}
       >
-        <Box 
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: '100%',
-            ml: 2,
-          }}
+        <Typography
+          variant="h5"
+          underlined='true'
+          color='white'
+          sx={{ mb: 2 }}
         >
-          <Typography
-            variant="h5"
-            underlined='true'
-            color='white'
-            sx={{
-              mb: 2,
-            }}
-          >
-            Reviews 
-          </Typography>
+          Reviews 
+        </Typography>
 
-          <span onClick={handleShowReviewForm}>
-            <AddBoxIcon sx={{ width: '1.5rem', height: '1.5rem', mr: 1,}}/> 
-            Add Review
-          </span>
-          <Box sx={{mb: 3,}}>
-            {isReviewForm && <AddReview user={user} game={game} setGameReviews={setGameReviews} gameReviews={gameReviews}/>}
-          </Box>
-          
-          {gameReviews.length > 0
-            ? gameReviews?.map((review) => <ReviewCard key={review.id} review={review}/>)
-            : <Typography variant="body2" color='rgb(190, 190, 190)'>Be the first to leave a review!</Typography>
-          }
+        <span onClick={handleShowReviewForm}>
+          <AddBoxIcon sx={{ width: '1.5rem', height: '1.5rem', mr: 2,}}/> 
+          Add Review
+        </span>
+        <Box sx={{mb: 3,}}>
+          {isReviewForm && <AddReview user={user} game={game} setGameReviews={setGameReviews} gameReviews={gameReviews}/>}
         </Box>
+        
+        {gameReviews.length > 0
+          ? gameReviews?.map((review) => <ReviewCard key={review.id} review={review}/>)
+          : <Typography variant="body2" color='rgb(190, 190, 190)'>Be the first to leave a review!</Typography>
+        }
       </Box>
       
     </div>

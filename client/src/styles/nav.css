@@ -133,7 +133,7 @@
 
 @media screen and (min-width: 801px) {
   #account-menu .no-display,
-  .no-display {
+  .menu-icon.no-display {
     display: none;
   }
 }

@@ -8,9 +8,10 @@ import Login from '@mui/icons-material/Login';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import VideoLibraryOutlinedIcon from '@mui/icons-material/VideoLibraryOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import MenuIcon from '@mui/icons-material/Menu';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { AiOutlineUser } from "react-icons/ai";
-import { GiHamburgerMenu } from "react-icons/gi";
+
 
 
 const menuTheme = createTheme({
@@ -41,12 +42,12 @@ const AccountMenu = ({user, handleLogOut}) => {
 
   return (
     <React.Fragment>
-      <AiOutlineUser 
+      <PersonOutlineIcon 
         className='menu-item title login-icon no-display-max'
         onClick={handleClick}
       />
 
-      <GiHamburgerMenu 
+      <MenuIcon 
         className='menu-item title menu-icon no-display'
         onClick={handleClick}
       />

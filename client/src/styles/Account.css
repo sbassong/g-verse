@@ -1,14 +1,13 @@
 .account-page {
-  display: flex;
-  align-items: center;
-  overflow-x: auto;
+  overflow: hidden !important;
 
-  .profile-ui {
+  .bottom-account {
     
-    .profile-box {
+    .forms-container {
+
+      .favorite-games-container {
+      }
     }
   }
   
-  .form-ui {
-  }
 }
