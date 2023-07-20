@@ -1,5 +1,6 @@
-const { User, Game, Cart } = require('../models')
-const middleware = require('../middleware')
+const { User } = require('../models');
+const middleware = require('../middleware');
+const { v4: uuidv4 } = require('uuid');
 
 
 const Login = async (req, res) => {
@@ -13,47 +14,53 @@ const Login = async (req, res) => {
       (await middleware.comparePassword(
         user.password_digest,
         req.body.password
-      ))
-    ) {
+        ))
+        ) {
+          const trimmedUser = {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            image: user.image,
+            favorites: user.favorites,
+          }
+          let token = middleware.createToken(trimmedUser);
+          return res.send({ user: trimmedUser, token });
+        }
+        res.send({ status: 401, message: 'Error: No user found' })
+      } catch (error) {
+        throw error;
+      }
+    };
+    
+const SignUp = async (req, res) => {
+  try {
+    const { email, password, name, image } = req.body;
+    
+    if (email && password && name) {
+      const password_digest = await middleware.hashPassword(password);
+      const user = await User.create({ email, password_digest, name, image });
+      
       const trimmedUser = {
         id: user.id,
         email: user.email,
         name: user.name,
         image: user.image,
         favorites: user.favorites,
-      }
-      let token = middleware.createToken(trimmedUser)
-      return res.send({ user: trimmedUser, token })
+      };
+
+      return res.send(trimmedUser);
     }
-    res.status(401).send({ status: 'Error', msg: 'No user matches this email or password. Try again.' })
+    // res.send({message: 'Missing required values'});
   } catch (error) {
-    throw error
+    throw error;
   }
-}
-
-const SignUp = async (req, res) => {
-  try {
-    const { email, password, name, image } = req.body
-    let password_digest = await middleware.hashPassword(password)
-    const user = await User.create({ email, password_digest, name, image })
-    const trimmedUser = {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      image: user.image,
-      favorites: user.favorites,
-    };
-
-    res.send(trimmedUser)
-  } catch (error) {
-    throw error
-  }
-}
+};
 
 const UpdatePassword = async (req, res) => {
   try {
-    const { oldPassword, newPassword } = req.body
-    const user = await User.findByPk(req.params.user_id)
+    const { oldPassword, newPassword } = req.body;
+    const userId = req.params.user_id;
+    const user = await User.findByPk(userId);
     if (
       user &&
       (await middleware.comparePassword(
@@ -61,103 +68,127 @@ const UpdatePassword = async (req, res) => {
         oldPassword
       ))
     ) {
-      let password_digest = await middleware.hashPassword(newPassword)
-      await user.update({ password_digest })
+      const password_digest = await middleware.hashPassword(newPassword)
+      await user.update({ password_digest });
       const updatedUser = {
         id: user.id,
         email: user.email,
         name: user.name,
         image: user.image,
         favorites: user.favorites,
-      }
-      return res.send(updatedUser)
+      };
+      return res.send(updatedUser);
     }
-    res.status(401).send({ status: 'Error', msg: 'Unauthorized' })
+    res.send({ status: 'Error', msg: 'Unauthorized' })
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 const CheckSession = async (req, res) => {
   try {
-    const { payload } = res.locals
-    const user = await User.findByPk(payload.id, {attributes: ['id', 'name', 'email', 'image', 'favorites']})
-    res.send(user)
+    const { payload } = res.locals;
+    const user = await User.findByPk(payload.id, {attributes: ['id', 'name', 'email', 'image', 'favorites']});
+    if (user) res.send(user);
+    else res.send({message: 'User not found'});
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 const GetProfiles = async (req, res) => {
   try {
-    const users = await User.findAll({attributes: ['id', 'name', 'email', 'image', 'favorites']})
-    res.send(users)
+    const users = await User.findAll({attributes: ['id', 'name', 'email', 'image', 'favorites']});
+    if (users) res.send(users);
+    else res.send({message: 'Bad request'});
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 const GetUserProfile = async (req, res) => {
   try {
-    const user = await User.findByPk(req.params.user_id, {attributes: ['id', 'name', 'email', 'image', 'favorites']})
-    res.send(user)
+    const userId = req.params.user_id;
+    const user = await User.findByPk(userId, {attributes: ['id', 'name', 'email', 'image', 'favorites']});
+    if (user) res.send(user);
+    else res.send({message: 'User not found'})
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 const UpdateUserFavorites = async (req, res) => {
-    try {
+  try {
     const { favorites } = req.body;
-    const user = await User.findByPk(req.params.user_id)
-    console.log('foundUser +++++++++++++ ', user)
+    const user = await User.findByPk(req.params.user_id);
     if ( user ) {
-      await user.update({ favorites })
+      await user.update({ favorites });
+
       const updatedUser = {
         id: user.id,
         email: user.email,
         name: user.name,
         image: user.image,
         favorites: user.favorites,
-      }
-        console.log('updatedUser &&&&&&&&&&&&&&&& ', updatedUser)
+      };
       return res.send(updatedUser);
     }
-    res.status(401).send({ status: 'Error', msg: 'Unauthorized' })
+    res.send({ status: 'Error', msg: 'User not found' });
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 const UpdateUser = async (req, res) => {
   try {
-    const user = await User.findByPk(req.params.user_id)
+    const userId = req.params.user_id;
+    const user = await User.findByPk(userId);
+
     if ( user ) {
-      await user.update(req.body)
+      await user.update(req.body);
+
       const updatedUser = {
         id: user.id,
         email: user.email,
         name: user.name,
         image: user.image,
         favorites: user.favorites,
-      }
+      };
+
       return res.send(updatedUser);
     }
-    res.status(401).send({ status: 'Error', msg: 'Unauthorized' })
+    res.send({ status: 'Error', msg: 'Unauthorized' });
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 const DeleteUser = async (req, res) => {
   try {
-    let userId = parseInt(req.params.user_id)
-    await User.destroy({ where: { id: userId } })
-    res.send({ message: `Deleted User with an id of ${userId}` })
+    const { deleteConfirmed } = req.body;
+
+    if (deleteConfirmed) {
+      const user = await User.findByPk(req.params.user_id);
+
+      if (user) {
+        const destroyedUser = await user.destroy();
+
+        const destroyedResponse = {
+          id: destroyedUser.id,
+          email: destroyedUser.email,
+          name: destroyedUser.name,
+          image: destroyedUser.image,
+          favorites: destroyedUser.favorites,
+        };
+
+        return res.send(destroyedResponse);
+      } else res.send({message: 'User not found'});
+    }
+    res.send({ message: `Unauthorized operation` });
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 
 module.exports = {
@@ -170,4 +201,4 @@ module.exports = {
   SignUp,
   UpdatePassword,
   CheckSession
-}
+};

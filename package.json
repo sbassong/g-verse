@@ -31,7 +31,8 @@
     "pg": "^8.8.0",
     "postgresql": "^0.0.1",
     "sequelize": "^6.28.0",
-    "sequelize-cli": "^6.6.0"
+    "sequelize-cli": "^6.6.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"

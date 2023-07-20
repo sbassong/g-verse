@@ -1,54 +1,63 @@
-const { User, Game, Review } = require('../models')
-const { Op, literal, fn, col } = require('sequelize')
+const { Game } = require('../models');
+const { Op } = require('sequelize');
 
 const GetPopularGames = async (req, res) => {
   try {
-    const popular = await Game.findAll({
+    const popularGames = await Game.findAll({
       order: [['rating', 'DESC']],
       where: { rating: { [Op.gt]: 8 } },
       limit: 10
-    })
-    res.send(popular)
+    });
+    res.send(popularGames);
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 const GetRecentGames = async (req, res) => {
   try {
-    const recents = await Game.findAll({
+    const recentGames = await Game.findAll({
       order: [['createdAt', 'DESC']],
       limit: 10
-    })
-    res.send(recents)
+    });
+
+    res.send(recentGames);
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 const GetGames = async (req, res) => {
   try {
-    const games = await Game.findAll()
-    res.send(games)
+    const allGames = await Game.findAll();
+    res.send(allGames);
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 const GetGameByTitle = async (req, res) => {
   try {
+    console.log('4$$$$$$$$$$$$$$$$$$$$$', req.body)
     const games = await Game.findAll({
-      where: { title: { [Op.like]: `%${req.params.game_title}%` } }
-    })
-    res.send(games)
+      where: { 
+        [Op.or]: [
+          { title: { [Op.iLike]: `${req.body}%` } },
+          { price: { [Op.iLike]: `${req.body}%` } },
+          { rating: { [Op.iLike]: `${req.body}%` } },
+        ] 
+      }
+    });
+    res.send(games);
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
+
 const CreateGame = async (req, res) => {
   try {
-    const game = await Game.create(req.body)
-    res.send(game)
+    const game = await Game.create(req.body);
+    res.send(game);
   } catch (error) {
     throw error
   }
@@ -66,13 +75,12 @@ const CreateGame = async (req, res) => {
 
 const GetOneGame = async (req, res) => {
   try {
-    const gameId = parseInt(req.params.game_id)
-    const game = await Game.findByPk(gameId)
-    res.send(game)
+    const game = await Game.findByPk(req.params.game_id);
+    res.send(game);
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 module.exports = {
   GetPopularGames,

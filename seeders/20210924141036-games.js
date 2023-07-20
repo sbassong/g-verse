@@ -1,9 +1,11 @@
 'use strict'
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     let games = [
       {
+        id: uuidv4(),
         title: 'Fifa 22',
         description:
           'Powered by Football™, EA SPORTS™ FIFA 22 brings the game even closer to the real thing with fundamental gameplay advances and a new season of innovation across every mode.',
@@ -17,6 +19,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: uuidv4(),
         title: 'Mario Kart 8',
         description:
           'The Mario Kart 8 Deluxe game has 42 characters to choose from—the biggest roster in the series!',
@@ -30,6 +33,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: uuidv4(),
         title: "Marvel's Spider-Man",
         description:
           "This isn’t the Spider-Man you’ve met or ever seen before. This is an experienced Peter Parker who’s more masterful at fighting big crime in Marvel's New York.",
@@ -43,6 +47,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: uuidv4(),
         title: "Marvel's friendly neighborhood",
         description:
           "This isn’t the Spider-Man you’ve met or ever seen before. This is an experienced Peter Parker who’s more masterful at fighting big crime in Marvel's New York.",
@@ -56,6 +61,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: uuidv4(),
         title: 'NBA 2K22',
         description:
           'NBA 2K22 puts the entire basketball universe in your hands. PLAY NOW in real NBA and WNBA environments against authentic teams and players.',
@@ -69,6 +75,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: uuidv4(),
         title: 'Rocket League',
         description:
           'WELCOME TO THE HIGH-POWERED HYBRID OF ARCADE-STYLE SOCCER AND VEHICULAR MAYHEM!',
@@ -82,6 +89,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: uuidv4(),
         title: 'Among Us',
         description:
           'Crewmates work together to complete tasks before one or more Impostors can kill everyone aboard.',
@@ -95,6 +103,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: uuidv4(),
         title: 'Destiny 2',
         description:
           'Destiny 2 is an action MMO with a single evolving world that you and your friends can join anytime, anywhere, absolutely free.',
@@ -108,6 +117,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: uuidv4(),
         title: 'League of Legends',
         description:
           "League of Legends is a team-based strategy game where two teams of five powerful champions face off to destroy the other's base. Choose from over 140 champions to make epic plays, secure kills, and take down towers as you battle your way to victory.",
@@ -121,6 +131,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: uuidv4(),
         title: 'Counter-Strike: Global Offensive',
         description:
           'Counter-Strike took the gaming industry by surprise when the unlikely MOD became the most played online PC action game in the world almost immediately after its release in August 1999, said Doug Lombardi at Valve.',
@@ -134,6 +145,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: uuidv4(),
         title: 'Grand Theft Auto V',
         description:
           'Grand Theft Auto V is a 2013 action-adventure game developed by Rockstar North and published by Rockstar Games.',
@@ -147,6 +159,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: uuidv4(),
         title: 'Valorant',
         description:
           'Valorant (stylized as VALORANT) is a free-to-play first-person hero shooter developed and published by Riot Games, for Microsoft Windows.',
@@ -160,6 +173,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: uuidv4(),
         title: 'Minecraft',
         description:
           'Minecraft is a sandbox video game developed by the Swedish video game developer Mojang Studios. The game was created by Markus Notch Persson in the Java programming language.',
@@ -173,6 +187,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: uuidv4(),
         title: 'Back 4 Blood',
         description:
           'Back 4 Blood is an upcoming multiplayer first-person shooter game developed by Turtle Rock Studios and published by Warner Bros. Interactive Entertainment.',
@@ -186,6 +201,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: uuidv4(),
         title: 'Back 4 Blood: Ultimate',
         description:
           'Back 4 Blood is an upcoming multiplayer first-person shooter game developed by Turtle Rock Studios and published by Warner Bros. Interactive Entertainment.',

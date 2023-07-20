@@ -8,6 +8,7 @@ export const GetReviewsByGameId = async (game_id) => {
     throw error
   }
 }
+
 export const CreateReview = async (data) => {
   try {
     const res = await Client.post(`/reviews/add`, data)

@@ -3,8 +3,11 @@ import Client from './api'
 export const SignInUser = async (data) => {
   try {
     const res = await Client.post('/users/login', data)
-    localStorage.setItem('token', res.data.token)
-    return res.data.user
+    if (res?.data?.user) {
+      localStorage.setItem('token', res.data.token)
+      return res.data.user
+    } else return {message: 'Error: No user found'}
+
   } catch (error) {
     throw error
   }
@@ -13,6 +16,7 @@ export const SignInUser = async (data) => {
 export const SignUpUser = async (data) => {
   try {
     const res = await Client.post('/users/signup', data)
+    console.log('createdUser res =>', res)
     return res.data
   } catch (error) {
     throw error

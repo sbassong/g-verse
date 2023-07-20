@@ -16,12 +16,12 @@ Gverse is a fully functional, intuitive, engaging full-stack application through
 
 <br>
 
-## **Requirements for machine**
-Node, npm, and PostgreSQL are necessary to run this application. If needed, please follow the installation guidelines **[below](#requirements)**
+## **_Local Environment Requirements_**
+Node, npm, and PostgreSQL are necessary to run this application. If needed, please follow the installation guidelines **[below](#env-requirements)**
 
 
 
-## **Getting Started**
+## **_Getting Started_**
  Once the requirements are met, we're ready to run the application. Follow the steps below to set up and launch the application server.
 
 Copy this repo's HTTPS URL and clone it onto your local machine's terminal:
@@ -44,7 +44,7 @@ Copy this repo's HTTPS URL and clone it onto your local machine's terminal:
   ### B. Server + Database / Express app / Backend
   1. Change directory into the newly cloned folder then install dependencies
       ```sh 
-      cd g-verse/client
+      cd g-verse
       npm install
       ```
 1.  In the g-verse root folder, add a `.env` file containing **both** the following variables 
@@ -56,12 +56,12 @@ Copy this repo's HTTPS URL and clone it onto your local machine's terminal:
 
 1.  Use the sequelize-cli to create the `g-verse_development` database on postgres (databases have a different name based on environment. Can be found in `config/config.json`).
 
-    *PostgreSQL needs to be running from here on ou*
+    *PostgreSQL needs to be running from here on out*
 
     ```sh 
     sequelize db:create
     ```
-1.  Migrate the database with app's models with 
+1.  Migrate the database with app's models
     ```sh 
     sequelize db:migrate
     ```
@@ -79,7 +79,7 @@ Copy this repo's HTTPS URL and clone it onto your local machine's terminal:
 
 ---
 
-## Future Updates
+### _Future Updates_
 
 
 - [x] Integrate a UI Library
@@ -89,62 +89,64 @@ Copy this repo's HTTPS URL and clone it onto your local machine's terminal:
 - [ ] Filter by Sidebar
 
 
-**_Credits_**
+### **_Credits_**
 
 - Inspiration: GameStop, Rawg
 - Pictures: [Google Images](https://google.com)
 - Logo: [Canva](http://canva.com)
 - Fonts: [Google Fonts](https://fonts.google.com/)
 
----
 
- **_Contributors_**
+### **_Contributors_**
 - **[Jin Im Brancalhao](https://www.linkedin.com/in/jinimb/)**
 - **[Raza Khalid](https://www.linkedin.com/in/razaskhalid/)**
   
   <br>
 
 
- <details><summary><h1> Backend Requirements</h1></summary>
+# Env Requirements
   Node, npm, and postgreSQL are necessary to run this application. please follow the installation guidelines below:
 
-* ### ***Node + npm***
-    * *Recommended*: Go to the Node Version Manager ([NVM](https://github.com/nvm-sh/nvm)) github and follow the instructions to install both both Node and npm
-    * *Alternatively*: Go to [Node.js](https://nodejs.org/en/) and use the installer appropriate for your system to install node and npm
+ <details><summary><h3>Node and npm</h3></summary>
 
-        *Verify that both node and npm have been installed by running the following in your CLI*
+* *Recommended*: Go to the Node Version Manager ([NVM](https://github.com/nvm-sh/nvm)) github and follow the instructions to install both both Node and npm
+* *Alternatively*: Go to [Node.js](https://nodejs.org/en/) and use the installer appropriate for your system to install node and npm
 
-            node -v
-            npm -v
+    *Verify that both node and npm have been installed by running the following in your CLI*
 
-* ### ***PostgreSQL***
-    * Head to the official [PostgreSQL](https://www.postgresql.org/download/) documentation, choose your operating system family and follow your preferred installation route
-    * My preferred installation method for Linux/MacOS:
+        node -v
+        npm -v
+</details>
 
-        1. install homebrew by running this command in your termninal
+ <details><summary><h3>PostgreSQL</h3></summary>
 
-                /bin/bash -c "$(curl -fsSL https://raw githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        2. follow this each of the following line **one by one**
+* Head to the official [PostgreSQL](https://www.postgresql.org/download/) documentation, choose your operating system family and follow your preferred installation route
+* My preferred installation method for Linux/MacOS:
 
-            use brew to install postgres
+    1. install homebrew by running this command in your termninal
 
-                brew install postgres
-            
-            confirm installation with:
+            /bin/bash -c "$(curl -fsSL https://raw githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    2. follow this each of the following line **one by one**
 
-                postgres --version
+        use brew to install postgres
 
-            To start Postgres and keep it running on your machine
+            brew install postgres
+        
+        confirm installation with:
 
-                brew services start postgresql
+            postgres --version
 
-            To test the above, create a database with your local profile/account name
+        To start Postgres and keep it running on your machine
 
-                createdb <account name>
-            
-            Confirm you can enter the postgres shell with the following command:
-            
-                psql
+            brew services start postgresql
 
-            Exit shell with:
+        To test the above, create a database with your local profile/account name
+
+            createdb <account name>
+        
+        Confirm you can enter the postgres shell with the following command:
+        
+            psql
+
+        Exit shell with:
 </details>

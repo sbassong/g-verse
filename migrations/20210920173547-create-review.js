@@ -4,17 +4,18 @@ module.exports = {
     await queryInterface.createTable('reviews', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4
       },
       game_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         allowNull: false,
         onDelete: 'CASCADE',
         references: {
           model: 'games',
-          key: 'id'
+          key: 'id',
         }
       },
       content: {

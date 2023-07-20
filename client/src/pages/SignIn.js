@@ -23,11 +23,15 @@ const SignIn = ({user, setUser, authenticated, toggleAuthenticated}) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = await SignInUser(formValues);
-    setFormValues(iState);
-    await setUser(payload);
-    toggleAuthenticated(true);
-    navigate('/user/account');
+    const user = await SignInUser(formValues);
+
+    if (user?.email) {
+      setFormValues(iState);
+      await setUser(user);
+      toggleAuthenticated(true);
+      navigate('/user/account');
+    }
+    return;
   };
 
 

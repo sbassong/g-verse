@@ -17,14 +17,20 @@ module.exports = (sequelize, DataTypes) => {
   }
   Review.init(
     {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4
+      },
       game_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
         onDelete: 'CASCADE',
         references: {
           model: 'games',
-          key: 'id'
-        }
+          key: 'id',
+        },
       },
       content: {
         type: DataTypes.STRING,

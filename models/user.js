@@ -12,6 +12,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init(
     {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false
@@ -32,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       favorites: {
-        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        type: DataTypes.ARRAY(DataTypes.UUID),
         defaultValue: []
       }
     },
