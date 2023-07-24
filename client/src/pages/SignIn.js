@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { NavLink, useLocation, Navigate } from 'react-router-dom'
 import { useNavigate } from "react-router";
 import { ThemeProvider } from '@mui/material/styles';
-import {Avatar, Button, TextField, IconButton, Box, Typography, Container, InputAdornment, } from '@mui/material/';
+import {Avatar, Button, TextField, IconButton, Box, Typography, Container, InputAdornment, Snackbar } from '@mui/material/';
+import MuiAlert from '@mui/material/Alert';
 import {Visibility, VisibilityOff} from '@mui/icons-material/';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CustomizedInputsStyleOverrides from '../styles/muiOverrides';
@@ -11,31 +12,48 @@ import { SignInUser } from '../services/UserServices'
 
 const iState = { email: '', password: '' };
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const SignIn = ({user, setUser, authenticated, toggleAuthenticated}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [formValues, setFormValues] = useState(iState);
-
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [snackMessage, setSnackMessage] = useState(null);
+  const [snackSeverity,  setSnackSeverity] = useState(null);
+  
+  
   const handleFormChange = (e) => setFormValues({ ...formValues, [e.target.name]: e.target.value });
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => event.preventDefault();
+  const handleShowSnack = () => setSnackOpen(true);
+  const handleCloseSnack = (event, reason) => {
+    if (reason === 'clickaway') return;
+    setSnackOpen(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = await SignInUser(formValues);
+    const payload = await SignInUser(formValues);
 
-    if (user?.email) {
-      setFormValues(iState);
-      await setUser(user);
+    if (payload?.email) {
+      setUser(payload);
+      localStorage.setItem('authenticated', '1');
       toggleAuthenticated(true);
       navigate('/user/account');
+    } else {
+      setSnackMessage(payload);
+      setSnackSeverity('error');
+      handleShowSnack();
+      setFormValues(iState);
     }
-    return;
   };
 
 
-  if (user && authenticated) return <Navigate to="/user/account" state={{ from: location }} replace />
+  if (authenticated) return <Navigate to="/user/account" state={{ from: location }} replace />
   else return (
     <ThemeProvider theme={CustomizedInputsStyleOverrides}>
       <Container component="main" maxWidth="sm">
@@ -127,6 +145,21 @@ const SignIn = ({user, setUser, authenticated, toggleAuthenticated}) => {
               </NavLink>
           </Box>
         </Box>
+
+        <Snackbar
+          open={snackOpen}
+          autoHideDuration={6000}
+          onClose={handleCloseSnack}
+        >
+          <Alert
+            onClose={handleCloseSnack}
+            severity={snackSeverity}
+            sx={{ width: '100%' }}
+          >
+            {snackMessage}
+          </Alert>
+        </Snackbar>
+
       </Container>
     </ThemeProvider>
   );

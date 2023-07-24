@@ -26,7 +26,7 @@ const Login = async (req, res) => {
           let token = middleware.createToken(trimmedUser);
           return res.send({ user: trimmedUser, token });
         }
-        res.send({ status: 401, message: 'Error: No user found' })
+        res.send({message: 'Error: No user found' })
       } catch (error) {
         throw error;
       }
@@ -79,7 +79,7 @@ const UpdatePassword = async (req, res) => {
       };
       return res.send(updatedUser);
     }
-    res.send({ status: 'Error', msg: 'Unauthorized' })
+    res.send({ message: 'Unauthorized' })
   } catch (error) {
     throw error;
   }
@@ -111,7 +111,7 @@ const GetUserProfile = async (req, res) => {
     const userId = req.params.user_id;
     const user = await User.findByPk(userId, {attributes: ['id', 'name', 'email', 'image', 'favorites']});
     if (user) res.send(user);
-    else res.send({message: 'User not found'})
+    else res.send({message: 'Error: User not found'})
   } catch (error) {
     throw error;
   }
@@ -133,7 +133,7 @@ const UpdateUserFavorites = async (req, res) => {
       };
       return res.send(updatedUser);
     }
-    res.send({ status: 'Error', msg: 'User not found' });
+    res.send({ message: 'Error: User not found' });
   } catch (error) {
     throw error;
   }

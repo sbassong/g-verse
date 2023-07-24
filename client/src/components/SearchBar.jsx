@@ -9,11 +9,12 @@ const SearchBar = ({ setSearchResults }) => {
 
   const getSearchResults = async (e) => {
     try {
-      e.preventDefault()
-      let results = await GetGamesByTitle(searchQuery)
-      setSearchResults(results)
-      setSearchQuery('')
-      navigate('/games/search/results')
+      e.preventDefault();
+      console.log(searchQuery);
+      let results = await GetGamesByTitle({searchQuery});
+      setSearchResults(results);
+      setSearchQuery('');
+      navigate('/games/search/results');
     } catch (err) {
       throw err
     }

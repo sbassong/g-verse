@@ -12,8 +12,8 @@ const Nav = ({ handleLogOut, authenticated, user, setSearchResults }) => {
       <NavLink className='logo' to='/'>G-VERSE</NavLink>
       <SearchBar setSearchResults={setSearchResults}/>
       <div className='menu-nav'>
-        <NavLink className='menu-item subtitle no-display-max' to='/'>Home</NavLink>
-        <NavLink className='menu-item subtitle no-display-max' to='/library/games'>Library</NavLink>
+        <NavLink className='menu-item title no-display-max' to='/'>Home</NavLink>
+        <NavLink className='menu-item title no-display-max' to='/library/games'>Library</NavLink>
         <AccountMenu handleLogOut={handleLogOut} user={user} authenticated={authenticated} />
       </div>
     </nav>

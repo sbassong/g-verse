@@ -6,7 +6,7 @@ import CustomizedInputsStyleOverrides from '../styles/muiOverrides';
 import { Rating, Button, TextField, Box, Typography, Container} from '@mui/material'
 
 
-const AddReview = ({ user, game, setGameReviews, gameReviews }) => {
+const AddReview = ({game, setGameReviews, gameReviews, handleShowReviewForm }) => {
   const [content, setContent] = useState('');
   const [rating, setRating] = useState(0);
 
@@ -15,18 +15,20 @@ const AddReview = ({ user, game, setGameReviews, gameReviews }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newReview = await CreateReview({
-      content: content ? content : 'No content',
-      rating,
-      game_id: game?.id,
-    });
+    if (rating > 0 && content) {
+      const newReview = await CreateReview({
+        content: content ? content : 'No content',
+        rating,
+        game_id: game?.id,
+      });
 
-    const updatedGameReviews = gameReviews;
-    updatedGameReviews.push(newReview);
-
-    setGameReviews(updatedGameReviews);
-    setRating(0);
-    setContent('');
+      const updatedGameReviews = gameReviews;
+      updatedGameReviews.push(newReview);
+      setGameReviews(updatedGameReviews);
+      setRating(0);
+      setContent('');
+      handleShowReviewForm();
+    } else console.log('Please rate and leave a comment')
   };
   
   return (

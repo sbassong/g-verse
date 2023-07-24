@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import './styles/App.css'
 
 import React, { useState, useEffect } from 'react'
@@ -29,10 +30,13 @@ function App() {
 
   const checkToken = async () => {
     const userSession = await CheckSession();
-    setUserFavorites(userSession?.favorites);
-    setUser(userSession);
-    localStorage.setItem('authenticated', '1');
-    toggleAuthenticated(true);
+    if (userSession?.email){
+      setUserFavorites(userSession?.favorites);
+      localStorage.setItem('authenticated', '1');
+      setUser(userSession);
+      toggleAuthenticated(true);
+    } else console.log(userSession)
+    return
   };
 
   const handleLogOut =  () => {
@@ -63,10 +67,10 @@ function App() {
           <Route exact path='/user/account' element={<Account authenticated={authenticated} games={games} user={user} setUser={setUser} toggleAuthenticated={toggleAuthenticated} handleLogOut={handleLogOut} userFavorites={userFavorites} setUserFavorites={setUserFavorites}/>} />
           { games.length > 0 && games.map(game => {
             let isFavorite;
-            if (userFavorites?.length > 0 && userFavorites.includes(game.id)) isFavorite = 1;
+            if (userFavorites?.length > 0 && userFavorites.includes(game?.id)) isFavorite = 1;
             else isFavorite = 0;
 
-            return <Route key={game.id} path={`/game/details/${game.id}`} element={<GameDetails game={game} user={user} setUser={setUser} setUser={setUser} authenticated={authenticated} userFavorites={userFavorites} isFavorite={isFavorite} setUserFavorites={setUserFavorites}/>} />
+            return <Route key={game.id} path={`/game/details/${game?.id}`} element={<GameDetails game={game} user={user} setUser={setUser} authenticated={authenticated} userFavorites={userFavorites} isFavorite={isFavorite} setUserFavorites={setUserFavorites}/>} />
           })}
         </Routes>
       </main>

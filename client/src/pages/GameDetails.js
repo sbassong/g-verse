@@ -24,6 +24,7 @@ const StyledRating = styled(Rating)({
 
 const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUserFavorites, isFavorite}) => {
   const [isFavoriteGame, setIsFavorite] = useState(null);
+  const [reviewUpdated, toggleReviewUpdated] = useState(false)
   const [gameReviews, setGameReviews] = useState([]);
   const [isReviewForm, toggleReviewButton] = useState(false);
 
@@ -61,7 +62,6 @@ const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUse
 
   useEffect(() => {
     if (isFavoriteGame !== isFavorite) setIsFavorite(isFavorite);
-    // setIsFavorite(isFavorite);
   }, [isFavorite]);
   
   useEffect(() => {
@@ -145,7 +145,7 @@ const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUse
           Add Review
         </span>
         <Box sx={{mb: 3,}}>
-          {isReviewForm && <AddReview user={user} game={game} setGameReviews={setGameReviews} gameReviews={gameReviews}/>}
+          {isReviewForm && <AddReview user={user} game={game} setGameReviews={setGameReviews} gameReviews={gameReviews} handleShowReviewForm={handleShowReviewForm}/>}
         </Box>
         
         {gameReviews.length > 0

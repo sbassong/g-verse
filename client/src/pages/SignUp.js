@@ -36,9 +36,13 @@ const SignUp = () => {
       email: formValues.email,
       password: formValues.password
     });
-    console.log('newUser =>', newUser)
-    setFormValues(iState);
-    navigate('/signin');
+
+    if (newUser?.email) {
+      setFormValues(iState);
+      navigate('/signin');
+    } else console.log(newUser)
+    
+    return;
   }
 
   return (

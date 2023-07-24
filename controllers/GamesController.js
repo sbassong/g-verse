@@ -38,15 +38,9 @@ const GetGames = async (req, res) => {
 
 const GetGameByTitle = async (req, res) => {
   try {
-    console.log('4$$$$$$$$$$$$$$$$$$$$$', req.body)
+    const {searchQuery} = req.body
     const games = await Game.findAll({
-      where: { 
-        [Op.or]: [
-          { title: { [Op.iLike]: `${req.body}%` } },
-          { price: { [Op.iLike]: `${req.body}%` } },
-          { rating: { [Op.iLike]: `${req.body}%` } },
-        ] 
-      }
+      where: { title: { [Op.iLike]: `${searchQuery}%` } },
     });
     res.send(games);
   } catch (error) {

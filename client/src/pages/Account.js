@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Navigate, useLocation } from 'react-router-dom'
 import { useNavigate } from "react-router";
 import '../styles/Account.css'
-import {Avatar, Button, Box, Container, Typography} from '@mui/material';
+import {Avatar, Button, Box, Typography} from '@mui/material';
 import {DeleteUser} from '../services/UserServices'
 import UpdatePassword from "../components/UpdatePassword";
 import UpdateProfile from "../components/UpdateProfile";
@@ -123,7 +123,7 @@ const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, gam
           </Button>
           
           <Button 
-            onClick={showPasswordForm}
+            onClick={handleLogOut}
             fullWidth
             variant="contained"
             sx={{ mb: 3, backgroundColor: 'red' }}
