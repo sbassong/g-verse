@@ -35,8 +35,7 @@ function App() {
       localStorage.setItem('authenticated', '1');
       setUser(userSession);
       toggleAuthenticated(true);
-    } else console.log(userSession)
-    return
+    } else return;
   };
 
   const handleLogOut =  () => {

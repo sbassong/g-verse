@@ -162,21 +162,21 @@ const UpdateUser = async (req, res) => {
 
 const DeleteUser = async (req, res) => {
   try {
-      const user = await User.findByPk(req.params.user_id);
+    const user = await User.findByPk(req.params.user_id);
 
-      if (user) {
-        const destroyedUser = await user.destroy();
+    if (user) {
+      const destroyedUser = await user.destroy();
 
-        const destroyedResponse = {
-          id: destroyedUser.id,
-          email: destroyedUser.email,
-          name: destroyedUser.name,
-          image: destroyedUser.image,
-          favorites: destroyedUser.favorites,
-        };
+      const destroyedResponse = {
+        id: destroyedUser.id,
+        email: destroyedUser.email,
+        name: destroyedUser.name,
+        image: destroyedUser.image,
+        favorites: destroyedUser.favorites,
+      };
 
-        return res.send(destroyedResponse);
-      } else res.send({message: 'User not found', severity: 'error'});
+      return res.send(destroyedResponse);
+    } else res.send({message: 'User not found', severity: 'error'});
   } catch (error) {
     res.send({ message: `Unauthorized operation`, severity: 'error' });
   }

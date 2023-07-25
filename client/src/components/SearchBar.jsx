@@ -10,7 +10,6 @@ const SearchBar = ({ setSearchResults }) => {
   const getSearchResults = async (e) => {
     try {
       e.preventDefault();
-      console.log(searchQuery);
       let results = await GetGamesByTitle({searchQuery});
       setSearchResults(results);
       setSearchQuery('');

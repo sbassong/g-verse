@@ -64,7 +64,6 @@ const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, gam
   
   const handleDeleteUser = async () => {
     const deletedUser = await DeleteUser(user?.id);
-    console.log('deletedUser', deletedUser)
     handleSetDialogClose();
     if (deletedUser?.email) {
       navigate('/signup');
