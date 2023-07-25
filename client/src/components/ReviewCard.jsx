@@ -9,7 +9,7 @@ const ReviewCard = ({review}) => {
       sx={{ 
         maxWidth: 700,
         mb: 3,
-        backgroundColor: 'transparent',
+        backgroundColor: 'rgba(255, 255, 255, .1)',
         borderBottom: '1px inset rgba(225, 225, 225, .2)',
         borderLeft: '1px inset rgba(225, 225, 225, .2)',
         width: '100%',

@@ -158,15 +158,15 @@ const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUse
           variant="h5"
           underlined='true'
           color='white'
-          sx={{ mb: 2 }}
+          sx={{ mb: 3, display: 'flex',  alignItems: 'center', justifyContent: 'space-between'}}
         >
           Reviews 
+          <Box onClick={handleShowReviewForm} sx={{display: 'flex',  alignItems: 'center', color: 'grey.600'}}>
+            <AddBoxIcon sx={{ width: 20, height: 20, mr: .5, ml: 2}}/> 
+            Add Review
+          </Box>
         </Typography>
 
-        <span onClick={handleShowReviewForm}>
-          <AddBoxIcon sx={{ width: '1.5rem', height: '1.5rem', mr: 2,}}/> 
-          Add Review
-        </span>
         
         {gameReviews.length > 0
           ? gameReviews?.map((review) => <ReviewCard key={review.id} review={review}/>)

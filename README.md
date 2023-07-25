@@ -17,7 +17,7 @@ Gverse is a fully functional, intuitive, engaging full-stack application through
 <br>
 
 ## **_Local Environment Requirements_**
-Node, npm, and PostgreSQL are necessary to run this application. If needed, please follow the installation guidelines **[below](#env-requirements)**
+Node, npm, and PostgreSQL are necessary to run this application. If needed, please follow the installation guidelines in the  **[Env-requirements section](#env-requirements)** section.
 
 
 
@@ -50,7 +50,7 @@ Copy this repo's HTTPS URL and clone it onto your local machine's terminal:
 1.  In the g-verse root folder, add a `.env` file containing **both** the following variables 
       ```sh 
       SALT_ROUNDS=<12 or 16>
-      APP_SECRET=<WhateverCombinationOfCharactersYouWant.Add889aAndSpecialChars&&##!Throughout>
+      APP_SECRET="<WhateverCombinationOfCharactersYouWant.Add889aAndSpecialChars&&##!Throughout>"
       ```
 
 
@@ -84,7 +84,7 @@ Copy this repo's HTTPS URL and clone it onto your local machine's terminal:
 
 - [x] Integrate a UI Library
 - [x] Polish User authentication and authorization
-- [ ] Add UX features, alerts, tooltips...
+- [x] Add UX features, alerts, tooltips...
 - [ ] Full update to MUI *(in progress)*
 - [ ] Filter by Sidebar
 
