@@ -1,6 +1,5 @@
 import '../styles/SignIn.css'
 import React, {useState} from 'react';
-import { useNavigate } from "react-router";
 import { UpdateUser } from '../services/UserServices'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -10,27 +9,32 @@ import { ThemeProvider } from '@mui/material/styles'
 import CustomizedInputsStyleOverrides from '../styles/muiOverrides';
 
 
-const UpdateProfile = ({user, setUser, setAccountUpdated}) => {
-  const navigate = useNavigate();
+const UpdateProfile = ({user, setUser, setAccountUpdated, handleSnack, setForm}) => {
   const iState = { name: '', email: '', image: '' };
   const [formValues, setFormValues] = useState(iState);
 
+  const handleChange = (e) => setFormValues({ ...formValues, [e.target.name]: e.target.value });
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payloadValues = formValues;
     if (!payloadValues.name) payloadValues.name = user.name;
     if (!payloadValues.email) payloadValues.email = user.email;
     if (!payloadValues.image) payloadValues.image = user.image;
+
     const updatedUser = await UpdateUser(user?.id, payloadValues);
+    if (updatedUser?.email) {
+      const successMsg = 'Success: User profile updated!'
+      await setUser(updatedUser);
+      setForm(null);
+      setAccountUpdated(true);
+      handleSnack(successMsg, 'success')
+    } else {
+      handleSnack(updatedUser, 'error');
+    }
     setFormValues(iState);
-    await setUser(updatedUser);
-    setAccountUpdated(true);
-    navigate('/user/account');
   };
 
-  const handleChange = (e) => {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value })
-  }
 
   return (
     <ThemeProvider theme={CustomizedInputsStyleOverrides}>

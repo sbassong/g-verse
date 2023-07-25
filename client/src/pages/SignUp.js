@@ -3,7 +3,8 @@ import React, {useState} from 'react';
 import { NavLink } from 'react-router-dom'
 import { useNavigate } from "react-router";
 import { ThemeProvider } from '@mui/material/styles';
-import {Avatar, Button, TextField, IconButton, Box, Typography, Container, InputAdornment, } from '@mui/material/';
+import {Avatar, Button, TextField, IconButton, Box, Typography, Container, InputAdornment, Snackbar} from '@mui/material/';
+import MuiAlert from '@mui/material/Alert';
 import {Visibility, VisibilityOff} from '@mui/icons-material/';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { SignUpUser } from '../services/UserServices'
@@ -16,21 +17,40 @@ const iState = {
   confirmPassword: ''
 };
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const SignUp = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
   const [formValues, setFormValues] = useState(iState);
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [snackMessage, setSnackMessage] = useState(null);
 
   const handleFormChange = (e) => setFormValues({ ...formValues, [e.target.name]: e.target.value });
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowConfirmPassword = () => setShowConfirmedPassword((show) => !show);
   const handleMouseDownPassword = (event) => event.preventDefault();
   const handleMouseDownConfirmedPassword = (event) => event.preventDefault();
+  const handleShowSnack = () => setSnackOpen(true);
+  const handleCloseSnack = (event, reason) => {
+    if (reason === 'clickaway') return;
+    setSnackOpen(false);
+  };
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (formValues.password !== formValues.confirmPassword) {
+      setSnackMessage('Error: Passowrds must match')
+      handleShowSnack();
+      setFormValues(iState);
+      return;
+    }
+
     const newUser = await SignUpUser({
       name: formValues.name,
       email: formValues.email,
@@ -38,11 +58,12 @@ const SignUp = () => {
     });
 
     if (newUser?.email) {
-      setFormValues(iState);
       navigate('/signin');
-    } else console.log(newUser)
-    
-    return;
+    } else {
+      setSnackMessage(newUser)
+      handleShowSnack();
+      setFormValues(iState);
+    }
   }
 
   return (
@@ -190,6 +211,20 @@ const SignUp = () => {
               </NavLink>
           </Box>
         </Box>
+
+        <Snackbar
+          open={snackOpen}
+          autoHideDuration={6000}
+          onClose={handleCloseSnack}
+        >
+          <Alert
+            onClose={handleCloseSnack}
+            severity='error'
+            sx={{ width: '100%' }}
+          >
+            {snackMessage}
+          </Alert>
+        </Snackbar>
       </Container>
     </ThemeProvider>
   );

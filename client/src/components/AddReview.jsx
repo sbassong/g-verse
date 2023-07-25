@@ -6,7 +6,7 @@ import CustomizedInputsStyleOverrides from '../styles/muiOverrides';
 import { Rating, Button, TextField, Box, Typography, Container} from '@mui/material'
 
 
-const AddReview = ({game, setGameReviews, gameReviews, handleShowReviewForm }) => {
+const AddReview = ({game, setGameReviews, gameReviews, handleShowReviewForm, handleSnack}) => {
   const [content, setContent] = useState('');
   const [rating, setRating] = useState(0);
 
@@ -15,20 +15,34 @@ const AddReview = ({game, setGameReviews, gameReviews, handleShowReviewForm }) =
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (rating > 0 && content) {
+
+    if (rating === 0) {
+      const errorMsg = 'Error: Missing rating';
+      handleSnack(errorMsg, 'error');
+    } else if (!content) {
+      const errorMsg = 'Error: Missing comments';
+      handleSnack(errorMsg, 'error');
+    } else if (rating > 0 && content) {
       const newReview = await CreateReview({
         content: content ? content : 'No content',
         rating,
         game_id: game?.id,
       });
 
-      const updatedGameReviews = gameReviews;
-      updatedGameReviews.push(newReview);
-      setGameReviews(updatedGameReviews);
-      setRating(0);
-      setContent('');
-      handleShowReviewForm();
-    } else console.log('Please rate and leave a comment')
+      if (newReview?.id) {
+        const updatedGameReviews = gameReviews;
+        updatedGameReviews.push(newReview);
+        setGameReviews(updatedGameReviews);
+        setRating(0);
+        setContent('');
+        handleShowReviewForm();
+        const successMsg = 'Success: Thank you for your review!';
+        handleSnack(successMsg, 'success');
+      } else {
+        handleSnack(newReview?.message, 'error');
+      }
+    }
+    return;
   };
   
   return (
@@ -63,12 +77,12 @@ const AddReview = ({game, setGameReviews, gameReviews, handleShowReviewForm }) =
               margin="normal"
               fullWidth
               id="content"
-              label="review"
+              label="comments"
               name="content"
               placeholder="What a game!"
               value={content}
               multiline
-              rows={2}
+              rows={3}
               onChange={handleContentChange}
               autoFocus
               sx={{

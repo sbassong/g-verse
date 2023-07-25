@@ -1,6 +1,5 @@
 import '../styles/SignIn.css'
 import React, {useState} from 'react';
-import { useNavigate } from "react-router";
 import { UpdateUserPassword } from '../services/UserServices'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -10,23 +9,35 @@ import { ThemeProvider } from '@mui/material/styles'
 import CustomizedInputsStyleOverrides from '../styles/muiOverrides';
 
 
-const UpdatePassword = ({user, setUser}) => {
-  const navigate = useNavigate();
+const UpdatePassword = ({user, setUser, handleSnack, setAccountUpdated, setForm}) => {
   const iState = { oldPassword: '', newPassword: '', c_newPassword: '' };
   const [formValues, setFormValues] = useState(iState);
+  
+  const handleChange = (e) => setFormValues({ ...formValues, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formValues.newPassword !== formValues.c_newPassword) {
+      const message = 'Error: New passwords must match';
+      handleSnack(message, 'error');
+      setFormValues(iState);
+      return;
+    }
+
     const updatedUser = await UpdateUserPassword(user?.id, formValues);
+    if (updatedUser?.email) {
+      const successMsg = 'Success: Password updated'
+      await setUser(updatedUser);
+      setForm(null);
+      setAccountUpdated(true);
+      handleSnack(successMsg, 'success');
+    } else {
+      const errorMsg = 'Error: No user matches credentials'
+      handleSnack(errorMsg, 'error');
+    }
     setFormValues(iState);
-    await setUser(updatedUser);
-    navigate('/user/account');
   };
-
-  const handleChange = (e) => {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value })
-  }
-
+  
   return (
     <ThemeProvider theme={CustomizedInputsStyleOverrides}>
       <Container component="main" maxWidth="sm">

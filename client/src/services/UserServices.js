@@ -54,7 +54,8 @@ export const GetAllUsers = async () => {
 export const UpdateUserPassword = async (user_id, data) => {
   try {
     const res = await Client.post(`/users/update/password/${user_id}`, data);
-    return res.data;
+    if (res.data?.email) return res.data;
+    else return;
   } catch (error) {;
     throw error
   }
@@ -63,7 +64,8 @@ export const UpdateUserPassword = async (user_id, data) => {
 export const UpdateUser = async (user_id, data) => {
   try {
     const res = await Client.put(`/users/update/${user_id}`, data)
-    return res.data
+    if (res.data?.email) return res.data;
+    else return res.data.message;
   } catch (error) {
     throw error
   }

@@ -3,12 +3,17 @@ import React, { useState, useEffect } from "react";
 import { Navigate, useLocation } from 'react-router-dom'
 import { useNavigate } from "react-router";
 import '../styles/Account.css'
-import {Avatar, Button, Box, Typography} from '@mui/material';
+import {Avatar, Button, Box, Typography, Dialog, DialogActions, DialogContentText, DialogContent, DialogTitle } from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert'
 import {DeleteUser} from '../services/UserServices'
 import UpdatePassword from "../components/UpdatePassword";
 import UpdateProfile from "../components/UpdateProfile";
 import Favorites from "./Favorites";
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, games, setUserFavorites}) => {
   const navigate = useNavigate();
@@ -17,6 +22,19 @@ const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, gam
   const [currentForm, setForm] = useState(null);
   const [passwordButton, togglePassword] = useState(false);
   const [profileButton, toggleProfile] = useState(false);
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [snackMessage, setSnackMessage] = useState(null);
+  const [snackSeverity,  setSnackSeverity] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleSetDialogOpen = () => setDialogOpen(true);
+  const handleSetDialogClose = () => setDialogOpen(false);
+  const handleShowSnack = () => setSnackOpen(true);
+  const handleCloseSnack = (event, reason) => {
+    if (reason === 'clickaway') return;
+    setSnackOpen(false);
+  };
+  
   
   const showProfileForm = () => {
     if (currentForm === 'profile') {
@@ -36,36 +54,37 @@ const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, gam
       setForm('password')
       togglePassword(true);
     }
-  }
-
-  const handleDeleteUser = async (userId) => {
-    // MySwal.fire({
-    //   title: "Are you sure?",
-    //   text: "This account will be permanently deleted!",
-    //   icon: "warning",
-    //   buttons: true,
-    //   dangerMode: true,
-    // })
-    // .then((willDelete) => {
-    //   if (willDelete) {
-        await DeleteUser(userId);
-        await handleLogOut();
-        navigate('/signup');
-      // }
-    // })
-  }
-
+  };
+  
+  const handleSnack = (message, severity) => {
+    setSnackMessage(message);
+    setSnackSeverity(severity);
+    handleShowSnack();
+  };
+  
+  const handleDeleteUser = async () => {
+    const deletedUser = await DeleteUser(user?.id);
+    console.log('deletedUser', deletedUser)
+    handleSetDialogClose();
+    if (deletedUser?.email) {
+      navigate('/signup');
+      await handleLogOut();
+    } else handleSnack(deletedUser.message, deletedUser.severity);
+  };
 
   useEffect(() => {
-    if (authenticated && user) setUser(user);
-  }, [authenticated])
+    if (authenticated && user) {
+      setUser(user);
+      setUserFavorites(user?.favorites);
+    }
+  }, [authenticated]);
 
   useEffect(() => {
     if (accountUpdated) setAccountUpdated(false);
-  }, [accountUpdated])
+  }, [accountUpdated]);
 
 
-  if (!(user && authenticated)) return <Navigate to="/signin" state={{ from: location }} replace />
+  if (!authenticated) return <Navigate to="/signin" state={{ from: location }} replace />
   else return (
     <div className="account-page">
       <Box
@@ -134,7 +153,7 @@ const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, gam
             fullWidth
             variant="contained"
             sx={{ backgroundColor: 'darkred', mb: 5 }}
-            onClick={() => handleDeleteUser(user?.id)}
+            onClick={handleSetDialogOpen}
           >
               Delete Account 
           </Button>
@@ -150,13 +169,41 @@ const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, gam
               <Favorites authenticated={authenticated} user={user} setUser={setUser} userFavorites={userFavorites} games={games} setUserFavorites={setUserFavorites}/>
             </>
           }
-          { currentForm === 'profile' && profileButton && <UpdateProfile user={user} setUser={setUser} setAccountUpdated={setAccountUpdated} />}
-          { currentForm === 'password' && passwordButton && <UpdatePassword user={user} setUser={setUser} setAccountUpdated={setAccountUpdated}/> }
+          { currentForm === 'profile' && profileButton && <UpdateProfile user={user} setUser={setUser} setAccountUpdated={setAccountUpdated} handleSnack={handleSnack} setForm={setForm} />}
+          { currentForm === 'password' && passwordButton && <UpdatePassword user={user} setUser={setUser} setAccountUpdated={setAccountUpdated} handleSnack={handleSnack} setForm={setForm} /> }
         </Box>
       </Box>
+      
+      <Snackbar
+        open={snackOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnack}
+      >
+        <Alert
+          onClose={handleCloseSnack}
+          severity={snackSeverity}
+          sx={{ width: '100%' }}
+        >
+          {snackMessage}
+        </Alert>
+      </Snackbar>
+
+      <Dialog
+        open={dialogOpen}
+        onClose={handleSetDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle sx={{color: 'black', mt: 2, ml: 2, mr: 2, textAlign: 'center'}} id="alert-dialog-description">Delete account?</DialogTitle>
+        <DialogActions
+          sx={{mb: 1, justifyContent: 'center'}}
+        >
+          <Button sx={{ backgroundColor: 'red'}} variant="contained" onClick={handleDeleteUser}>Delete</Button>
+          <Button variant="contained" onClick={handleSetDialogClose} autoFocus >Cancel</Button>
+        </DialogActions>
+      </Dialog>
     </div>
-  );
-          
+  );   
 }
 
 export default Account

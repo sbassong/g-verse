@@ -5,6 +5,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import Rating from '@mui/material/Rating';
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert'
 import { styled } from '@mui/material/styles';
 import ReviewCard from "../components/ReviewCard";
 import AddReview from '../components/AddReview';
@@ -21,12 +23,19 @@ const StyledRating = styled(Rating)({
   },
 });
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 
 const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUserFavorites, isFavorite}) => {
   const [isFavoriteGame, setIsFavorite] = useState(null);
   const [reviewUpdated, toggleReviewUpdated] = useState(false)
   const [gameReviews, setGameReviews] = useState([]);
   const [isReviewForm, toggleReviewButton] = useState(false);
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [snackMessage, setSnackMessage] = useState(null);
+  const [snackSeverity,  setSnackSeverity] = useState(null);
 
   const handleShowReviewForm = () => {
     isReviewForm ? toggleReviewButton(false) : toggleReviewButton(true);
@@ -58,6 +67,19 @@ const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUse
     setUserFavorites(currUserFavorites);
     const updatedUser = await updateUserFavoritesArr(currUserFavorites);
     setUser(updatedUser);
+  };
+
+  const handleShowSnack = () => setSnackOpen(true);
+
+  const handleCloseSnack = (event, reason) => {
+    if (reason === 'clickaway') return;
+    setSnackOpen(false);
+  };
+
+  const handleSnack = (message, severity) => {
+    setSnackMessage(message);
+    setSnackSeverity(severity);
+    handleShowSnack();
   };
 
   useEffect(() => {
@@ -145,7 +167,7 @@ const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUse
           Add Review
         </span>
         <Box sx={{mb: 3,}}>
-          {isReviewForm && <AddReview user={user} game={game} setGameReviews={setGameReviews} gameReviews={gameReviews} handleShowReviewForm={handleShowReviewForm}/>}
+          {isReviewForm && <AddReview user={user} game={game} setGameReviews={setGameReviews} gameReviews={gameReviews} handleShowReviewForm={handleShowReviewForm} handleSnack={handleSnack}/>}
         </Box>
         
         {gameReviews.length > 0
@@ -154,6 +176,20 @@ const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUse
         }
       </Box>
       
+      <Snackbar
+          open={snackOpen}
+          autoHideDuration={6000}
+          onClose={handleCloseSnack}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        >
+          <Alert
+            onClose={handleCloseSnack}
+            severity={snackSeverity}
+            sx={{ width: '100%' }}
+          >
+            {snackMessage}
+          </Alert>
+        </Snackbar>
     </div>
   )
 }

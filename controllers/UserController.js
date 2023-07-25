@@ -1,6 +1,5 @@
 const { User } = require('../models');
 const middleware = require('../middleware');
-const { v4: uuidv4 } = require('uuid');
 
 
 const Login = async (req, res) => {
@@ -47,12 +46,10 @@ const SignUp = async (req, res) => {
         image: user.image,
         favorites: user.favorites,
       };
-
       return res.send(trimmedUser);
     }
-    // res.send({message: 'Missing required values'});
   } catch (error) {
-    throw error;
+    res.send({message: 'Invalid or missing values'});
   }
 };
 
@@ -157,17 +154,14 @@ const UpdateUser = async (req, res) => {
 
       return res.send(updatedUser);
     }
-    res.send({ status: 'Error', msg: 'Unauthorized' });
+    res.send({ message: 'Error: No user matches credentials' });
   } catch (error) {
-    throw error;
+    res.send({message: 'Error: Invalid email' });
   }
 };
 
 const DeleteUser = async (req, res) => {
   try {
-    const { deleteConfirmed } = req.body;
-
-    if (deleteConfirmed) {
       const user = await User.findByPk(req.params.user_id);
 
       if (user) {
@@ -182,11 +176,9 @@ const DeleteUser = async (req, res) => {
         };
 
         return res.send(destroyedResponse);
-      } else res.send({message: 'User not found'});
-    }
-    res.send({ message: `Unauthorized operation` });
+      } else res.send({message: 'User not found', severity: 'error'});
   } catch (error) {
-    throw error;
+    res.send({ message: `Unauthorized operation`, severity: 'error' });
   }
 };
 

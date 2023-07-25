@@ -1,5 +1,4 @@
 const { Review } = require('../models');
-const { v4: uuidv4 } = require('uuid');
 
 const GetReviewsByGame = async (req, res) => {
   try {
@@ -15,12 +14,10 @@ const GetReviewsByGame = async (req, res) => {
 
 const CreateReview = async (req, res) => {
   try {
-    // const id = uuidv4();
-    // req.body['id'] = id;
     const review = await Review.create(req.body);
     res.send(review);
   } catch (error) {
-    throw error;
+    res.send({message: 'Error: unsuccessful submission'});
   }
 };
 
