@@ -30,7 +30,13 @@ body {
   box-sizing: border-box;
   font-size: clamp(.9rem, 1vw, 1.5rem);
   color: white;
+  
 }
+
+/* .MuiRating-root {
+  color: black !important;
+
+} */
 
 
 

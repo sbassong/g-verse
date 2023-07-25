@@ -30,7 +30,7 @@ function App() {
 
   const checkToken = async () => {
     const userSession = await CheckSession();
-    if (userSession?.email){
+    if (userSession?.email) {
       setUserFavorites(userSession?.favorites);
       localStorage.setItem('authenticated', '1');
       setUser(userSession);

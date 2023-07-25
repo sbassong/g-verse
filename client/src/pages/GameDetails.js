@@ -30,16 +30,17 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUserFavorites, isFavorite}) => {
   const [isFavoriteGame, setIsFavorite] = useState(null);
-  const [reviewUpdated, toggleReviewUpdated] = useState(false)
+  // const [reviewUpdated, toggleReviewUpdated] = useState(false)
   const [gameReviews, setGameReviews] = useState([]);
   const [isReviewForm, toggleReviewButton] = useState(false);
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState(null);
   const [snackSeverity,  setSnackSeverity] = useState(null);
+  const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
 
-  const handleShowReviewForm = () => {
-    isReviewForm ? toggleReviewButton(false) : toggleReviewButton(true);
-  };
+  const handleShowReviewForm = () => setReviewDialogOpen(true);
+  const handleHideReviewForm = () => setReviewDialogOpen(false);
+  
 
   const getReviews = async () => {
     const reviews = await GetReviewsByGameId(game.id);
@@ -166,9 +167,6 @@ const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUse
           <AddBoxIcon sx={{ width: '1.5rem', height: '1.5rem', mr: 2,}}/> 
           Add Review
         </span>
-        <Box sx={{mb: 3,}}>
-          {isReviewForm && <AddReview user={user} game={game} setGameReviews={setGameReviews} gameReviews={gameReviews} handleShowReviewForm={handleShowReviewForm} handleSnack={handleSnack}/>}
-        </Box>
         
         {gameReviews.length > 0
           ? gameReviews?.map((review) => <ReviewCard key={review.id} review={review}/>)
@@ -177,19 +175,31 @@ const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUse
       </Box>
       
       <Snackbar
-          open={snackOpen}
-          autoHideDuration={6000}
+        open={snackOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnack}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert
           onClose={handleCloseSnack}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          severity={snackSeverity}
+          sx={{ width: '100%' }}
         >
-          <Alert
-            onClose={handleCloseSnack}
-            severity={snackSeverity}
-            sx={{ width: '100%' }}
-          >
-            {snackMessage}
-          </Alert>
-        </Snackbar>
+          {snackMessage}
+        </Alert>
+      </Snackbar>
+      
+      <AddReview
+        user={user}
+        game={game}
+        setGameReviews={setGameReviews}
+        gameReviews={gameReviews}
+        handleShowReviewForm={handleShowReviewForm}
+        handleHideReviewForm={handleHideReviewForm}
+        reviewDialogOpen={reviewDialogOpen}
+        handleSnack={handleSnack}
+      />
+
     </div>
   )
 }
