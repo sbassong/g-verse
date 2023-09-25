@@ -126,7 +126,7 @@ Copy this repo's HTTPS URL and clone it onto your local machine's terminal:
     1. install homebrew by running this command in your termninal
 
             /bin/bash -c "$(curl -fsSL https://raw githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    2. follow this each of the following line **one by one**
+    2. follow the following steps **one by one**
 
         use brew to install postgres
 
