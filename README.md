@@ -9,7 +9,7 @@ Gverse is a fully functional, intuitive, engaging full-stack application through
 
 - [PostgreSQL](https://www.postgresql.org/)
 - [Express.js](https://expressjs.com/)
-- [React](https://reactjs.org/)
+- [React](https://reactjs.org/) (bootstrapped with [Create-react-app](https://create-react-app.dev/))
 - [Node.js](https://nodejs.org/en/)
 - [Sequelize](https://sequelize.org/master/)
 - [Heroku](https://www.heroku.com/home)
