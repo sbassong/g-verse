@@ -1,12 +1,15 @@
 {
   "name": "g-verse",
   "version": "1.0.0",
-  "description": "## Date: 9/17/2021",
+  "description": "## Date: 12/16/24",
   "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js",
     "start": "node app.js",
-    "build": "npm install && npx sequelize-cli db:migrate && cd client && rm -rf build && npm install && npm run build"
+    "build": "npm install && npx sequelize-cli db:migrate && cd client && rm -rf build && npm install && npm run build",
+    "seed": "npx sequelize-cli db:seed:all",
+    "migrate": "npx sequelize-cli db:migrate"
+
   },
   "repository": {
     "type": "git",
@@ -30,11 +33,11 @@
     "pg": "^8.13.1",
     "postgresql": "^0.0.1",
     "sequelize": "^6.37.5",
-    "sequelize-cli": "^6.6.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
     "morgan": "^1.10.0",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "sequelize-cli": "^6.6.2"
   }
 }
