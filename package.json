@@ -16,25 +16,25 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sbassong/GameStart/issues"
+    "url": "https://github.com/sbassong/g-verse/issues"
   },
-  "homepage": "https://github.com/sbassong/GameStart#readme",
+  "homepage": "https://github.com/sbassong/g-verse#readme",
   "dependencies": {
-    "axios": "^1.4.0",
-    "bcrypt": "^5.0.1",
-    "body-parser": "^1.19.0",
+    "axios": "^1.7.9",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^9.0.0",
-    "morgan": "^1.10.0",
-    "pg": "^8.8.0",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.1",
     "postgresql": "^0.0.1",
-    "sequelize": "^6.28.0",
-    "sequelize-cli": "^6.6.0",
-    "uuid": "^9.0.0"
+    "sequelize": "^6.37.5",
+    "sequelize-cli": "^6.6.2",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.12"
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.9"
   }
 }
