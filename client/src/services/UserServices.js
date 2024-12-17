@@ -15,7 +15,7 @@ export const SignInUser = async (data) => {
 
 export const SignUpUser = async (data) => {
   try {
-    const res = await Client.post('/users/signup', data);
+    const res = await Client.post('/users/', data);
     if (res?.data?.email) return res.data;
     else return res.data.message;
   } catch (error) {

@@ -1,6 +1,5 @@
-const { User } = require('../models');
+const { supabase } = require('../supabaseClient.js')
 const middleware = require('../middleware');
-
 
 const Login = async (req, res) => {
   try {
@@ -32,24 +31,37 @@ const Login = async (req, res) => {
     };
     
 const SignUp = async (req, res) => {
+  const { email, password, username, image } = req.body;
+
   try {
-    const { email, password, name, image } = req.body;
-    
-    if (email && password && name) {
+    if (email && password && username) {
       const password_digest = await middleware.hashPassword(password);
-      const user = await User.create({ email, password_digest, name, image });
+      const { data, error } = await supabase
+      .from("users")
+      .insert([
+        {
+          username,
+          email,
+          password_digest,
+          image,
+        }
+      ])
+      .select();
       
-      const trimmedUser = {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        image: user.image,
-        favorites: user.favorites,
-      };
-      return res.send(trimmedUser);
+      if (error.message) return res.status(400).send({message: error.message});
+      
+      res.send({
+        id: data[0].id,
+        email: data[0].email,
+        username: data[0].username,
+        image: data[0].image,
+        favoriteGames: data[0].favorite_games,
+      });
+    } else {
+      res.status(400).send({ message: 'Invalid or missing values' });
     }
   } catch (error) {
-    res.send({message: 'Invalid or missing values'});
+    res.send(error);
   }
 };
 
