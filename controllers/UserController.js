@@ -1,35 +1,40 @@
-const { supabase } = require('../supabaseClient.js')
+const { supabase } = require('../supabaseClient.js');
 const middleware = require('../middleware');
 
+
 const Login = async (req, res) => {
+  const { email, password } = req.body;
+
   try {
-    const user = await User.findOne({
-      where: { email: req.body.email },
-      raw: true
-    })
-    if (
-      user &&
-      (await middleware.comparePassword(
-        user.password_digest,
-        req.body.password
-        ))
-        ) {
-          const trimmedUser = {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            image: user.image,
-            favorites: user.favorites,
-          }
-          let token = middleware.createToken(trimmedUser);
-          return res.send({ user: trimmedUser, token });
-        }
-        res.send({message: 'Error: No user found' })
-      } catch (error) {
-        throw error;
-      }
-    };
+    let { data: users, error } = await supabase
+      .from('users')
+      .select("*")
+      .eq('email', email);
+
+    if ( 
+      users[0] 
+      && (await middleware.comparePassword( users[0].password_digest, password))
+      ) {
+      const trimmedUser = {
+        id: users[0].id,
+        email: users[0].email,
+        name: users[0].username,
+        image: users[0].image,
+        favorites: users[0].favorites
+      };
+
+      if (error.message) return res.status(400).send({ message: error.message });
+      let token = middleware.createToken(trimmedUser);
+      return res.send({ user: trimmedUser, token });
+    }
     
+    res.status(400).send({message: 'Error: No user found' })
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  };
+    
+
 const SignUp = async (req, res) => {
   const { email, password, username, image } = req.body;
 
@@ -37,19 +42,19 @@ const SignUp = async (req, res) => {
     if (email && password && username) {
       const password_digest = await middleware.hashPassword(password);
       const { data, error } = await supabase
-      .from("users")
-      .insert([
-        {
-          username,
-          email,
-          password_digest,
-          image,
-        }
-      ])
-      .select();
+        .from("users")
+        .insert([
+          {
+            username,
+            email,
+            password_digest,
+            image,
+          }
+        ])
+        .select();
       
       if (error.message) return res.status(400).send({message: error.message});
-      
+
       res.send({
         id: data[0].id,
         email: data[0].email,
