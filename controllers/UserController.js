@@ -71,36 +71,6 @@ const SignUp = async (req, res) => {
   }
 };
 
-const UpdatePassword = async (req, res) => {
-  const { oldPassword, newPassword } = req.body;
-  const { user_id: userId } = req.params;
-
-  try {
-    const password_digest = await middleware.hashPassword(newPassword);
-    const { data: users, error } = await supabase
-      .from('users')
-      .update({ 
-        password_digest,
-        updatedAt: ((new Date()).toISOString()).toLocaleString('zh-TW')
-      })
-      .eq('id', userId)
-      .select();
-
-    if (error?.message) return res.status(400).send({ message: error.message });
-
-    res.send({
-      id: users[0].id,
-      email: users[0].email,
-      username: users[0].username,
-      image: users[0].image,
-      favorite_games: users[0].favorite_games,
-    });
-  } catch (error) {
-    console.error(error)
-    res.status(500).send(error);
-  }
-};
-
 const CheckSession = async (req, res) => {
   try {
     const { payload } = res.locals;
@@ -130,6 +100,36 @@ const GetUserProfile = async (req, res) => {
     else res.send({message: 'Error: User not found'})
   } catch (error) {
     throw error;
+  }
+};
+
+const UpdatePassword = async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const { user_id: userId } = req.params;
+
+  try {
+    const password_digest = await middleware.hashPassword(newPassword);
+    const { data: users, error } = await supabase
+      .from('users')
+      .update({
+        password_digest,
+        updatedAt: ((new Date()).toISOString()).toLocaleString('zh-TW')
+      })
+      .eq('id', userId)
+      .select();
+
+    if (error?.message) return res.status(400).send({ message: error.message });
+
+    res.send({
+      id: users[0].id,
+      email: users[0].email,
+      username: users[0].username,
+      image: users[0].image,
+      favorite_games: users[0].favorite_games,
+    });
+  } catch (error) {
+    console.error(error)
+    res.status(500).send(error);
   }
 };
 
@@ -195,22 +195,23 @@ const UpdateUser = async (req, res) => {
 };
 
 const DeleteUser = async (req, res) => {
+  const { user_id: userId } = req.params
+
   try {
-    const user = await User.findByPk(req.params.user_id);
+    const { data, error } = await supabase
+      .from('users')
+      .delete()
+      .eq('id', userId)
+      .select()
 
-    if (user) {
-      const destroyedUser = await user.destroy();
+    if (error?.message) return res.status(400).send({ message: error.message })
 
-      const destroyedResponse = {
-        id: destroyedUser.id,
-        email: destroyedUser.email,
-        name: destroyedUser.name,
-        image: destroyedUser.image,
-        favorites: destroyedUser.favorites,
-      };
+    return res.send({
+      id: data[0].id,
+      email: data[0].email,
+      username: data[0].username,
+    });
 
-      return res.send(destroyedResponse);
-    } else res.send({message: 'User not found', severity: 'error'});
   } catch (error) {
     res.send({ message: `Unauthorized operation`, severity: 'error' });
   }
