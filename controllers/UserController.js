@@ -154,26 +154,32 @@ const UpdateUserFavorites = async (req, res) => {
 
 const UpdateUser = async (req, res) => {
   const { user_id: userId } = req.params;
+  const { email, username, image } = req.body;
   
   try {
-    const user = await User.findByPk(userId);
+    const { data: users, error } = await supabase
+      .from("users")
+      .update({ 
+        email: email && email, 
+        username: username && username, 
+        image: image && image 
+      })
+      .eq("id", userId)
+      .select();
+    
+    if (error?.message) return res.status(400).send({ message: error.message })
 
-    if ( user ) {
-      await user.update(req.body);
+    return res.send({
+      id: users[0].id,
+      email: users[0].email,
+      username: users[0].username,
+      image: users[0].image,
+      favorite_games: users[0].favorite_games,
+    });
 
-      const updatedUser = {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        image: user.image,
-        favorites: user.favorites,
-      };
-
-      return res.send(updatedUser);
-    }
-    res.send({ message: 'Error: No user matches credentials' });
   } catch (error) {
-    res.send({message: 'Error: Invalid email' });
+    console.error(error)
+    res.status(500).send(error);
   }
 };
 
