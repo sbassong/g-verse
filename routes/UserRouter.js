@@ -11,7 +11,7 @@ Router.post('/login', controller.Login);
 
 Router.put('/:user_id/password/update', middleware.stripToken, middleware.verifyToken, controller.UpdatePassword);
 Router.put('/:user_id/profile/update', middleware.stripToken, middleware.verifyToken, controller.UpdateUser);
-Router.put('/:user_id/favorites/update', controller.UpdateUserFavorites);
+Router.put('/:user_id/favorites/update', middleware.stripToken, middleware.verifyToken, controller.UpdateUserFavorites);
 
 Router.delete('/:user_id/delete', controller.DeleteUser);
 

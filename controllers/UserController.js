@@ -79,7 +79,10 @@ const UpdatePassword = async (req, res) => {
     const password_digest = await middleware.hashPassword(newPassword);
     const { data: users, error } = await supabase
       .from('users')
-      .update({ password_digest })
+      .update({ 
+        password_digest,
+        updatedAt: ((new Date()).toISOString()).toLocaleString('zh-TW')
+      })
       .eq('id', userId)
       .select();
 
@@ -131,22 +134,29 @@ const GetUserProfile = async (req, res) => {
 };
 
 const UpdateUserFavorites = async (req, res) => {
-  try {
-    const { favorites } = req.body;
-    const user = await User.findByPk(req.params.user_id);
-    if ( user ) {
-      await user.update({ favorites });
+  const { user_id: userId } = req.params;
+  const { favoriteGames } = req.body;
 
-      const updatedUser = {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        image: user.image,
-        favorites: user.favorites,
-      };
-      return res.send(updatedUser);
-    }
-    res.send({ message: 'Error: User not found' });
+  try {
+    const { data: users, error } = await supabase
+      .from('users')
+      .update({ 
+        favorite_games: favoriteGames,
+        updatedAt: ((new Date()).toISOString()).toLocaleString('zh-TW')
+      })
+      .eq('id', userId)
+      .select();
+
+    if (error?.message) return res.status(400).send({ message: error.message });
+
+    return res.send({
+      id: users[0].id,
+      email: users[0].email,
+      username: users[0].username,
+      image: users[0].image,
+      favorite_games: users[0].favorite_games,
+    });
+    
   } catch (error) {
     throw error;
   }
@@ -162,7 +172,8 @@ const UpdateUser = async (req, res) => {
       .update({ 
         email: email && email, 
         username: username && username, 
-        image: image && image 
+        image: image && image,
+        updatedAt: ((new Date()).toISOString()).toLocaleString('zh-TW') 
       })
       .eq("id", userId)
       .select();
