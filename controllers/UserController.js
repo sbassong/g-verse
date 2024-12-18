@@ -23,13 +23,14 @@ const Login = async (req, res) => {
         favorites: users[0].favorites
       };
 
-      if (error.message) return res.status(400).send({ message: error.message });
+      if (error?.message) return res.status(400).send({ message: error.message });
       let token = middleware.createToken(trimmedUser);
       return res.send({ user: trimmedUser, token });
     }
     
     res.status(400).send({message: 'Error: No user found' })
     } catch (error) {
+      // console.error(error)
       res.status(500).send(error);
     }
   };
@@ -53,7 +54,7 @@ const SignUp = async (req, res) => {
         ])
         .select();
       
-      if (error.message) return res.status(400).send({message: error.message});
+      if (error?.message) return res.status(400).send({message: error.message});
 
       res.send({
         id: data[0].id,
@@ -71,31 +72,29 @@ const SignUp = async (req, res) => {
 };
 
 const UpdatePassword = async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const { user_id: userId } = req.params;
+
   try {
-    const { oldPassword, newPassword } = req.body;
-    const userId = req.params.user_id;
-    const user = await User.findByPk(userId);
-    if (
-      user &&
-      (await middleware.comparePassword(
-        user.dataValues.password_digest,
-        oldPassword
-      ))
-    ) {
-      const password_digest = await middleware.hashPassword(newPassword)
-      await user.update({ password_digest });
-      const updatedUser = {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        image: user.image,
-        favorites: user.favorites,
-      };
-      return res.send(updatedUser);
-    }
-    res.send({ message: 'Unauthorized' })
+    const password_digest = await middleware.hashPassword(newPassword);
+    const { data: users, error } = await supabase
+      .from('users')
+      .update({ password_digest })
+      .eq('id', userId)
+      .select();
+
+    if (error?.message) return res.status(400).send({ message: error.message });
+
+    res.send({
+      id: users[0].id,
+      email: users[0].email,
+      username: users[0].username,
+      image: users[0].image,
+      favorite_games: users[0].favorite_games,
+    });
   } catch (error) {
-    throw error;
+    console.error(error)
+    res.status(500).send(error);
   }
 };
 
@@ -154,8 +153,9 @@ const UpdateUserFavorites = async (req, res) => {
 };
 
 const UpdateUser = async (req, res) => {
+  const { user_id: userId } = req.params;
+  
   try {
-    const userId = req.params.user_id;
     const user = await User.findByPk(userId);
 
     if ( user ) {
