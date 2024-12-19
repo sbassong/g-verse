@@ -8,8 +8,11 @@ const Login = async (req, res) => {
   try {
     let { data: users, error } = await supabase
       .from('users')
-      .select("*")
-      .eq('email', email);
+      .update({is_authenticated: true})
+      .eq('email', email)
+      .select("*");
+
+    if (error?.message) return res.status(400).send({ message: error.message });
 
     if ( 
       users[0] 
@@ -18,24 +21,23 @@ const Login = async (req, res) => {
       const trimmedUser = {
         id: users[0].id,
         email: users[0].email,
-        name: users[0].username,
+        username: users[0].username,
         image: users[0].image,
-        favorites: users[0].favorites
+        favoriteGames: users[0].favorite_games,
+        isAuthenticated: users[0].is_authenticated,
       };
 
-      if (error?.message) return res.status(400).send({ message: error.message });
       let token = middleware.createToken(trimmedUser);
       return res.send({ user: trimmedUser, token });
     }
     
     res.status(400).send({message: 'Error: No user found' })
-    } catch (error) {
-      // console.error(error)
-      res.status(500).send(error);
-    }
-  };
+  } catch (error) {
+    // console.error(error)
+    res.status(500).send(error);
+  }
+};
     
-
 const SignUp = async (req, res) => {
   const { email, password, username, image } = req.body;
 
@@ -71,35 +73,65 @@ const SignUp = async (req, res) => {
   }
 };
 
-const CheckSession = async (req, res) => {
-  try {
-    const { payload } = res.locals;
-    const user = await User.findByPk(payload.id, {attributes: ['id', 'name', 'email', 'image', 'favorites']});
-    if (user) res.send(user);
-    else res.send({message: 'User not found'});
-  } catch (error) {
-    throw error;
-  }
-};
+// const CheckSession = async (req, res) => {
+//   try {
+//     const { payload } = res.locals;
+//     const user = await User.findByPk(payload.id, {attributes: ['id', 'name', 'email', 'image', 'favorites']});
+//     if (user) res.send(user);
+//     else res.send({message: 'User not found'});
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
 const GetProfiles = async (req, res) => {
   try {
-    const users = await User.findAll({attributes: ['id', 'name', 'email', 'image', 'favorites']});
-    if (users) res.send(users);
-    else res.send({message: 'Bad request'});
+    const { data: users, error } = await supabase
+      .from("users")
+      .select();
+
+    if (error?.message) return res.status(400).send(error);
+
+    const userProfiles = users.map((user) => {
+      return {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        image: user.image,
+        favoriteGames: user.favorite_games,
+        isAuthenticated: user.is_authenticated,
+      };
+    });
+
+    res.send(userProfiles);
   } catch (error) {
-    throw error;
+    console.error(error);
+    res.status(500).send(error);
   }
 };
 
 const GetUserProfile = async (req, res) => {
+  const { user_id: userId } = req.params;
+
   try {
-    const userId = req.params.user_id;
-    const user = await User.findByPk(userId, {attributes: ['id', 'name', 'email', 'image', 'favorites']});
-    if (user) res.send(user);
-    else res.send({message: 'Error: User not found'})
+    const { data: users, error } = await supabase
+    .from("users")
+    .select()
+    .eq("id", userId);
+
+    if (error?.message) return res.status(400).send(error);
+
+    res.send({
+      id: users[0].id,
+      email: users[0].email,
+      username: users[0].username,
+      image: users[0].image,
+      favoriteGames: users[0].favorite_games,
+      isAuthenticated: users[0].is_authenticated,
+    });
   } catch (error) {
-    throw error;
+    console.error(error)
+    res.status(500).send(error);
   }
 };
 
@@ -125,7 +157,8 @@ const UpdatePassword = async (req, res) => {
       email: users[0].email,
       username: users[0].username,
       image: users[0].image,
-      favorite_games: users[0].favorite_games,
+      favoriteGames: users[0].favorite_games,
+      isAuthenticated: users[0].is_authenticated
     });
   } catch (error) {
     console.error(error)
@@ -154,7 +187,8 @@ const UpdateUserFavorites = async (req, res) => {
       email: users[0].email,
       username: users[0].username,
       image: users[0].image,
-      favorite_games: users[0].favorite_games,
+      favoriteGames: users[0].favorite_games,
+      isAuthenticated: users[0].is_authenticated
     });
     
   } catch (error) {
@@ -178,18 +212,19 @@ const UpdateUser = async (req, res) => {
       .eq("id", userId)
       .select();
     
-    if (error?.message) return res.status(400).send({ message: error.message })
+    if (error?.message) return res.status(400).send({ message: error.message });
 
     return res.send({
       id: users[0].id,
       email: users[0].email,
       username: users[0].username,
       image: users[0].image,
-      favorite_games: users[0].favorite_games,
-    });
+      favoriteGames: users[0].favorite_games,
+      isAuthenticated: users[0].is_authenticated
+    }); 
 
   } catch (error) {
-    console.error(error)
+    console.error(error);
     res.status(500).send(error);
   }
 };
@@ -202,9 +237,9 @@ const DeleteUser = async (req, res) => {
       .from('users')
       .delete()
       .eq('id', userId)
-      .select()
+      .select();
 
-    if (error?.message) return res.status(400).send({ message: error.message })
+    if (error?.message) return res.status(400).send({ message: error.message });
 
     return res.send({
       id: data[0].id,
@@ -213,7 +248,8 @@ const DeleteUser = async (req, res) => {
     });
 
   } catch (error) {
-    res.send({ message: `Unauthorized operation`, severity: 'error' });
+    console.error(error);
+    res.status(500).send(error);
   }
 };
 
@@ -226,6 +262,5 @@ module.exports = {
   UpdateUserFavorites,
   Login,
   SignUp,
-  UpdatePassword,
-  CheckSession
+  UpdatePassword
 };
