@@ -1,12 +1,12 @@
-const Router = require('express').Router()
-const controller = require('../controllers/GamesController')
+const Router = require('express').Router();
+const controller = require('../controllers/GamesController');
 
-Router.get('/game/:game_id', controller.GetOneGame)
-Router.get('/popular', controller.GetPopularGames)
-Router.get('/recent', controller.GetRecentGames)
-Router.get('/listings', controller.GetGames)
-Router.post('/search', controller.GetGameByTitle)
+Router.get('/', controller.GetGames);
+Router.get('/popular', controller.GetPopularGames);
+Router.get('/recent', controller.GetRecentGames);
+Router.get('/:game_id', controller.GetGameById);
+Router.get('/name/search', controller.SearchGames);
+Router.get('/platforms/search', controller.GetGameByPlatform);
+Router.get('/genres/search', controller.GetGameByGenre);
 
-Router.post('/new_game', controller.CreateGame)
-
-module.exports = Router
+module.exports = Router;

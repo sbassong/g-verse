@@ -3,8 +3,8 @@ const controller = require('../controllers/UserController');
 const middleware = require('../middleware');
 
 Router.get('/', controller.GetProfiles);
-// Router.get('/session', middleware.stripToken, middleware.verifyToken, controller.CheckSession);
 Router.get('/:user_id', controller.GetUserProfile);
+// Router.get('/session', middleware.stripToken, middleware.verifyToken, controller.CheckSession);
 
 Router.post('/', controller.SignUp);
 Router.post('/login', controller.Login);
