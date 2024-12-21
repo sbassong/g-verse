@@ -109,6 +109,7 @@ const GetRecentGames = async (req, res) => {
 };
 
 
+
 module.exports = {
   GetPopularGames,
   GetRecentGames,
