@@ -3,7 +3,7 @@ import './styles/App.css'
 
 import React, { useState, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { CheckSession } from './services/UserServices'
+import { CheckSession, SignOut } from './services/UserServices'
 import { GetGames } from './services/GameServices'
 
 import Nav from './components/Nav'
@@ -38,11 +38,10 @@ function App() {
     } else return;
   };
 
-  const handleLogOut =  () => {
+  const handleLogOut =  async () => {
     setUser(null);
     toggleAuthenticated(false);
-    localStorage.removeItem('authenticated');
-    localStorage.removeItem('token');
+    await SignOut({ id: user.id })
   };
 
   useEffect(() => {

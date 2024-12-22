@@ -2,29 +2,32 @@ const { supabase } = require('../supabaseClient.js');
 const middleware = require('../middleware');
 
 
-const Login = async (req, res) => {
+const SignIn = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    let { data: users, error } = await supabase
+    const { data: users, error } = await supabase
       .from('users')
-      .update({is_authenticated: true})
+      .update({
+        isAuthenticated: true,
+        updatedAt: ((new Date()).toISOString()).toLocaleString('en-US')
+      })
       .eq('email', email)
-      .select("*");
+      .select("id, email, username, image, favoriteGames, isAuthenticated, passwordDigest");
 
-    if (error?.message) return res.status(400).send({ message: error.message });
+    if (error) return res.status(400).send(error);
 
     if ( 
       users[0] 
-      && (await middleware.comparePassword( users[0].password_digest, password))
+      && (await middleware.comparePassword( users[0].passwordDigest, password))
       ) {
       const trimmedUser = {
         id: users[0].id,
         email: users[0].email,
         username: users[0].username,
         image: users[0].image,
-        favoriteGames: users[0].favorite_games,
-        isAuthenticated: users[0].is_authenticated,
+        favoriteGames: users[0].favoriteGames,
+        isAuthenticated: users[0].isAuthenticated
       };
 
       let token = middleware.createToken(trimmedUser);
@@ -33,7 +36,6 @@ const Login = async (req, res) => {
     
     res.status(400).send({message: 'Error: No user found' })
   } catch (error) {
-    // console.error(error)
     res.status(500).send(error);
   }
 };
@@ -43,52 +45,66 @@ const SignUp = async (req, res) => {
 
   try {
     if (email && password && username) {
-      const password_digest = await middleware.hashPassword(password);
-      const { data, error } = await supabase
+      const passwordDigest = await middleware.hashPassword(password);
+      
+      const { data: users, error } = await supabase
         .from("users")
         .insert([
           {
             username,
             email,
-            password_digest,
+            passwordDigest,
             image,
           }
         ])
-        .select();
+        .select("id, email, username, image, favoriteGames, isAuthenticated");
       
-      if (error?.message) return res.status(400).send({message: error.message});
+      if (error) return res.status(400).send(error);
 
       res.send({
-        id: data[0].id,
-        email: data[0].email,
-        username: data[0].username,
-        image: data[0].image,
-        favoriteGames: data[0].favorite_games,
+        id: users[0].id,
+        email: users[0].email,
+        username: users[0].username,
+        image: users[0].image,
+        favoriteGames: users[0].favoriteGames,
+        isAuthenticated: users[0].isAuthenticated,
       });
     } else {
       res.status(400).send({ message: 'Invalid or missing values' });
     }
   } catch (error) {
-    res.send(error);
+    res.status(500).send(error);
   }
 };
 
-// const CheckSession = async (req, res) => {
-//   try {
-//     const { payload } = res.locals;
-//     const user = await User.findByPk(payload.id, {attributes: ['id', 'name', 'email', 'image', 'favorites']});
-//     if (user) res.send(user);
-//     else res.send({message: 'User not found'});
-//   } catch (error) {
-//     throw error;
-//   }
-// };
+const CheckSession = async (req, res) => {
+  try {
+    const { payload } = res.locals;
+    const { data: users, error } = await supabase
+      .from("users")
+      .select("id, email, username, image, favoriteGames, isAuthenticated")
+      .eq("id", payload.id);
+
+    if (error) return res.status(400).send(error);
+
+    res.send({
+      id: users[0].id,
+      email: users[0].email,
+      username: users[0].username,
+      image: users[0].image,
+      favoriteGames: users[0].favoriteGames,
+      isAuthenticated: users[0].isAuthenticated
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
 
 const GetProfiles = async (req, res) => {
   try {
     const { data: users, error } = await supabase
       .from("users")
-      .select();
+      .select("id, email, username, image, favoriteGames, isAuthenticated");
 
     if (error?.message) return res.status(400).send(error);
 
@@ -98,106 +114,103 @@ const GetProfiles = async (req, res) => {
         email: user.email,
         username: user.username,
         image: user.image,
-        favoriteGames: user.favorite_games,
-        isAuthenticated: user.is_authenticated,
+        favoriteGames: user.favoriteGames,
+        isAuthenticated: user.isAuthenticated
       };
     });
 
     res.send(userProfiles);
   } catch (error) {
-    console.error(error);
     res.status(500).send(error);
   }
 };
 
 const GetUserProfile = async (req, res) => {
-  const { user_id: userId } = req.params;
+  const { userId } = req.params;
 
   try {
     const { data: users, error } = await supabase
     .from("users")
-    .select()
+    .select("id, email, username, image, favoriteGames, isAuthenticated")
     .eq("id", userId);
 
-    if (error?.message) return res.status(400).send(error);
+    if (error) return res.status(400).send(error);
 
     res.send({
       id: users[0].id,
       email: users[0].email,
       username: users[0].username,
       image: users[0].image,
-      favoriteGames: users[0].favorite_games,
-      isAuthenticated: users[0].is_authenticated,
+      favoriteGames: users[0].favoriteGames,
+      isAuthenticated: users[0].isAuthenticated
     });
   } catch (error) {
-    console.error(error)
     res.status(500).send(error);
   }
 };
 
 const UpdatePassword = async (req, res) => {
-  const { oldPassword, newPassword } = req.body;
-  const { user_id: userId } = req.params;
+  const { newPassword } = req.body;
+  const { userId } = req.params;
 
   try {
-    const password_digest = await middleware.hashPassword(newPassword);
+    const passwordDigest = await middleware.hashPassword(newPassword);
     const { data: users, error } = await supabase
       .from('users')
       .update({
-        password_digest,
-        updatedAt: ((new Date()).toISOString()).toLocaleString('zh-TW')
+        passwordDigest,
+        updatedAt: ((new Date()).toISOString()).toLocaleString('en-US')
       })
       .eq('id', userId)
-      .select();
+      .select("id, email, username, image, favoriteGames, isAuthenticated");
 
-    if (error?.message) return res.status(400).send({ message: error.message });
+    if (error) return res.status(400).send(error);
 
     res.send({
       id: users[0].id,
       email: users[0].email,
       username: users[0].username,
       image: users[0].image,
-      favoriteGames: users[0].favorite_games,
-      isAuthenticated: users[0].is_authenticated
+      favoriteGames: users[0].favoriteGames,
+      isAuthenticated: users[0].isAuthenticated
     });
   } catch (error) {
-    console.error(error)
     res.status(500).send(error);
   }
 };
 
 const UpdateUserFavorites = async (req, res) => {
-  const { user_id: userId } = req.params;
+  const { userId } = req.params;
   const { favoriteGames } = req.body;
 
   try {
     const { data: users, error } = await supabase
       .from('users')
       .update({ 
-        favorite_games: favoriteGames,
-        updatedAt: ((new Date()).toISOString()).toLocaleString('zh-TW')
+        favoriteGames: favoriteGames,
+        updatedAt: ((new Date()).toISOString()).toLocaleString('en-US')
       })
       .eq('id', userId)
-      .select();
+      .select("id, email, username, image, favoriteGames, isAuthenticated");
 
-    if (error?.message) return res.status(400).send({ message: error.message });
+    if (error) return res.status(400).send(error);
 
     return res.send({
       id: users[0].id,
       email: users[0].email,
       username: users[0].username,
       image: users[0].image,
-      favoriteGames: users[0].favorite_games,
-      isAuthenticated: users[0].is_authenticated
+      favoriteGames: users[0].favoriteGames,
+      isAuthenticated: users[0].isAuthenticated
     });
     
   } catch (error) {
-    throw error;
+    res.status(500).send(error);
   }
 };
 
 const UpdateUser = async (req, res) => {
-  const { user_id: userId } = req.params;
+  const { userId } = req.params;
   const { email, username, image } = req.body;
   
   try {
@@ -207,48 +220,73 @@ const UpdateUser = async (req, res) => {
         email: email && email, 
         username: username && username, 
         image: image && image,
-        updatedAt: ((new Date()).toISOString()).toLocaleString('zh-TW') 
+        updatedAt: ((new Date()).toISOString()).toLocaleString('en-US') 
       })
       .eq("id", userId)
-      .select();
+      .select("id, email, username, image, favoriteGames, isAuthenticated");
     
-    if (error?.message) return res.status(400).send({ message: error.message });
+    if (error) return res.status(400).send(error);
 
     return res.send({
       id: users[0].id,
       email: users[0].email,
       username: users[0].username,
       image: users[0].image,
-      favoriteGames: users[0].favorite_games,
-      isAuthenticated: users[0].is_authenticated
+      favoriteGames: users[0].favoriteGames,
+      isAuthenticated: users[0].isAuthenticated
     }); 
 
   } catch (error) {
-    console.error(error);
     res.status(500).send(error);
   }
 };
 
 const DeleteUser = async (req, res) => {
-  const { user_id: userId } = req.params
+  const { userId } = req.params
 
   try {
-    const { data, error } = await supabase
+    const { data: users, error } = await supabase
       .from('users')
       .delete()
       .eq('id', userId)
-      .select();
+      .select("id, email, username");
 
-    if (error?.message) return res.status(400).send({ message: error.message });
+    if (error) return res.status(400).send(error);
 
     return res.send({
-      id: data[0].id,
-      email: data[0].email,
-      username: data[0].username,
+      id: users[0].id,
+      email: users[0].email,
+      username: users[0].username,
     });
-
   } catch (error) {
-    console.error(error);
+    res.status(500).send(error);
+  }
+};
+
+const SignOut = async (req, res) => {
+  const { id } = req.body
+
+  try {
+    const { data: users, error } = await supabase
+      .from('users')
+      .update({ 
+        isAuthenticated: false, 
+        updatedAt: ((new Date()).toISOString()).toLocaleString('en-US')
+      })
+      .eq('id', id)
+      .select("id, email, username, image, favoriteGames, isAuthenticated");
+
+    if (error) return res.status(400).send(error);
+
+    res.send({
+      id: users[0].id,
+      email: users[0].email,
+      username: users[0].username,
+      image: users[0].image,
+      favoriteGames: users[0].favoriteGames,
+      isAuthenticated: users[0].isAuthenticated
+    });
+  } catch (error) {
     res.status(500).send(error);
   }
 };
@@ -260,7 +298,9 @@ module.exports = {
   UpdateUser,
   DeleteUser,
   UpdateUserFavorites,
-  Login,
+  SignIn,
   SignUp,
-  UpdatePassword
+  UpdatePassword,
+  CheckSession,
+  SignOut
 };

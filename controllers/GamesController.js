@@ -32,7 +32,7 @@ const SearchGames = async (req, res) => {
 
 
 const GetGameById = async (req, res) => {
-  const {game_id: gameId} = req.params;
+  const { gameId } = req.params;
 
   try {
     const { data: games, error } = await supabase
@@ -49,7 +49,6 @@ const GetGameById = async (req, res) => {
 
 const GetGameByPlatform = async (req, res) => {
   const { platforms } = req.query;
-  console.log(platforms.split(','))
 
   try {
     const { data: games, error } = await supabase
