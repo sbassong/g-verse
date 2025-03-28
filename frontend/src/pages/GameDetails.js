@@ -122,7 +122,7 @@ const GameDetails = ({ game, authenticated, setUser, userFavorites, setUserFavor
               style={{ color: '#fdca52', fontWeight: 'bold' }}
               className='subtitle'
             >
-              {game.rating}/10
+              {game.rating}/5
             </span>
           </div>
           <div
