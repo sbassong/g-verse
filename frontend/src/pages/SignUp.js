@@ -1,82 +1,112 @@
 import '../styles/SignIn.css'
-import React, { useState, useContext } from 'react';
-import { NavLink, useLocation, Navigate } from 'react-router-dom'
+import { useState, forwardRef } from 'react';
+import { NavLink } from 'react-router-dom'
 import { useNavigate } from "react-router";
 import { ThemeProvider } from '@mui/material/styles';
-import {Avatar, Button, TextField, IconButton, Box, Typography, Container, InputAdornment, Snackbar } from '@mui/material/';
+import { Avatar, Button, TextField, IconButton, Box, Typography, Container, InputAdornment, Snackbar } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
-import {Visibility, VisibilityOff} from '@mui/icons-material/';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { SignUpUser } from '../services/UserServices'
 import CustomizedInputsStyleOverrides from '../styles/muiOverrides';
-import { SignInUser } from '../services/UserServices'
-import { UserContext } from '../utils';
 
+const iState = {
+  username: '',
+  email: '',
+  password: '',
+  confirmPassword: ''
+};
 
-const iState = { email: '', password: '' };
-
-const Alert = React.forwardRef(function Alert(props, ref) {
+const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const SignIn = ({setUser, authenticated, toggleAuthenticated}) => {
+const SignUp = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
   const [formValues, setFormValues] = useState(iState);
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState(null);
-  const [snackSeverity,  setSnackSeverity] = useState(null);
-  const [loggedUser, setLogged] = useState();
-  
+
   const handleFormChange = (e) => setFormValues({ ...formValues, [e.target.name]: e.target.value });
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowConfirmPassword = () => setShowConfirmedPassword((show) => !show);
   const handleMouseDownPassword = (event) => event.preventDefault();
+  const handleMouseDownConfirmedPassword = (event) => event.preventDefault();
   const handleShowSnack = () => setSnackOpen(true);
   const handleCloseSnack = (event, reason) => {
     if (reason === 'clickaway') return;
     setSnackOpen(false);
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = await SignInUser(formValues);
-    if (payload?.email) {
-      setUser(payload);
-      setLogged(payload)
-      localStorage.setItem('gverse-authenticated', '1');
-      toggleAuthenticated(true);
-      navigate(`/user/${payload.id}/profile`);
+
+    if (formValues.password !== formValues.confirmPassword) {
+      setSnackMessage('Error: Passowrds must match')
+      handleShowSnack();
+      setFormValues(iState);
+      return;
+    }
+
+    const newUser = await SignUpUser({
+      username: formValues.username,
+      email: formValues.email,
+      password: formValues.password
+    });
+
+    if (newUser?.email) {
+      navigate('/signin');
     } else {
-      setSnackMessage(payload);
-      setSnackSeverity('error');
+      setSnackMessage(newUser)
       handleShowSnack();
       setFormValues(iState);
     }
   };
 
-
-  // if (authenticated) return <Navigate to={`/user/${loggedUser?.id}/profile`} state={{ from: location }} replace />
   return (
     <ThemeProvider theme={CustomizedInputsStyleOverrides}>
       <Container component="main" maxWidth="sm">
         <Box
           sx={{
             padding: 3,
-            marginTop: 12,
+            marginTop: 6,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            borderRadius:  2,
+            borderRadius: 2,
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: '#2dc14f' }}>
+          <Avatar sx={{ m: 1, bgcolor: '#757ce8' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign up
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label="Account Name"
+              name="username"
+              placeholder="Username"
+              value={formValues.username}
+              onChange={handleFormChange}
+              autoComplete="name"
+              autoFocus
+              className='signup-name-field'
+              sx={{
+                borderRadius: 1,
+                backgroundColor: 'rgba(225, 225, 225)',
+              }}
+            />
+
             <TextField
               margin="normal"
               required
@@ -88,7 +118,6 @@ const SignIn = ({setUser, authenticated, toggleAuthenticated}) => {
               value={formValues.email}
               onChange={handleFormChange}
               autoComplete="email"
-              autoFocus
               className='signin-email-field'
               sx={{
                 borderRadius: 1,
@@ -108,6 +137,7 @@ const SignIn = ({setUser, authenticated, toggleAuthenticated}) => {
               autoComplete="current-password"
               className='signin-password-field'
               color="grey"
+              // focused
               onChange={handleFormChange}
               sx={{
                 borderRadius: 1,
@@ -126,25 +156,59 @@ const SignIn = ({setUser, authenticated, toggleAuthenticated}) => {
                 </InputAdornment>,
               }}
             />
+
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="confirmPassword"
+              label="Comfirm Password"
+              type={showConfirmedPassword ? 'text' : 'password'}
+              id="outlined-adornment-confirm-password"
+              value={formValues.confirmPassword}
+              autoComplete="current-password"
+              className='signin-confirm-password-field'
+              color="grey"
+              // focused
+              onChange={handleFormChange}
+              sx={{
+                borderRadius: 1,
+                backgroundColor: 'rgba(225, 225, 225)',
+              }}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle confirmed password visibility"
+                    onClick={handleClickShowConfirmPassword}
+                    onMouseDown={handleMouseDownConfirmedPassword}
+                    edge="start"
+                  >
+                    {showConfirmedPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>,
+              }}
+            />
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 6, mb: 3, backgroundColor: '#2dc14f' }}
+              sx={{ mt: 4, mb: 3, backgroundColor: '#757ce8' }}
+
             >
-              Sign In
+              Create Account
             </Button>
             <Box className='separator-line'><span className='or-span'>OR</span></Box>
-              <NavLink className='menu-item subtitle no-display-max' to='/signup'>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2, backgroundColor: '#757ce8', borderColor: 'red' }}
-                >
-                  Create Account
-                </Button>
-              </NavLink>
+            <NavLink className='menu-item subtitle no-display-max' to='/signin'>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 2, mb: 1, backgroundColor: '#2dc14f' }}
+              >
+                Already have an account ? Sign In
+              </Button>
+            </NavLink>
           </Box>
         </Box>
 
@@ -155,17 +219,15 @@ const SignIn = ({setUser, authenticated, toggleAuthenticated}) => {
         >
           <Alert
             onClose={handleCloseSnack}
-            severity={snackSeverity}
+            severity='error'
             sx={{ width: '100%' }}
           >
             {snackMessage}
           </Alert>
         </Snackbar>
-
       </Container>
     </ThemeProvider>
   );
-  
 }
 
-export default SignIn;
+export default SignUp;

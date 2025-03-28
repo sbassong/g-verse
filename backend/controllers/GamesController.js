@@ -15,7 +15,7 @@ const GetGames = async (req, res) => {
 
 const SearchGames = async (req, res) => {
   const { name } = req.query;
-  
+
   try {
     let { data: games, error } = await supabase
       .from('games')

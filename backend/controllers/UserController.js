@@ -1,5 +1,5 @@
 const { supabase } = require('../supabaseClient.js');
-const middleware = require('../middleware');
+const middleware = require('../middleware/index.js');
 
 
 const SignIn = async (req, res) => {

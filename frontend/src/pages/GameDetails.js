@@ -1,5 +1,5 @@
 /* eslint-disable */
-import '../../src/styles/GameDetails.css'
+import '../styles/GameDetails.css'
 import React, { useEffect, useContext, useState } from "react"
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
@@ -30,30 +30,30 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 
-const GameDetails = ({ game, authenticated, setUser, userFavorites, setUserFavorites, isFavorite}) => {
+const GameDetails = ({ game, authenticated, setUser, userFavorites, setUserFavorites, isFavorite }) => {
   const authenticatedUser = useContext(UserContext);
   const [isFavoriteGame, setIsFavorite] = useState(null);
   const [gameReviews, setGameReviews] = useState([]);
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState(null);
-  const [snackSeverity,  setSnackSeverity] = useState(null);
+  const [snackSeverity, setSnackSeverity] = useState(null);
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
 
   const handleShowReviewForm = () => setReviewDialogOpen(true);
   const handleHideReviewForm = () => setReviewDialogOpen(false);
-  
+
 
   const getReviews = async () => {
     const reviews = await GetReviewsByGameId(game?.id);
     setGameReviews(reviews);
   };
-  
+
   const updateUserFavoritesArr = async (data) => {
     if (!authenticatedUser) return;
     const updatedUser = await UpdateUserFavorites(authenticatedUser?.id, { favoriteGames: data });
     return updatedUser;
   };
-  
+
   const handleOnFavoriteChange = async (newRating) => {
     let currUserFavorites = authenticatedUser?.favoriteGames;
     if (newRating === 1) currUserFavorites?.push(game?.id)
@@ -81,7 +81,7 @@ const GameDetails = ({ game, authenticated, setUser, userFavorites, setUserFavor
   useEffect(() => {
     if (isFavoriteGame !== isFavorite) setIsFavorite(isFavorite);
   }, [isFavorite]);
-  
+
   useEffect(() => {
     getReviews();
   }, []);
@@ -90,44 +90,44 @@ const GameDetails = ({ game, authenticated, setUser, userFavorites, setUserFavor
     <div className='game-details'>
       <Box className='top-half'>
         <img className='img-div' src={game.backgroundImage} alt={`${game.name} poster`} />
-      
+
         <div className='right-side'>
-          <div 
-            className='title' 
-            style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
+          <div
+            className='title'
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
           >
-            {game.name} 
-      
-            { authenticatedUser?.isAuthenticated && 
+            {game.name}
+
+            {authenticatedUser?.isAuthenticated &&
               <StyledRating
                 name="customized-color"
                 value={isFavoriteGame}
                 getLabelText={(value) => `${value} Heart${value !== 1 ? 's' : ''}`}
                 max={1}
                 controlled='true'
-                icon={<FavoriteIcon fontSize="inherit" sx={{fill: '#ff3d47', minWidth: '1.5rem', minHeight: '1.5rem', maxWidth: '2.5rem', maxHeight: '2.5rem', width: '2vw', height: '2vw'}}/>}
-                emptyIcon={<FavoriteBorderIcon fontSize="inherit" sx={{fill: '#ff6d75', minWidth: '1.5rem', minHeight: '1.5rem', maxWidth: '2.5rem', maxHeight: '2.5rem', width: '2vw', height: '2vw'}}/>}
+                icon={<FavoriteIcon fontSize="inherit" sx={{ fill: '#ff3d47', minWidth: '1.5rem', minHeight: '1.5rem', maxWidth: '2.5rem', maxHeight: '2.5rem', width: '2vw', height: '2vw' }} />}
+                emptyIcon={<FavoriteBorderIcon fontSize="inherit" sx={{ fill: '#ff6d75', minWidth: '1.5rem', minHeight: '1.5rem', maxWidth: '2.5rem', maxHeight: '2.5rem', width: '2vw', height: '2vw' }} />}
                 onChange={(event, newRating) => {
                   handleOnFavoriteChange(newRating);
                 }}
-                sx={{ml: 2, mr: 2}}
-            />}
+                sx={{ ml: 2, mr: 2 }}
+              />}
           </div>
-          <div className='subtitle' style={{ color: '#2dc14f'}}>${ game.price } USD</div>
+          <div className='subtitle' style={{ color: '#2dc14f' }}>${game.price} USD</div>
           <div
             className='subtitle'
-            style={{ color: 'rgb(175, 175, 175)', fontWeight: 'bold'}}
+            style={{ color: 'rgb(175, 175, 175)', fontWeight: 'bold' }}
           >
-            Rating <span 
-                style={{ color: '#fdca52', fontWeight: 'bold'}}
-                className='subtitle'
-              >
-                {game.rating}/10
-              </span>
+            Rating <span
+              style={{ color: '#fdca52', fontWeight: 'bold' }}
+              className='subtitle'
+            >
+              {game.rating}/10
+            </span>
           </div>
-          <div 
+          <div
             className='subtitle'
-            style={{ color: 'rgb(175, 175, 175)'}}
+            style={{ color: 'rgb(175, 175, 175)' }}
           >
             Platforms: {
               game.platforms.map((platform, idx) => (
@@ -141,11 +141,11 @@ const GameDetails = ({ game, authenticated, setUser, userFavorites, setUserFavor
           >
             {game.description}
           </div> */}
-          <br/>
+          <br />
         </div>
       </Box>
 
-      <Box 
+      <Box
         sx={{
           display: 'flex',
           flexDirection: 'column',
@@ -157,22 +157,22 @@ const GameDetails = ({ game, authenticated, setUser, userFavorites, setUserFavor
           variant="h5"
           underlined='true'
           color='white'
-          sx={{ mb: 3, display: 'flex',  alignItems: 'center', justifyContent: 'space-between'}}
+          sx={{ mb: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
         >
-          Reviews 
-          <Box onClick={handleShowReviewForm} sx={{display: 'flex',  alignItems: 'center', color: 'grey.600'}}>
-            <AddBoxIcon sx={{ width: 20, height: 20, mr: .5, ml: 2}}/> 
+          Reviews
+          <Box onClick={handleShowReviewForm} sx={{ display: 'flex', alignItems: 'center', color: 'grey.600' }}>
+            <AddBoxIcon sx={{ width: 20, height: 20, mr: .5, ml: 2 }} />
             Add Review
           </Box>
         </Typography>
 
-        
+
         {gameReviews.length > 0
-          ? gameReviews?.map((review) => <ReviewCard key={review.id} review={review}/>)
+          ? gameReviews?.map((review) => <ReviewCard key={review.id} review={review} />)
           : <Typography variant="body2" color='rgb(190, 190, 190)'>Be the first to leave a review!</Typography>
         }
       </Box>
-      
+
       <Snackbar
         open={snackOpen}
         autoHideDuration={6000}
@@ -187,7 +187,7 @@ const GameDetails = ({ game, authenticated, setUser, userFavorites, setUserFavor
           {snackMessage}
         </Alert>
       </Snackbar>
-      
+
       <AddReview
         game={game}
         setGameReviews={setGameReviews}
