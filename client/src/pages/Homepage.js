@@ -1,26 +1,29 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import GameCard from '../components/GameCard'
 import { GetPopularGames, GetRecentGames } from '../services/GameServices'
 import '../styles/Homepage.css'
+import { UserContext } from '../utils';
 
-const Homepage = ({ user, authenticated, userFavorites, setUser, setUserFavorites}) => {
+
+const Homepage = ({ authenticated, setUser, setUserFavorites}) => {
+  const authenticatedUser = useContext(UserContext);
   const [recentGames, setRecentGames] = useState([]);
   const [popularGames, setPopularGames] = useState([]);
 
   const showRecentGames = async () => {
     const res = await GetRecentGames();
     setRecentGames(res);
-  }
+  };
 
   const showPopularGames = async () => {
     const res = await GetPopularGames();
     setPopularGames(res);
-  }
+  };
 
   useEffect(() => {
     showRecentGames();
     showPopularGames();
-  }, [])
+  }, []);
 
   return (
     <div className="homepage">
@@ -28,20 +31,18 @@ const Homepage = ({ user, authenticated, userFavorites, setUser, setUserFavorite
       <div className='games-cont'>
         {popularGames && popularGames.map((game) => {
           let isFavorite;
-          if (userFavorites?.length > 0 && userFavorites.includes(game.id)) isFavorite = 1;
+          if (authenticatedUser?.favoriteGames?.length > 0 && authenticatedUser?.favoriteGames.includes(game?.id)) isFavorite = 1;
           else isFavorite = 0;
 
           return (<GameCard
-            key={game.id}
-            id={game.id}
-            title={game.title}
-            image={game.background_image}
+            key={game?.id}
+            id={game?.id}
+            name={game.name}
+            image={game.backgroundImage}
             price={game.price}
             rating={game.rating}
-            user={user}
             isFavorite={isFavorite}
             authenticated={authenticated}
-            userFavorites={userFavorites}
             setUserFavorites={setUserFavorites}
             setUser={setUser}
           />)
@@ -53,23 +54,24 @@ const Homepage = ({ user, authenticated, userFavorites, setUser, setUserFavorite
       <div className='games-cont'>
         {recentGames && recentGames.map((game) => {
           let isFavorite;
-          if (userFavorites?.length > 0 && userFavorites.includes(game.id)) isFavorite = 1;
+          if (authenticatedUser?.favoriteGames?.length > 0 && authenticatedUser?.favoriteGames.includes(game?.id)) isFavorite = 1;
           else isFavorite = 0;
 
-          return (<GameCard
-            key={game.id}
-            id={game.id}
-            title={game.title}
-            image={game.background_image}
-            price={game.price}
-            rating={game.rating}
-            user={user}
-            isFavorite={isFavorite}
-            authenticated={authenticated}
-            userFavorites={userFavorites}
-            setUserFavorites={setUserFavorites}
-            setUser={setUser}
-          />)
+          return (
+            <GameCard
+              key={game.id}
+              id={game.id}
+              name={game.name}
+              image={game.backgroundImage}
+              price={game.price}
+              rating={game.rating}
+              user={authenticatedUser}
+              isFavorite={isFavorite}
+              authenticated={authenticated}
+              setUserFavorites={setUserFavorites}
+              setUser={setUser}
+            />
+          )
         })
       }
       </div>

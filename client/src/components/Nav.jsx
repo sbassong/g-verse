@@ -5,7 +5,7 @@ import SearchBar from './SearchBar'
 import AccountMenu from './ProfileMenu';
 
 
-const Nav = ({ handleLogOut, authenticated, user, setSearchResults }) => {
+const Nav = ({ handleLogOut, authenticated, setSearchResults }) => {
   
   return (
     <nav className='nav'>
@@ -13,8 +13,8 @@ const Nav = ({ handleLogOut, authenticated, user, setSearchResults }) => {
       <SearchBar setSearchResults={setSearchResults}/>
       <div className='menu-nav'>
         <NavLink className='menu-item title no-display-max' to='/'>Home</NavLink>
-        <NavLink className='menu-item title no-display-max' to='/library/games'>Library</NavLink>
-        <AccountMenu handleLogOut={handleLogOut} user={user} authenticated={authenticated} />
+        <NavLink className='menu-item title no-display-max' to='/games'>Library</NavLink>
+        <AccountMenu handleLogOut={handleLogOut} authenticated={authenticated} />
       </div>
     </nav>
   )

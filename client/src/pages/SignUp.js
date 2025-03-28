@@ -1,5 +1,5 @@
 import '../styles/SignIn.css'
-import React, {useState} from 'react';
+import {useState, forwardRef} from 'react';
 import { NavLink } from 'react-router-dom'
 import { useNavigate } from "react-router";
 import { ThemeProvider } from '@mui/material/styles';
@@ -11,13 +11,13 @@ import { SignUpUser } from '../services/UserServices'
 import CustomizedInputsStyleOverrides from '../styles/muiOverrides';
 
 const iState = {
-  name: '',
+  username: '',
   email: '',
   password: '',
   confirmPassword: ''
 };
 
-const Alert = React.forwardRef(function Alert(props, ref) {
+const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
@@ -52,7 +52,7 @@ const SignUp = () => {
     }
 
     const newUser = await SignUpUser({
-      name: formValues.name,
+      username: formValues.username,
       email: formValues.email,
       password: formValues.password
     });
@@ -64,7 +64,7 @@ const SignUp = () => {
       handleShowSnack();
       setFormValues(iState);
     }
-  }
+  };
 
   return (
     <ThemeProvider theme={CustomizedInputsStyleOverrides}>
@@ -92,11 +92,11 @@ const SignUp = () => {
               margin="normal"
               required
               fullWidth
-              id="name"
+              id="username"
               label="Account Name"
-              name="name"
-              placeholder="Firstname Lastname"
-              value={formValues.name}
+              name="username"
+              placeholder="Username"
+              value={formValues.username}
               onChange={handleFormChange}
               autoComplete="name"
               autoFocus
@@ -105,7 +105,7 @@ const SignUp = () => {
                 borderRadius: 1,
                 backgroundColor: 'rgba(225, 225, 225)',
               }}
-              />
+            />
 
             <TextField
               margin="normal"
@@ -123,7 +123,7 @@ const SignUp = () => {
                 borderRadius: 1,
                 backgroundColor: 'rgba(225, 225, 225)',
               }}
-              />
+            />
 
             <TextField
               margin="normal"

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Navigate, useLocation } from 'react-router-dom'
 import { useNavigate } from "react-router";
 import '../styles/Account.css'
@@ -10,12 +10,15 @@ import {DeleteUser} from '../services/UserServices'
 import UpdatePassword from "../components/UpdatePassword";
 import UpdateProfile from "../components/UpdateProfile";
 import Favorites from "./Favorites";
+import { UserContext } from '../utils';
+
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, games, setUserFavorites}) => {
+const Account = ({authenticated, setUser, handleLogOut, userFavorites, games, setUserFavorites}) => {
+  const authenticatedUser = useContext(UserContext);
   const navigate = useNavigate();
   const location = useLocation();
   const [accountUpdated, setAccountUpdated] = useState(false)
@@ -30,11 +33,11 @@ const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, gam
   const handleSetDialogOpen = () => setDialogOpen(true);
   const handleSetDialogClose = () => setDialogOpen(false);
   const handleShowSnack = () => setSnackOpen(true);
+
   const handleCloseSnack = (event, reason) => {
     if (reason === 'clickaway') return;
     setSnackOpen(false);
   };
-  
   
   const showProfileForm = () => {
     if (currentForm === 'profile') {
@@ -63,7 +66,7 @@ const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, gam
   };
   
   const handleDeleteUser = async () => {
-    const deletedUser = await DeleteUser(user?.id);
+    const deletedUser = await DeleteUser(authenticatedUser?.id);
     handleSetDialogClose();
     if (deletedUser?.email) {
       navigate('/signup');
@@ -72,18 +75,18 @@ const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, gam
   };
 
   useEffect(() => {
-    if (authenticated && user) {
-      setUser(user);
-      setUserFavorites(user?.favorites);
+    if (authenticated && authenticatedUser) {
+      setUser(authenticatedUser);
+      setUserFavorites(authenticatedUser?.favoriteGames);
     }
   }, [authenticated]);
 
   useEffect(() => {
     if (accountUpdated) setAccountUpdated(false);
-  }, [accountUpdated]);
+  }, [accountUpdated, authenticatedUser]);
 
 
-  if (!authenticated) return <Navigate to="/signin" state={{ from: location }} replace />
+  if (!authenticatedUser) return <Navigate to="/signin" state={{ from: location }} replace />
   else return (
     <div className="account-page">
       <Box
@@ -101,8 +104,8 @@ const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, gam
           sx={{ m:2, mr: 4, ml: 4, }}
         >
           <Avatar 
-            alt={user?.name}
-            src={user?.image}
+            alt={authenticatedUser?.username}
+            src={authenticatedUser?.image}
             sx={{ width: '9vw', height: '9vw', minWidth: '7rem', minHeight: '7rem', m: 2,  }}
           />  
         </Box>
@@ -110,8 +113,8 @@ const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, gam
           className='profile-box'
           sx={{ m:2}}
         >
-          <Typography variant="h6" sx={{mb: 1, fontWeight: '600'}} >{user?.name}</Typography>
-          <Typography variant="h6">{user?.email}</Typography>
+          <Typography variant="h6" sx={{mb: 1, fontWeight: '600'}} >{authenticatedUser?.username}</Typography>
+          <Typography variant="h6">{authenticatedUser?.email}</Typography>
         </Box>
       </Box>
 
@@ -165,11 +168,11 @@ const Account = ({authenticated, user, setUser, handleLogOut, userFavorites, gam
           { !currentForm &&
             <>
               <Typography variant="h5" sx={{textAlign: 'center', fontWeight: 'bold'}}>Favorite Games</Typography>
-              <Favorites authenticated={authenticated} user={user} setUser={setUser} userFavorites={userFavorites} games={games} setUserFavorites={setUserFavorites}/>
+              <Favorites authenticated={authenticated} user={authenticatedUser} setUser={setUser} userFavorites={userFavorites} games={games} setUserFavorites={setUserFavorites}/>
             </>
           }
-          { currentForm === 'profile' && profileButton && <UpdateProfile user={user} setUser={setUser} setAccountUpdated={setAccountUpdated} handleSnack={handleSnack} setForm={setForm} />}
-          { currentForm === 'password' && passwordButton && <UpdatePassword user={user} setUser={setUser} setAccountUpdated={setAccountUpdated} handleSnack={handleSnack} setForm={setForm} /> }
+          { currentForm === 'profile' && profileButton && <UpdateProfile user={authenticatedUser} setUser={setUser} setAccountUpdated={setAccountUpdated} handleSnack={handleSnack} setForm={setForm} />}
+          { currentForm === 'password' && passwordButton && <UpdatePassword user={authenticatedUser} setUser={setUser} setAccountUpdated={setAccountUpdated} handleSnack={handleSnack} setForm={setForm} /> }
         </Box>
       </Box>
       

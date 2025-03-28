@@ -4,7 +4,7 @@ const middleware = require('../middleware');
 
 const SignIn = async (req, res) => {
   const { email, password } = req.body;
-
+  
   try {
     const { data: users, error } = await supabase
       .from('users')
@@ -14,24 +14,15 @@ const SignIn = async (req, res) => {
       })
       .eq('email', email)
       .select("id, email, username, image, favoriteGames, isAuthenticated, passwordDigest");
-
+      // .select("id, email, username, image, favoriteGames:games!gameId(games()), isAuthenticated, passwordDigest");
     if (error) return res.status(400).send(error);
 
     if ( 
       users[0] 
       && (await middleware.comparePassword( users[0].passwordDigest, password))
       ) {
-      const trimmedUser = {
-        id: users[0].id,
-        email: users[0].email,
-        username: users[0].username,
-        image: users[0].image,
-        favoriteGames: users[0].favoriteGames,
-        isAuthenticated: users[0].isAuthenticated
-      };
-
-      let token = middleware.createToken(trimmedUser);
-      return res.send({ user: trimmedUser, token });
+      let token = middleware.createToken(users[0]);
+      return res.send({ user: users[0], token });
     }
     
     res.status(400).send({message: 'Error: No user found' })
@@ -55,20 +46,14 @@ const SignUp = async (req, res) => {
             email,
             passwordDigest,
             image,
+            favoriteGames: []
           }
         ])
         .select("id, email, username, image, favoriteGames, isAuthenticated");
       
       if (error) return res.status(400).send(error);
 
-      res.send({
-        id: users[0].id,
-        email: users[0].email,
-        username: users[0].username,
-        image: users[0].image,
-        favoriteGames: users[0].favoriteGames,
-        isAuthenticated: users[0].isAuthenticated,
-      });
+      res.send(users[0]);
     } else {
       res.status(400).send({ message: 'Invalid or missing values' });
     }
@@ -87,14 +72,7 @@ const CheckSession = async (req, res) => {
 
     if (error) return res.status(400).send(error);
 
-    res.send({
-      id: users[0].id,
-      email: users[0].email,
-      username: users[0].username,
-      image: users[0].image,
-      favoriteGames: users[0].favoriteGames,
-      isAuthenticated: users[0].isAuthenticated
-    });
+    res.send(users[0]);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -108,18 +86,7 @@ const GetProfiles = async (req, res) => {
 
     if (error?.message) return res.status(400).send(error);
 
-    const userProfiles = users.map((user) => {
-      return {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        image: user.image,
-        favoriteGames: user.favoriteGames,
-        isAuthenticated: user.isAuthenticated
-      };
-    });
-
-    res.send(userProfiles);
+    res.send(users);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -136,14 +103,7 @@ const GetUserProfile = async (req, res) => {
 
     if (error) return res.status(400).send(error);
 
-    res.send({
-      id: users[0].id,
-      email: users[0].email,
-      username: users[0].username,
-      image: users[0].image,
-      favoriteGames: users[0].favoriteGames,
-      isAuthenticated: users[0].isAuthenticated
-    });
+    res.send(users[0]);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -166,19 +126,13 @@ const UpdatePassword = async (req, res) => {
 
     if (error) return res.status(400).send(error);
 
-    res.send({
-      id: users[0].id,
-      email: users[0].email,
-      username: users[0].username,
-      image: users[0].image,
-      favoriteGames: users[0].favoriteGames,
-      isAuthenticated: users[0].isAuthenticated
-    });
+    res.send(users[0]);
   } catch (error) {
     res.status(500).send(error);
   }
 };
 
+// gotta  figure out how to handle favorite games, whether referencing or pushing in ids to be  fetched
 const UpdateUserFavorites = async (req, res) => {
   const { userId } = req.params;
   const { favoriteGames } = req.body;
@@ -187,23 +141,15 @@ const UpdateUserFavorites = async (req, res) => {
     const { data: users, error } = await supabase
       .from('users')
       .update({ 
-        favoriteGames: favoriteGames,
+        favoriteGames,
         updatedAt: ((new Date()).toISOString()).toLocaleString('en-US')
       })
       .eq('id', userId)
       .select("id, email, username, image, favoriteGames, isAuthenticated");
 
-    if (error) return res.status(400).send(error);
+    if (error) return res.status(400).send(error)
 
-    return res.send({
-      id: users[0].id,
-      email: users[0].email,
-      username: users[0].username,
-      image: users[0].image,
-      favoriteGames: users[0].favoriteGames,
-      isAuthenticated: users[0].isAuthenticated
-    });
-    
+    res.send(users[0]);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -227,14 +173,7 @@ const UpdateUser = async (req, res) => {
     
     if (error) return res.status(400).send(error);
 
-    return res.send({
-      id: users[0].id,
-      email: users[0].email,
-      username: users[0].username,
-      image: users[0].image,
-      favoriteGames: users[0].favoriteGames,
-      isAuthenticated: users[0].isAuthenticated
-    }); 
+    res.send(users[0]); 
 
   } catch (error) {
     res.status(500).send(error);
@@ -253,11 +192,7 @@ const DeleteUser = async (req, res) => {
 
     if (error) return res.status(400).send(error);
 
-    return res.send({
-      id: users[0].id,
-      email: users[0].email,
-      username: users[0].username,
-    });
+    res.send(users[0]);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -278,14 +213,7 @@ const SignOut = async (req, res) => {
 
     if (error) return res.status(400).send(error);
 
-    res.send({
-      id: users[0].id,
-      email: users[0].email,
-      username: users[0].username,
-      image: users[0].image,
-      favoriteGames: users[0].favoriteGames,
-      isAuthenticated: users[0].isAuthenticated
-    });
+    res.send(users[0]);
   } catch (error) {
     res.status(500).send(error);
   }

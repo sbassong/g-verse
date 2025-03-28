@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from "react";
 import { NavLink } from 'react-router-dom'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -11,7 +11,7 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-
+import { UserContext } from "../utils";
 
 
 const menuTheme = createTheme({
@@ -22,7 +22,8 @@ const menuTheme = createTheme({
   }
 });
 
-const AccountMenu = ({user, handleLogOut}) => {
+const AccountMenu = ({ handleLogOut}) => {
+  const authenticatedUser = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -42,13 +43,13 @@ const AccountMenu = ({user, handleLogOut}) => {
 
   return (
     <React.Fragment>
-      <PersonOutlineIcon 
-        className='menu-item title login-icon no-display-max'
+      <PersonOutlineIcon
+        className="menu-item title login-icon no-display-max"
         onClick={handleClick}
       />
 
-      <MenuIcon 
-        className='menu-item title menu-icon no-display'
+      <MenuIcon
+        className="menu-item title menu-icon no-display"
         onClick={handleClick}
       />
 
@@ -62,74 +63,73 @@ const AccountMenu = ({user, handleLogOut}) => {
           PaperProps={{
             elevation: 0,
             sx: {
-              overflow: 'visible',
-              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+              overflow: "visible",
+              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
               mt: 1,
-              '& .MuiSvgIcon-root': {
+              "& .MuiSvgIcon-root": {
                 width: 25,
                 height: 25,
                 ml: -0.5,
-                bgcolor: 'background.default',
+                bgcolor: "background.default",
                 mr: 1,
               },
-              '&:before': {
+              "&:before": {
                 content: '""',
-                display: 'block',
-                position: 'absolute',
+                display: "block",
+                position: "absolute",
                 top: 0,
                 right: 8,
                 width: 10,
                 height: 10,
-                bgcolor: 'background.default',
-                transform: 'translateY(-50%) rotate(45deg)',
+                bgcolor: "background.default",
+                transform: "translateY(-50%) rotate(45deg)",
                 zIndex: 0,
               },
             },
           }}
-          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          transformOrigin={{ horizontal: "right", vertical: "top" }}
+          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <NavLink to='/'>
-            <MenuItem className='no-display'  onClick={handleClose}>
+          <NavLink to="/">
+            <MenuItem className="no-display" onClick={handleClose}>
               <HomeOutlinedIcon />
               <HomeItem />
             </MenuItem>
           </NavLink>
-          <NavLink to='/library/games'>
-            <MenuItem className='no-display' onClick={handleClose}>
+          <NavLink to="/games">
+            <MenuItem className="no-display" onClick={handleClose}>
               <VideoLibraryOutlinedIcon />
               <LibraryItem />
             </MenuItem>
           </NavLink>
 
-          <Divider className='no-display'/>
+          <Divider className="no-display" />
 
-          { user &&
-            <NavLink to="/user/account">
+          {authenticatedUser && (
+            <NavLink to={`/user/${authenticatedUser?.id}/profile`}>
               <MenuItem onClick={handleClose}>
                 <AccountCircleOutlinedIcon />
                 <ProfileItem />
               </MenuItem>
             </NavLink>
-          }  
-          { user &&
-            <NavLink to="/" onClick={handleLogOut} >
+          )}
+          {authenticatedUser && (
+            <NavLink to="/" onClick={handleLogOut}>
               <MenuItem onClick={handleClose}>
                 <Logout />
                 <LogOutItem />
               </MenuItem>
             </NavLink>
-          }
-          { !user &&
+          )}
+          {!authenticatedUser?.isAuthenticated && (
             <NavLink to="/signin">
               <MenuItem onClick={handleClose}>
                 <Login />
                 <LogInItem />
               </MenuItem>
             </NavLink>
-          }
+          )}
         </Menu>
-        
       </ThemeProvider>
     </React.Fragment>
   );

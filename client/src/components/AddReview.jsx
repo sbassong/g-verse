@@ -1,75 +1,95 @@
-import React, {useState} from 'react';
-import { CreateReview } from '../services/ReviewServices'
-import '../styles/SignIn.css'
-import { Rating, Button, TextField, Dialog, DialogActions, DialogContentText, DialogContent, DialogTitle } from '@mui/material'
+import "../styles/SignIn.css";
+import React, { useContext, useState } from "react";
+import { CreateReview } from "../services/ReviewServices";
+import {
+  Rating,
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContentText,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
+import { UserContext } from "../utils";
 
 const customRatingStyles = {
-  mt: 2, 
+  mt: 2,
   mb: 1,
   "& .MuiRating-iconFilled": {
     color: "#faaf00",
   },
   "& .MuiRating-iconHover": {
-    color: "#faaf00"
+    color: "#faaf00",
   },
 };
 
+const AddReview = ({
+  game,
+  setGameReviews,
+  gameReviews,
+  handleSnack,
+  reviewDialogOpen,
+  handleHideReviewForm,
+}) => {
+  const authenticatedUser = useContext(UserContext);
+  const [formData, setFormData] = useState({
+    content: "",
+    userRating: 0,
+  });
 
-const AddReview = ({ game, setGameReviews, gameReviews, handleShowReviewForm, handleSnack, reviewDialogOpen, handleHideReviewForm }) => {
-  const [content, setContent] = useState('');
-  const [rating, setRating] = useState(0);
-
-  const handleContentChange = (e) => setContent(e.target.value );
-  const handleRatingChange = (e, newRating) => setRating(newRating);
+  const handleFormChange = (e, newRating) => {
+    setFormData({
+      ...formData,
+      [e.target.name]:
+        e.target.name === "userRating" ? newRating : e.target.value,
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (rating === 0) {
-      const errorMsg = 'Error: Missing rating';
-      handleSnack(errorMsg, 'error');
-    } else if (!content) {
-      const errorMsg = 'Error: Missing comments';
-      handleSnack(errorMsg, 'error');
-    } else if (rating > 0 && content) {
-      const newReview = await CreateReview({
-        content: content ? content : 'No content',
-        rating,
-        game_id: game?.id,
-      });
-      
-      if (newReview?.id) {
-        const successMsg = 'Success: Thank you for your review!';
-        const updatedGameReviews = gameReviews;
 
-        updatedGameReviews.push(newReview);
+    if (formData.userRating === 0)
+      handleSnack("Error: please give a rating", "error");
+    else if (!formData.content)
+      handleSnack("Error: please add a comment", "error");
+    else if (formData.userRating > 0 && formData.content) {
+      console.log(authenticatedUser);
+      const createdReview = await CreateReview({
+        content: formData.content,
+        userRating: formData.userRating,
+        gameId: game?.id,
+        userId: authenticatedUser?.id,
+      });
+
+      if (createdReview?.id) {
+        const updatedGameReviews = gameReviews;
+        updatedGameReviews.push(createdReview);
         setGameReviews(updatedGameReviews);
-        setRating(0);
-        setContent('');
-        handleHideReviewForm()
-        handleSnack(successMsg, 'success');
+        setFormData({ content: "", userRating: 0 });
+        handleHideReviewForm();
+        handleSnack("Success: Thank you for your review!", "success");
       } else {
-        handleSnack(newReview?.message, 'error');
+        handleSnack(createdReview?.message, "error");
       }
     }
-    return;
   };
-  
+
   return (
     <Dialog open={reviewDialogOpen} onClose={handleHideReviewForm}>
-      <DialogTitle sx={{ color: 'black', m: 1, mb: 0 }}>Leave a review</DialogTitle>
-      <DialogContent
-        sx={{ color: 'black', mr: 1, ml: 1 }}
-      >
+      <DialogTitle sx={{ color: "black", m: 1, mb: 0 }}>
+        Leave a review
+      </DialogTitle>
+      <DialogContent sx={{ color: "black", mr: 1, ml: 1 }}>
         <DialogContentText>
           Please rate the game and leave a comment
         </DialogContentText>
         <Rating
-          name="simple-controlled"
-          className='review-rating'
+          name="userRating"
+          className="review-rating"
           required
-          value={rating}
-          onChange={handleRatingChange}
+          value={formData.userRating}
+          onChange={handleFormChange}
           sx={customRatingStyles}
         />
 
@@ -80,28 +100,34 @@ const AddReview = ({ game, setGameReviews, gameReviews, handleShowReviewForm, ha
           label="comments"
           name="content"
           placeholder="What a game!"
-          value={content}
+          value={formData.content}
           multiline
           rows={3}
-          onChange={handleContentChange}
+          onChange={handleFormChange}
           autoFocus
           sx={{
             borderRadius: 1,
             mb: 0,
             mt: 1,
-            backgroundColor: 'rgba(225, 225, 225, .5)',
-            input: { color: 'white' },
+            backgroundColor: "rgba(225, 225, 225, .5)",
+            input: { color: "white" },
           }}
         />
       </DialogContent>
-      <DialogActions
-        sx={{ mb: 1, mr: 2, ml: 2 }}
-      >
-        <Button sx={{ backgroundColor: 'grey' }} variant="contained" onClick={handleHideReviewForm}>Cancel</Button>
-        <Button variant="contained" onClick={handleSubmit} autoFocus>Review</Button>
+      <DialogActions sx={{ mb: 1, mr: 2, ml: 2 }}>
+        <Button
+          sx={{ backgroundColor: "grey" }}
+          variant="contained"
+          onClick={handleHideReviewForm}
+        >
+          Cancel
+        </Button>
+        <Button variant="contained" onClick={handleSubmit} autoFocus>
+          Review
+        </Button>
       </DialogActions>
     </Dialog>
   );
-}
+};
 
 export default AddReview;

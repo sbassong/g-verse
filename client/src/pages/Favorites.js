@@ -1,8 +1,11 @@
-import React, {useEffect} from 'react'
+import React, { useEffect, useContext } from 'react'
 import GameCard from '../components/GameCard'
 import { Box  } from '@mui/material';
+import { UserContext } from '../utils';
 
-const Favorites = ({user, authenticated, games, userFavorites, setUser, setUserFavorites}) => {
+
+const Favorites = ({ games, userFavorites, setUser, setUserFavorites}) => {
+  const authenticatedUser = useContext(UserContext);
   const noItems = (
     <h2 className="subtitle">No favorites games? checkout out the game-verse</h2>
   )
@@ -23,13 +26,11 @@ const Favorites = ({user, authenticated, games, userFavorites, setUser, setUserF
             return (<GameCard
               key={game.id}
               id={game.id}
-              title={game.title}
-              image={game.background_image}
+              name={game.name}
+              image={game.backgroundImage}
               price={game.price}
               rating={game.rating}
-              user={user}
               isFavorite={isFavorite}
-              authenticated={authenticated}
               userFavorites={userFavorites}
               setUserFavorites={setUserFavorites}
               setUser={setUser}

@@ -1,5 +1,5 @@
 import '../styles/SignIn.css'
-import React, {useState} from 'react';
+import React, { useState, useContext } from 'react';
 import { UpdateUser } from '../services/UserServices'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -7,10 +7,12 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles'
 import CustomizedInputsStyleOverrides from '../styles/muiOverrides';
+import { UserContext } from '../utils';
 
 
-const UpdateProfile = ({user, setUser, setAccountUpdated, handleSnack, setForm}) => {
-  const iState = { name: '', email: '', image: '' };
+const UpdateProfile = ({ setUser, setAccountUpdated, handleSnack, setForm}) => {
+  const authenticatedUser = useContext(UserContext);
+  const iState = { username: '', email: '', image: '' };
   const [formValues, setFormValues] = useState(iState);
 
   const handleChange = (e) => setFormValues({ ...formValues, [e.target.name]: e.target.value });
@@ -18,11 +20,11 @@ const UpdateProfile = ({user, setUser, setAccountUpdated, handleSnack, setForm})
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payloadValues = formValues;
-    if (!payloadValues.name) payloadValues.name = user.name;
-    if (!payloadValues.email) payloadValues.email = user.email;
-    if (!payloadValues.image) payloadValues.image = user.image;
+    if (!payloadValues.username) payloadValues.username = authenticatedUser.username;
+    if (!payloadValues.email) payloadValues.email = authenticatedUser.email;
+    if (!payloadValues.image) payloadValues.image = authenticatedUser.image;
 
-    const updatedUser = await UpdateUser(user?.id, payloadValues);
+    const updatedUser = await UpdateUser(authenticatedUser?.id, payloadValues);
     if (updatedUser?.email) {
       const successMsg = 'Success: User profile updated!'
       await setUser(updatedUser);
@@ -56,9 +58,9 @@ const UpdateProfile = ({user, setUser, setAccountUpdated, handleSnack, setForm})
               fullWidth
               id="name"
               label="Account Name"
-              name="name"
-              placeholder="Firstname Lastname"
-              value={formValues.name}
+              name="username"
+              placeholder="New username"
+              value={formValues.username}
               onChange={handleChange}
               autoComplete="name"
               autoFocus
@@ -108,7 +110,7 @@ const UpdateProfile = ({user, setUser, setAccountUpdated, handleSnack, setForm})
               fullWidth
               variant="contained"
               sx={{ mt: 4, mb: 3, backgroundColor: '#757ce8' }}
-              disabled={!formValues.name && !formValues.email && !formValues.image}
+              disabled={!formValues.username && !formValues.email && !formValues.image}
             >
               Update Profile
             </Button>

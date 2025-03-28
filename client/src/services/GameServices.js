@@ -29,7 +29,7 @@ export const GetPopularGames = async () => {
 
 export const GetGamesByTitle = async (data) => {
   try {
-    const res = await Client.get(`/games/name/search?name=${data.name}`)
+    const res = await Client.get(`/games/name/search?name=${data.searchQuery}`)
     return res.data
   } catch (error) {
     throw error
@@ -53,9 +53,9 @@ export const GetGamesByGenres = async (data) => {
   }
 }
 
-export const GetOneGame = async (game_id) => {
+export const GetOneGame = async (gameId) => {
   try {
-    const res = await Client.get(`/games/${game_id}`)
+    const res = await Client.get(`/games/${gameId}`)
     return res.data
   } catch (error) {
     throw error

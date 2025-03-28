@@ -1,6 +1,6 @@
 /* eslint-disable */
 import '../../src/styles/GameDetails.css'
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useContext, useState } from "react"
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import Rating from '@mui/material/Rating';
@@ -13,6 +13,8 @@ import AddReview from '../components/AddReview';
 import { GetReviewsByGameId } from "../services/ReviewServices";
 import { UpdateUserFavorites } from '../services/UserServices';
 import { Box, Typography } from '@mui/material';
+import { UserContext } from '../utils';
+
 
 const StyledRating = styled(Rating)({
   '& .MuiRating-iconFilled': {
@@ -28,11 +30,10 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 
-const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUserFavorites, isFavorite}) => {
+const GameDetails = ({ game, authenticated, setUser, userFavorites, setUserFavorites, isFavorite}) => {
+  const authenticatedUser = useContext(UserContext);
   const [isFavoriteGame, setIsFavorite] = useState(null);
-  // const [reviewUpdated, toggleReviewUpdated] = useState(false)
   const [gameReviews, setGameReviews] = useState([]);
-  const [isReviewForm, toggleReviewButton] = useState(false);
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState(null);
   const [snackSeverity,  setSnackSeverity] = useState(null);
@@ -43,28 +44,22 @@ const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUse
   
 
   const getReviews = async () => {
-    const reviews = await GetReviewsByGameId(game.id);
+    const reviews = await GetReviewsByGameId(game?.id);
     setGameReviews(reviews);
   };
   
   const updateUserFavoritesArr = async (data) => {
-    if (!user) return;
-    const updatedUser = await UpdateUserFavorites(user?.id, { favorites: data });
+    if (!authenticatedUser) return;
+    const updatedUser = await UpdateUserFavorites(authenticatedUser?.id, { favoriteGames: data });
     return updatedUser;
-  };
-
-  const removeFavoriteId = (value, index, arr) => {
-    if (value !== game?.id) return true;
-    else return false;
   };
   
   const handleOnFavoriteChange = async (newRating) => {
-    let currUserFavorites = userFavorites;
-    
-    if (newRating === 1) currUserFavorites?.push(game.id);
-    else currUserFavorites = currUserFavorites?.filter(removeFavoriteId);
+    let currUserFavorites = authenticatedUser?.favoriteGames;
+    if (newRating === 1) currUserFavorites?.push(game?.id)
+    else currUserFavorites = currUserFavorites?.filter(gameId => gameId !== game?.id);
 
-    setIsFavorite(newRating)
+    setIsFavorite(newRating);
     setUserFavorites(currUserFavorites);
     const updatedUser = await updateUserFavoritesArr(currUserFavorites);
     setUser(updatedUser);
@@ -94,16 +89,16 @@ const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUse
   return (
     <div className='game-details'>
       <Box className='top-half'>
-        <img className='img-div' src={game.background_image} alt={`${game.title} poster`} />
+        <img className='img-div' src={game.backgroundImage} alt={`${game.name} poster`} />
       
         <div className='right-side'>
           <div 
             className='title' 
             style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}
           >
-            {game.title} 
+            {game.name} 
       
-            { user && authenticated && 
+            { authenticatedUser?.isAuthenticated && 
               <StyledRating
                 name="customized-color"
                 value={isFavoriteGame}
@@ -134,14 +129,18 @@ const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUse
             className='subtitle'
             style={{ color: 'rgb(175, 175, 175)'}}
           >
-            Platforms: <span className='subtitle'>{game.platform}</span>
+            Platforms: {
+              game.platforms.map((platform, idx) => (
+                <span key={idx} className='subtitle'>{platform}</span>
+              ))
+            }
           </div>
-          <div 
+          {/* <div 
             className='details-desc'
             style={{ color: 'rgb(190, 190, 190)'}}
           >
             {game.description}
-          </div>
+          </div> */}
           <br/>
         </div>
       </Box>
@@ -190,7 +189,6 @@ const GameDetails = ({ game, user, authenticated, setUser, userFavorites, setUse
       </Snackbar>
       
       <AddReview
-        user={user}
         game={game}
         setGameReviews={setGameReviews}
         gameReviews={gameReviews}

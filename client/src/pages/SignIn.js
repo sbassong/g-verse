@@ -1,5 +1,5 @@
 import '../styles/SignIn.css'
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { NavLink, useLocation, Navigate } from 'react-router-dom'
 import { useNavigate } from "react-router";
 import { ThemeProvider } from '@mui/material/styles';
@@ -9,6 +9,8 @@ import {Visibility, VisibilityOff} from '@mui/icons-material/';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CustomizedInputsStyleOverrides from '../styles/muiOverrides';
 import { SignInUser } from '../services/UserServices'
+import { UserContext } from '../utils';
+
 
 const iState = { email: '', password: '' };
 
@@ -24,7 +26,7 @@ const SignIn = ({setUser, authenticated, toggleAuthenticated}) => {
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState(null);
   const [snackSeverity,  setSnackSeverity] = useState(null);
-  
+  const [loggedUser, setLogged] = useState();
   
   const handleFormChange = (e) => setFormValues({ ...formValues, [e.target.name]: e.target.value });
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -38,12 +40,12 @@ const SignIn = ({setUser, authenticated, toggleAuthenticated}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = await SignInUser(formValues);
-
     if (payload?.email) {
       setUser(payload);
-      localStorage.setItem('authenticated', '1');
+      setLogged(payload)
+      localStorage.setItem('gverse-authenticated', '1');
       toggleAuthenticated(true);
-      navigate('/user/account');
+      navigate(`/user/${payload.id}/profile`);
     } else {
       setSnackMessage(payload);
       setSnackSeverity('error');
@@ -53,8 +55,8 @@ const SignIn = ({setUser, authenticated, toggleAuthenticated}) => {
   };
 
 
-  if (authenticated) return <Navigate to="/user/account" state={{ from: location }} replace />
-  else return (
+  // if (authenticated) return <Navigate to={`/user/${loggedUser?.id}/profile`} state={{ from: location }} replace />
+  return (
     <ThemeProvider theme={CustomizedInputsStyleOverrides}>
       <Container component="main" maxWidth="sm">
         <Box

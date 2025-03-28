@@ -1,8 +1,12 @@
 import '../styles/SearchResults.css'
-import React from 'react'
+import React, { useContext } from 'react'
 import GameCard from '../components/GameCard'
+import { UserContext } from '../utils';
 
-const SearchResults = ({searchResults, user, authenticated, userFavorites, setUser, setUserFavorites}) => {
+
+const SearchResults = ({searchResults, user, authenticated, setUser, setUserFavorites}) => {
+  const authenticatedUser = useContext(UserContext);
+  
   return (
     <div className='search-results'>
       <h3 className='title'>Search results</h3>
@@ -10,20 +14,18 @@ const SearchResults = ({searchResults, user, authenticated, userFavorites, setUs
         { searchResults?.length > 0
           ? searchResults?.map((game) => {
             let isFavorite;
-            if (userFavorites?.length > 0 && userFavorites.includes(game.id)) isFavorite = 1;
+            if (authenticatedUser?.favoriteGames?.length > 0 && authenticatedUser?.favoriteGames.includes(game.id)) isFavorite = 1;
             else isFavorite = 0;
 
             return (<GameCard
               key={game.id}
               id={game.id}
-              title={game.title}
-              image={game.background_image}
+              name={game.name}
+              image={game.backgroundImage}
               price={game.price}
               rating={game.rating}
-              user={user}
               isFavorite={isFavorite}
               authenticated={authenticated}
-              userFavorites={userFavorites}
               setUserFavorites={setUserFavorites}
               setUser={setUser}
             />)})

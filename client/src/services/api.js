@@ -9,7 +9,7 @@ const Client = Axios.create({ baseURL: BASE_URL });
 // Intercepts every request axios makes to
 Client.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('gverse-token');
     if (token) {
         config.headers['authorization'] = `Bearer ${token}`;
     }

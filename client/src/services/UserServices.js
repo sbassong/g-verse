@@ -4,7 +4,7 @@ export const SignInUser = async (data) => {
   try {
     const res = await Client.post('/users/signin', data);
     if (res?.data?.user) {
-      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('gverse-token', res.data.token);
       return res.data.user;
     } else return res.data.message;
 
@@ -16,10 +16,11 @@ export const SignInUser = async (data) => {
 export const SignOut = async (data) => {
   try {
     const res = await Client.post('/users/signout', data);
-    if (res?.data?.user) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('authenticated');
-      return res.data.user;
+    console.log(res)
+    if (!res.data?.isAuthenticated) {
+      localStorage.removeItem('gverse-token');
+      localStorage.removeItem('gverse-authenticated');
+      return res.data;
     } else return res.data.message;
 
   } catch (error) {
@@ -40,7 +41,7 @@ export const SignUpUser = async (data) => {
 export const CheckSession = async () => {
   try {
     const res = await Client.get('/users/session');
-    if (res?.data?.email) return res.data;
+    if (res.data?.isAuthenticated) return res.data;
     else return res.data?.message;
   } catch (error) {
     throw error;
@@ -59,7 +60,8 @@ export const GetUser = async (userId) => {
 export const GetAllUsers = async () => {
   try {
     const res = await Client.get(`/users`);
-    return res.data;
+    if (res.data?.email) return res.data
+    else return res.data?.message;
   } catch (error) {
     throw error;
   }
@@ -69,7 +71,7 @@ export const UpdateUserPassword = async (userId, data) => {
   try {
     const res = await Client.put(`/users/${userId}/password/update`, data);
     if (res.data?.email) return res.data;
-    else return;
+    else return res.data?.message;
   } catch (error) {;
     throw error
   }
@@ -78,8 +80,8 @@ export const UpdateUserPassword = async (userId, data) => {
 export const UpdateUser = async (userId, data) => {
   try {
     const res = await Client.put(`/users/${userId}/profile/update`, data)
-    if (res.data?.email) return res.data;
-    else return res.data.message;
+    if (res.data?.email) return res.data
+    else return res.data?.message;
   } catch (error) {
     throw error
   }
@@ -88,7 +90,8 @@ export const UpdateUser = async (userId, data) => {
 export const UpdateUserFavorites = async (userId, data) => {
   try {
     const res = await Client.put(`/users/${userId}/favorites/update`, data)
-    return res.data
+    if (res.data?.email) return res.data
+    else return res.data?.message;
   } catch (error) {
     throw error
   }

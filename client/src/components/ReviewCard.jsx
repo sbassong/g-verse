@@ -16,7 +16,7 @@ const ReviewCard = ({review}) => {
       }}
     >
       <CardContent>
-        <Rating name="read-only" value={review.rating} readOnly />
+        <Rating name="read-only" value={review.userRating} readOnly />
         <Typography
           variant="body2"
           color="rgba(225, 225, 225, .9)"
