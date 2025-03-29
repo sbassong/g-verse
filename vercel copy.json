@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "outputDirectory": "frontend/build",
+
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/backend/index.js"
+    }
+  ],
+  "buildCommand": "npm install && cd ../frontend && rm -rf build && npm install && npm run build"
+}
