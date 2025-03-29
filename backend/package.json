@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "postinstall": "cd ../frontend && npm install && npm run build",
-    "build": "npm install && cd ../frontend && rm -rf build && npm install && npm run build"
+    "build": "npm install && npm run build"
   },
   "repository": {
     "type": "git",
