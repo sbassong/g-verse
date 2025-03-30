@@ -5,7 +5,7 @@ const cors = require('cors');
 const logger = require('morgan');
 const path = require('path');
 
-const AppRouter = require('./routes/AppRouter');
+const AppRouter = require('../routes/AppRouter');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
