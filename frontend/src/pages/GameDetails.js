@@ -131,7 +131,7 @@ const GameDetails = ({ game, authenticated, setUser, userFavorites, setUserFavor
           >
             Platforms: {
               game.platforms.map((platform, idx) => (
-                <span key={idx} className='subtitle'>{platform}</span>
+                <span key={idx} className='subtitle platform-pill'>{platform} </span>
               ))
             }
           </div>
