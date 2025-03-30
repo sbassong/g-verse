@@ -1,4 +1,4 @@
-# [G-verse](https://peaceful-everglades-79165.herokuapp.com/)
+# [G-verse](https://g-verse-frontend.vercel.app)
 
 
 ## **_Description_**
