@@ -118,7 +118,7 @@ const GameDetails = ({ game, authenticated, setUser, userFavorites, setUserFavor
             className='subtitle'
             style={{ color: 'rgb(175, 175, 175)', fontWeight: 'bold' }}
           >
-            Rating <span
+            Rating: <span
               style={{ color: '#fdca52', fontWeight: 'bold' }}
               className='subtitle'
             >
