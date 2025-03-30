@@ -1,6 +1,6 @@
 import '../styles/SignIn.css'
-import React, { useState, useContext } from 'react';
-import { NavLink, useLocation, Navigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom'
 import { useNavigate } from "react-router";
 import { ThemeProvider } from '@mui/material/styles';
 import { Avatar, Button, TextField, IconButton, Box, Typography, Container, InputAdornment, Snackbar } from '@mui/material';
@@ -9,7 +9,6 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CustomizedInputsStyleOverrides from '../styles/muiOverrides';
 import { SignInUser } from '../services/UserServices'
-import { UserContext } from '../utils';
 
 
 const iState = { email: '', password: '' };
