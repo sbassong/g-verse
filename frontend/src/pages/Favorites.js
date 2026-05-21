@@ -1,11 +1,9 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect } from 'react'
 import GameCard from '../components/GameCard'
 import { Box  } from '@mui/material';
-import { UserContext } from '../utils';
 
 
 const Favorites = ({ games, userFavorites, setUser, setUserFavorites}) => {
-  const authenticatedUser = useContext(UserContext);
   const noItems = (
     <h2 className="subtitle">No favorites games? checkout out the game-verse</h2>
   )

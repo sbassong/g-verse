@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Navigate, useLocation } from 'react-router-dom'
 import { useNavigate } from "react-router";
 import '../styles/Account.css'
-import {Avatar, Button, Box, Typography, Dialog, DialogActions, DialogContentText, DialogContent, DialogTitle } from '@mui/material';
+import {Avatar, Button, Box, Typography, Dialog, DialogActions, DialogTitle } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert'
 import {DeleteUser} from '../services/UserServices'

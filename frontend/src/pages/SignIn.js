@@ -1,6 +1,6 @@
 import '../styles/SignIn.css'
 import React, { useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { useNavigate } from "react-router";
 import { ThemeProvider } from '@mui/material/styles';
 import { Avatar, Button, TextField, IconButton, Box, Typography, Container, InputAdornment, Snackbar } from '@mui/material';
@@ -19,12 +19,12 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const SignIn = ({ setUser, authenticated, toggleAuthenticated }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [formValues, setFormValues] = useState(iState);
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState(null);
   const [snackSeverity, setSnackSeverity] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [loggedUser, setLogged] = useState();
 
   const handleFormChange = (e) => setFormValues({ ...formValues, [e.target.name]: e.target.value });
@@ -53,8 +53,6 @@ const SignIn = ({ setUser, authenticated, toggleAuthenticated }) => {
     }
   };
 
-
-  // if (authenticated) return <Navigate to={`/user/${loggedUser?.id}/profile`} state={{ from: location }} replace />
   return (
     <ThemeProvider theme={CustomizedInputsStyleOverrides}>
       <Container component="main" maxWidth="sm">
