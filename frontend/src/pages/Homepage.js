@@ -29,7 +29,7 @@ const Homepage = ({ authenticated, setUser, setUserFavorites}) => {
     <div className="homepage">
       <h1 className='title'>Top Games</h1>
       <div className='games-cont'>
-        {popularGames && popularGames.map((game) => {
+        {popularGames?.length > 0 && popularGames.map((game) => {
           let isFavorite;
           if (authenticatedUser?.favoriteGames?.length > 0 && authenticatedUser?.favoriteGames.includes(game?.id)) isFavorite = 1;
           else isFavorite = 0;
@@ -52,7 +52,7 @@ const Homepage = ({ authenticated, setUser, setUserFavorites}) => {
 
       <h1 className='title'>Latest Games</h1>
       <div className='games-cont'>
-        {recentGames && recentGames.map((game) => {
+        {recentGames?.length > 0 && recentGames.map((game) => {
           let isFavorite;
           if (authenticatedUser?.favoriteGames?.length > 0 && authenticatedUser?.favoriteGames.includes(game?.id)) isFavorite = 1;
           else isFavorite = 0;
