@@ -52,7 +52,10 @@ const FetchRawgGames = async (req, res) => {
       // if (error) return res.send(error)
       // return res.send(gameentries.slice(0, 20));
     }
-    // console.log(response)
+
+
+    console.log(response)
+    return
   } catch (error) {
     console.error(error)
   }
