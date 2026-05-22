@@ -14,7 +14,7 @@ const SignIn = async (req, res) => {
       })
       .eq('email', email)
       .select("id, email, username, image, favoriteGames, isAuthenticated, passwordDigest");
-      // .select("id, email, username, image, favoriteGames:games!gameId(games()), isAuthenticated, passwordDigest");
+      
     if (error) return res.status(400).send(error);
 
     if ( 

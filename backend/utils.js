@@ -7,8 +7,6 @@ function parseDateString(dateString) {
 
   return ((date).toISOString()).toLocaleString('en-US')
 }
-// const date = parseDateString("2018-10-26");
-// console.log(date); 
 
 
 // run to seed games from rawg, change the page query and repeat as needed
@@ -43,19 +41,10 @@ const FetchRawgGames = async (req, res) => {
           })
         }
       })
-      console.log(games.length)
+      
       console.log(games.slice(0, 5))
-      // const { data: gameentries, error } = await supabase
-      //   .from("games")
-      //   .insert(games)
-      //   .select();
-      // if (error) return res.send(error)
-      // return res.send(gameentries.slice(0, 20));
     }
 
-
-    console.log(response)
-    return
   } catch (error) {
     console.error(error)
   }

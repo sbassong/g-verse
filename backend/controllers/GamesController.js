@@ -5,9 +5,9 @@ const GetGames = async (req, res) => {
     let { data: games, error } = await supabase
       .from('games')
       .select("id, name, rating, backgroundImage, released, price, platforms, genres, metacritic");
+      
     if (error?.message) return res.status(400).send(error);
     else res.send(games);
-
   } catch (error) {
     throw error;
   }
