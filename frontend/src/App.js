@@ -30,14 +30,6 @@ function App() {
     setGames(games);
   };
 
-  // const filterFavoriteGames = () => {
-
-  //   const favoriteGames = []
-  //   user?.favoriteGames.forEach((gameId) => {
-  //     if gameId
-  //   })
-  // }
-
   const checkToken = async () => {
     const userSession = await CheckSession();
     if (userSession?.isAuthenticated) {
